@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live view, pitch</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#0E1116}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width:500px;height:900px;box-sizing:border-box;background:#0E1116;color:#F3F5F7;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column;gap:12px;padding:14px 16px;overflow:hidden">
+
+  <div style="display:flex;align-items:center;gap:12px;height:28px">
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700">
+      <span style="width:10px;height:10px;border-radius:50%;background:#FF6B6B;display:inline-block"></span>LIVE
+      <span style="font-weight:600;color:#9AA4B2;font-variant-numeric:tabular-nums">14:30</span>
+    </div>
+    <div style="flex-grow:1;height:6px;border-radius:3px;background:#2A313C;position:relative">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:48%;border-radius:3px;background:#9AA4B2"></div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:#9AA4B2">Pitch</div>
+  </div>
+
+  <div style="background:#161B22;border:1px solid #2A313C;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;height:196px;box-sizing:border-box">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Say next</span>
+      <span style="font-size:12px;font-weight:700;color:#9AA4B2;border:1px solid #3A4452;border-radius:6px;padding:3px 7px">M9 · L31</span>
+    </div>
+    <div style="font-size:30px;font-weight:700;line-height:1.18;letter-spacing:-.01em">Can I try a few additional ideas on you?</div>
+    <div style="font-size:15px;line-height:1.35;color:#B6BFCB">Then pitch below, top need first. End with a question, then stop talking.</div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;min-height:20px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">She just said</span>
+    <span style="font-size:12px;font-weight:700;color:#F3F5F7;background:#1B222B;border:1px solid #3A4452;border-radius:6px;padding:3px 8px">SOLUTION</span>
+    <span style="font-size:13px;color:#9AA4B2">a need, not yet a metric</span>
+  </div>
+
+  <div style="height:64px;box-sizing:border-box;border-radius:12px;background:#2A2310;border:1px solid #6B5518;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span style="font-size:15px;font-weight:700;color:#FFE9B0">Ready to pitch</span>
+      <span style="font-size:13px;color:#E6CF94">Pain and 3 needs captured. Top need: compliance.</span>
+    </div>
+    <button style="font-size:14px;font-weight:700;color:#0E1116;background:#F2B84B;border:0;border-radius:8px;padding:9px 12px;min-height:36px;cursor:pointer">Pitched  N</button>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Situation</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Pain</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Needs</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Impact</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Timeframe</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #F2B84B;background:linear-gradient(90deg,#F2B84B 50%,transparent 50%);display:inline-block"></span>Nutanix</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Objections</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Next step</span>
+    </div>
+    <div style="font-size:13px;color:#B6BFCB">Missing: <span style="color:#F3F5F7;font-weight:600">pitch not yet said · objections · next step</span></div>
+  </div>
+
+  <div style="background:#161B22;border:1px solid #2A313C;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:12px;flex-grow:1">
+    <div style="font-size:15px;line-height:1.4;color:#D5DBE3">A lot of VMware customers are looking at alternatives since Broadcom changed the licensing. Nutanix puts your servers, storage and networking into one system, so you manage it from one place.</div>
+    <div style="border-left:3px solid #F2B84B;padding-left:11px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F2B84B">Top need · compliance</span>
+      <span style="font-size:16px;line-height:1.4;font-weight:600">We bring in a compliance expert to answer in writing and agree who covers it on your side. You told me written sign-off from Priya matters most. So here's how that fits.</span>
+    </div>
+    <div style="border-left:3px solid #3A4452;padding-left:11px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Need 2 · migration</span>
+      <span style="font-size:15px;line-height:1.4;color:#D5DBE3">We agree migration windows with your clinical teams and name an engineer on call during cutover. You told me clinicians need to believe in the approach.</span>
+    </div>
+    <div style="font-size:16px;font-weight:700">How does that sit against what you need? <span style="color:#9AA4B2;font-weight:600;font-size:14px">Then stop talking.</span></div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.35;color:#8993A1;border-top:1px solid #2A313C;padding-top:9px">
+    <span><b style="color:#9AA4B2">Her</b> Without Priya's sign-off nothing moves.</span>
+    <span><b style="color:#9AA4B2">Me</b> Why does that matter to you personally?</span>
+  </div>
+
+  <div style="display:flex;gap:14px;font-size:12px;color:#9AA4B2">
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">N</b> Nutanix introduced</span>
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">O</b> Objection handled</span>
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">S</b> Summarise</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":500,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

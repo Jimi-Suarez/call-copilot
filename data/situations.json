@@ -1,0 +1,32 @@
+[
+ {
+  "id": "s-no-pain",
+  "label": "No real pain surfaced: 'it's fine, I took the meeting because the reseller asked'",
+  "handling": "Never invent a pain. Keep Pain empty, show red pitch confidence with probing questions: 'What would make you look at this?', 'What has changed in the last year?', 'What would you do if the renewal doubled?' Do not build a pitch from nothing."
+ },
+ {
+  "id": "s-pain-denied",
+  "label": "She raises something then plays it down ('not a big deal')",
+  "handling": "Store it as a soft pain tagged 'minimised'; ask 'To what extent is X an issue for YOU?'. Do not treat it as a need."
+ },
+ {
+  "id": "s-already-evaluating",
+  "label": "Already evaluating another option (e.g. another hypervisor, cloud, or staying)",
+  "handling": "Capture which option and where she is. Prompt: 'What would good look like?' and never run down VMware or the other option."
+ },
+ {
+  "id": "s-just-renewed",
+  "label": "Just renewed / signed multi-year",
+  "handling": "Capture the end date as renewalDate; prompt for what would make her look early; the pitch uses 'before the next renewal' wording."
+ },
+ {
+  "id": "s-not-decision-maker",
+  "label": "She isn't the decision maker / delegates mid-call",
+  "handling": "Capture who decides; prompt 'Who else should be in the room?'; flag next step should include that person."
+ },
+ {
+  "id": "s-other",
+  "label": "Anything not in the taxonomy",
+  "handling": "Keep her exact words as the pain. Model drafts a generic 'We [verb] ...' line tagged 'draft, not from Lookup' (process only, no product claims) and the generic questions: 'To what extent is ___ an issue for YOU?' and 'What does ___ affect, and who else feels it?'"
+ }
+]

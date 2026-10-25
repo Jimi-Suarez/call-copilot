@@ -1,0 +1,26 @@
+# Objection test call — contains 4 objections and 1 normal question (should NOT be flagged)
+
+[00:30] Me: Thanks for taking the time. Can I ask — what made you agree to this call?
+[00:45] Her: Honestly, the VMware renewal quote. It's come in at over double what we pay now. My CFO wants answers.
+[01:10] Me: Understood. Has the board given you a deadline to respond?
+[01:20] Her: We need to give them a recommendation by March.
+[02:00] Me: Can I try a few ideas on you? Since Broadcom bought VMware, a lot of hospitals are looking at Nutanix — it puts servers, storage and networking into one system.
+[02:30] Her: Can you guarantee there'll be no downtime during a migration? We can't have patient systems going down.
+[03:00] Me: That's the right thing to worry about. I can't promise zero downtime, and nobody honest can. What would you need to see in a plan to feel safe?
+[03:20] Her: A proper cutover window agreed with our clinical teams. That's what I need before I can approve this.
+[04:00] Me: What does your team look like on the infrastructure side?
+[04:15] Her: Three of us. We all know VMware inside out. My team would need retraining on a new platform — that's a real cost we'd have to put in.
+[05:00] Me: That's a real cost, so we put it in the comparison. Would it help more to have training time, or someone supporting you during the move?
+[05:30] Her: Probably both, but mainly someone there during the move.
+[06:00] Me: The reseller mentioned it would be cheaper than VMware. Is that your expectation?
+[06:15] Her: Is it actually cheaper? Because if you can't prove that, I'm not taking this to the CFO.
+[07:00] Me: I can't promise that, because I haven't seen your setup yet. What would you need to see to know if it's worth it?
+[07:30] Her: What is Nutanix's market position? How many customers do they have?
+[08:00] Me: About three thousand new customers last year, around two and a half billion in annual recurring revenue.
+[08:30] Her: What about patient data? Anything touching clinical systems needs compliance sign-off. Can you prove it's compliant?
+[09:00] Me: That's a big one, and I'd want a compliance expert to answer it properly, not me. Who looks after that on your side?
+[09:20] Her: Sarah in our legal and compliance team. She'd need to see something in writing.
+[10:00] Me: Does a working session with you, Sarah, and the reseller make sense as a next step?
+[10:20] Her: Yes. We need a costed comparison and a migration plan before I can approve anything. Week of February 10th works, or after March 1st.
+[10:45] Me: I'll send over a draft agenda. In the room: you, Sarah from compliance, and the reseller. Shall I send dates today?
+[11:00] Her: Yes, let's do that.

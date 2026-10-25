@@ -1,0 +1,32 @@
+# THIN CALL — one explicit need, two pains, no clear top need, sparse
+# Acceptance tests: thin pitch (one need, assumed top), pitch from pains (amber)
+[00:20] Me: Thanks for your time. I'd like to understand your situation in the first part of the call, then decide on a next step. Does that work?
+[00:35] Her: Fine, yes.
+[01:00] Me: What was it that made you take this meeting?
+[01:20] Her: The renewal. The quote came back about double. That's what started it.
+[01:50] Her: And separately our storage arrays are going out of support — end of next year. We haven't sorted that yet either.
+[02:30] Me: That's two things at once. What's the number — how much is the renewal?
+[02:55] Her: We pay about 280 thousand now. The quote is 600.
+[03:30] Me: What can you absorb?
+[03:45] Her: I'm not sure yet. Haven't had that conversation with finance.
+[04:15] Me: When's the deadline?
+[04:30] Her: Board in March.
+[05:00] Me: What would happen if nothing changes?
+[05:15] Her: We'd sign the renewal. Not ideal, but it's the default.
+[05:45] Me: What do you need to happen before then?
+[06:10] Her: We need a proper alternative on the table before the board meeting. That's the main thing.
+[06:45] Me: Which matters most to you?
+[07:00] Her: Getting the alternative sorted. That's what I said.
+[07:15] Me: Can I try a few ideas on you? A lot of hospital IT teams are looking at alternatives to VMware after the Broadcom licensing changes. Nutanix brings servers, storage and networking together in one system.
+[07:35] Me: We put a tested alternative on the table with a costed comparison before your board meeting. You told me getting the alternative sorted matters most. So here's how that fits.
+[07:55] Her: Is it actually cheaper? The reseller mentioned it would be.
+[08:10] Me: I can't promise that, because I haven't seen your setup yet. That's what the comparison is for.
+[08:25] Her: Fair enough.
+[08:45] Me: Does a next step make sense from here?
+[09:00] Her: I'd want to see some information first, to be honest. Can you send something over?
+[09:15] Me: Of course. What would be most useful — a comparison template, or a summary of how a migration would work?
+[09:30] Her: Both would be good.
+[09:45] Me: Let me send a one-pager. When are you back in the office?
+[10:00] Her: I'm here through December, then back mid-January.
+[10:15] Me: I'll send something today and we can pick this back up in January.
+[10:25] Her: Fine.

@@ -1,0 +1,41 @@
+# Hold-out C: hospital IT director. Pains: storage arrays end of support + board wants less single-vendor dependence. She declines to give a quote number. Asks Nutanix basics questions during the pitch.
+[00:10] Me: Thanks for making time. I'd like about 15 to 20 minutes on your set-up, and then in the last 10 we decide a next step or part ways. Does that work?
+[00:25] Her: Go ahead.
+[00:40] Me: Can you walk me through your estate?
+[00:55] Her: Fourteen hosts, 380 VMs, 150 terabytes, a SAN with two arrays. Team of five.
+[01:30] Me: What made you take the meeting?
+[01:45] Her: The arrays go out of support at the end of next year and I need to decide what replaces them. The reseller said hyperconverged might be an option.
+[02:30] Me: What does that affect?
+[02:40] Her: The whole capital plan. A SAN refresh is a big spend and it ties us in for another five years.
+[03:30] Me: What's driving the timing?
+[03:45] Her: The board wants us less dependent on one vendor. They've said it explicitly, after the Broadcom thing. They'd like to see an alternative before the budget is set in November.
+[04:40] Me: Can you give me a sense of the renewal?
+[04:50] Her: I'd rather not discuss numbers yet. We pay what we pay, it's gone up, that's all you get.
+[05:20] Me: No problem. What happens if nothing changes?
+[05:30] Her: We buy a new SAN, we renew VMware, and we're exactly as locked in as before.
+[06:20] Me: Why do you think that's a problem?
+[06:30] Her: Because we've never actually tested whether we could run on anything else. I can't say to the board that we've tried it.
+[07:30] Me: What does it mean for other people?
+[07:40] Her: The CFO wants to know we're not being taken for a ride. The board chair mentioned vendor concentration at the last meeting.
+[08:40] Me: And for you personally?
+[08:50] Her: I'd like to be the person who brought a real option, not the person who rubber-stamped the default.
+[09:50] Me: Who signs off?
+[10:00] Her: CFO and the board. The CTO has a view too.
+[11:00] Me: What do you need to happen before November?
+[11:10] Her: A tested alternative on the table. And a clear answer on what happens to our existing storage, whether we keep it or replace it.
+[12:00] Me: Which matters most?
+[12:10] Her: The tested alternative. That's what the board asked for.
+[14:00] Me: Can I try a few ideas on you? Since Broadcom changed VMware's licensing, a lot of customers are looking at alternatives. Nutanix brings servers, storage and networking together in one system.
+[14:40] Her: What's AHV? The reseller kept mentioning it.
+[14:50] Me: It's the hypervisor that runs the virtual machines. Nutanix says it's included in the licence at no additional cost.
+[15:20] Me: We build a tested alternative next to your current set-up so you have something real for the board. You told me a tested alternative matters most. So here's how that fits.
+[16:10] Her: Do we have to throw out our current storage?
+[16:20] Me: Nutanix says it can run alongside an existing SAN or replace it. Which fits depends on your estate, so that's part of the comparison.
+[16:50] Her: Can we use our existing VMware licences?
+[17:00] Me: Nutanix says existing vSphere licences can be applied. I'd want to check your exact licences.
+[17:30] Her: Are you big enough? I don't want to swap one risk for another.
+[17:40] Me: About 2.55 billion dollars annual recurring revenue, up 16 percent. I'd rather you checked that yourself than took my word for it.
+[18:30] Me: We said we'd decide if a next step makes sense. Does it?
+[18:40] Her: Yes. A working session the last week of October, before budgets lock.
+[18:55] Me: Who else should be there?
+[19:00] Her: Me, the CTO, and your engineer.

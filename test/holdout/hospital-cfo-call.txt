@@ -1,0 +1,42 @@
+# Hold-out D: hospital IT director. Pains: paying for a suite they don't use + CFO needs numbers. Terse, hostile. One off-list objection. Out-of-order (starts with budget).
+[00:10] Me: Thanks for making time. About 15 to 20 minutes on your set-up, then the last 10 we decide a next step or part ways. Does that work?
+[00:20] Her: I have twenty minutes and then I'm in a budget meeting. Let's not waste them. The CFO is breathing down my neck about this.
+[00:40] Me: Understood. What's the CFO asking?
+[00:50] Her: Why we pay for a suite we barely use. Two hundred and forty thousand a year, quote is three hundred and ninety.
+[01:20] Me: How much could you absorb without cutting anything?
+[01:30] Her: Zero. I've been told to bring it down, not up.
+[02:00] Me: Walk me through the estate.
+[02:10] Her: Ten hosts, 300 VMs, 120 terabytes. Four people.
+[02:40] Me: What did the reseller say that made you take the meeting?
+[02:50] Her: That we're paying for vSphere features we never turned on. They said you'd map what we use against what we're paying for.
+[03:30] Me: What does that affect?
+[03:40] Her: Nothing gets approved until I show the CFO a real comparison. Capital projects are frozen.
+[04:20] Me: What's driving the priority?
+[04:30] Her: Budget sign-off is the twentieth of January. Contract renews end of February.
+[05:10] Me: What happens if nothing changes?
+[05:20] Her: I sign it, the CFO is furious, and I lose credibility.
+[06:00] Me: Why is it hitting so hard?
+[06:10] Her: Broadcom bundled everything. We use maybe a third of it.
+[07:00] Me: How does it land on you personally?
+[07:10] Her: Bluntly, my bonus is tied to staying inside budget.
+[08:00] Me: Who signs off?
+[08:10] Her: CFO, and the procurement lead, Ayesha.
+[09:00] Me: What do you need to happen before January?
+[09:10] Her: A side-by-side comparison using our real numbers. And a clear list of what we'd stop paying for.
+[10:00] Me: Which matters most?
+[10:10] Her: The comparison. Everything else is noise.
+[11:00] Me: Why does it matter to you personally?
+[11:10] Her: Because I need to walk into that room with something other than a shrug.
+[15:00] Me: Can I try a few ideas on you? Many VMware customers are looking at alternatives since the Broadcom licensing changes. Nutanix puts servers, storage and networking in one system, so you manage it from one place.
+[15:40] Me: We cost it side by side with your VMware quote, using your actual numbers, and map what you use against what you're quoted for. You told me a real comparison matters most. So here's how that fits.
+[16:30] Her: Is it cheaper? The reseller said so.
+[16:40] Me: I can't promise that, because I haven't seen your setup yet. What would you need to see to know if it's worth it?
+[16:55] Her: Proof. Numbers I can put in front of a CFO.
+[17:10] Her: We've also just signed a three-year support deal with our SAN vendor. Why would I touch any of this?
+[17:25] Me: That's a fair challenge. What would need to be true for it to be worth looking at anyway?
+[17:40] Her: If the total cost over three years is clearly lower, and nothing breaks.
+[18:00] Her: Can you prove it'll work for us?
+[18:10] Me: I can't prove that today. That's exactly what the comparison is for.
+[19:00] Me: Does a next step make sense?
+[19:10] Her: Yes. Get me a first costed comparison by the twelfth of January. I'll bring Ayesha.
+[19:25] Me: I'll send dates and a recap today.

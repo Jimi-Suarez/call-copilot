@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Call Copilot</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Top bar (42px) -->
+<div id="topbar">
+  <div id="status-indicator">
+    <span id="status-dot"></span>
+    <span id="status-text">READY</span>
+  </div>
+  <div id="replay-controls" class="hidden">
+    <select id="sample-select"></select>
+    <button id="btn-replay-start">▶ Start Replay</button>
+    <button id="btn-replay-pause" class="hidden">⏸ Pause</button>
+    <label id="speed-label">Speed:
+      <select id="replay-speed">
+        <option value="100">Fast</option>
+        <option value="500" selected>Normal</option>
+        <option value="1500">Slow</option>
+      </select>
+    </label>
+    <span id="replay-progress"></span>
+  </div>
+  <div id="timer-area"><span id="timer">00:00</span></div>
+  <button id="btn-end" class="btn-danger hidden">End</button>
+  <button id="btn-load-replay" class="btn-secondary">Load Sample Call</button>
+  <button id="btn-live" class="btn-secondary">🎙 Start Live</button>
+  <button id="btn-flip-speaker" class="btn-secondary hidden">Me=Spk0</button>
+  <div id="level-meter-wrap" class="hidden"><div id="level-meter"></div></div>
+  <button id="btn-view-toggle" class="btn-secondary">Review ▸</button>
+  <button id="btn-settings" class="btn-secondary btn-icon" title="Settings">⚙</button>
+</div>
+
+<!-- Live status bar (hidden until live mode) -->
+<div id="live-status-bar" class="hidden">
+  <span id="lst-engine"></span>
+  <span id="lst-ws"></span>
+  <span id="lst-bytes"></span>
+  <span id="lst-last"></span>
+  <span id="lst-error"></span>
+</div>
+
+<div id="main-area">
+
+<!-- Live column (primary view) -->
+<div id="live-col">
+  <div id="lv-bar">
+    <div id="lv-indicator">
+      <span id="lv-dot"></span>
+      <span class="lv-live-word">LIVE</span>
+      <span id="lv-timer">00:00</span>
+    </div>
+    <div id="lv-progress"><div id="lv-progress-fill"></div><span class="lv-progress-target">20:00</span></div>
+    <div id="lv-phase-label">Discovery</div>
+  </div>
+  <div id="lv-next">
+    <div id="lv-next-hdr">
+      <span id="lv-next-label">ASK NEXT</span>
+      <span id="lv-move-ref"></span>
+    </div>
+    <div id="lv-next-q">Load a sample call to begin.</div>
+    <div id="lv-next-sub"></div>
+  </div>
+  <div id="lv-she">
+    <span class="lv-label">She just said</span>
+    <span id="lv-she-tag"></span>
+    <span id="lv-she-desc"></span>
+  </div>
+  <div id="lv-alert" class="alert-empty"></div>
+  <div id="lv-chips-wrap">
+    <div id="lv-chips"></div>
+    <div id="lv-missing"></div>
+  </div>
+  <div id="lv-mid-wrap">
+    <div id="lv-mid-tabs">
+      <button id="lv-tab-notes" class="lv-tab lv-tab-active">Notes</button>
+      <button id="lv-tab-pitch" class="lv-tab">Pitch <span id="lv-tab-pitch-dot" class="lv-tab-dot hidden"></span></button>
+      <button id="lv-tab-transcript" class="lv-tab">Transcript</button>
+      <button id="btn-jump-narrow" class="btn-small hidden" style="margin-left:auto;align-self:center">↓ Live</button>
+    </div>
+    <div id="lv-mid"></div>
+  </div>
+  <div id="lv-dig" class="hidden">
+    <span class="lv-label">Dig here</span>
+    <div id="lv-dig-chips"></div>
+  </div>
+  <div id="lv-tx"></div>
+  <div id="lv-keys">
+    <span><kbd class="lv-key">N</kbd> Nutanix introduced</span>
+    <span><kbd class="lv-key">O</kbd> Objection handled</span>
+    <span><kbd class="lv-key">S</kbd> Summarise</span>
+  </div>
+</div><!-- /live-col -->
+
+<!-- Transcript column — always visible at wide (>900px), hidden at narrow -->
+<div id="transcript-col">
+  <div id="transcript-header">
+    <span class="panel-title">TRANSCRIPT</span>
+    <button id="btn-jump" class="btn-small hidden">↓ Live</button>
+  </div>
+  <div id="transcript-list"></div>
+</div>
+
+<!-- Review view (call sheet, hidden by default) -->
+<div id="review-view" class="hidden">
+
+<!-- Coach panel (replaces NEXT box) -->
+<div id="coach-panel">
+  <div id="coach-row1">
+    <span class="coach-label">NEXT</span>
+    <span id="coach-main-q">Load a sample call to begin.</span>
+    <span id="coach-lesson-tag" class="lesson-tag hidden"></span>
+    <span id="coach-backup-q"></span>
+    <div id="coach-alerts">
+      <span id="coach-pitch-badge" class="hidden">PITCH READY</span>
+      <span id="coach-nudge-badge" class="hidden">▶ Nutanix</span>
+      <span id="coach-dig-badge" class="hidden"></span>
+    </div>
+  </div>
+  <div id="coach-row1b">
+    <span id="coach-statement-tag" class="statement-tag hidden"></span>
+    <span id="coach-peel-nudge" class="peel-nudge hidden"></span>
+  </div>
+  <div id="coach-row2">
+    <div id="coach-crit-chips"></div>
+    <div id="coach-pacing-wrap">
+      <div id="coach-pacing-bar"><div id="coach-pacing-fill"></div></div>
+      <span id="coach-pacing-label"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Main: call sheet (2 cols) | right panel -->
+<div id="main-layout">
+
+  <!-- Call sheet — two internal columns -->
+  <div id="call-sheet">
+    <div id="cs-col-a">
+      <div id="sheet-header">
+        <span class="sheet-title">CALL SHEET</span>
+        <span id="extract-status"></span>
+      </div>
+
+      <!-- Situation -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">2</span>Situation<span class="tick" id="tick-situation"></span><span class="ready-chip hidden" id="ready-chip-situation">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="situation">Summarise</button></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="situation.hosts"><label>Hosts</label><div class="field-value" id="f-situation-hosts"></div></div>
+          <div class="field-row" data-field="situation.vms"><label>VMs</label><div class="field-value" id="f-situation-vms"></div></div>
+          <div class="field-row" data-field="situation.storageTB"><label>Storage</label><div class="field-value" id="f-situation-storageTB"></div></div>
+          <div class="field-row" data-field="situation.teamSize"><label>Team</label><div class="field-value" id="f-situation-teamSize"></div></div>
+          <div class="field-row" data-field="situation.workloads"><label>Workloads</label><div class="field-value" id="f-situation-workloads"></div></div>
+        </div>
+        <div id="summary-panel-situation" class="summary-line hidden"></div>
+      </div>
+
+      <!-- Pain -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">2</span>Pain<span class="tick" id="tick-pain"></span><span class="ready-chip hidden" id="ready-chip-pain">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="pain">Summarise</button></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="painType"><label>Pain type</label><div class="field-value" id="f-painType"></div></div>
+          <div class="field-row" data-field="pain"><label>Pain</label><div class="field-value" id="f-pain"></div><span class="field-hint">what made her take the meeting?</span></div>
+          <div class="field-row" data-field="whatItAffects"><label>Affects</label><div class="field-value" id="f-whatItAffects"></div><span class="field-hint">what does the pain affect?</span></div>
+          <div class="field-row" data-field="whyProblem"><label>Why problem</label><div class="field-value" id="f-whyProblem"></div><span class="field-hint">why is it a problem now?</span></div>
+        </div>
+        <div id="summary-panel-pain" class="summary-line hidden"></div>
+      </div>
+
+      <!-- Numbers -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">3</span>Numbers<span class="tick" id="tick-timeframe"></span><span class="ready-chip hidden" id="ready-chip-numbers">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="numbers">Summarise</button></div>
+        <div class="fields-grid fields-2col">
+          <div class="field-row" data-field="numbers.paysNow"><label>Pays now</label><div class="field-value" id="f-numbers-paysNow"></div></div>
+          <div class="field-row" data-field="numbers.quote"><label>Quote</label><div class="field-value" id="f-numbers-quote"></div></div>
+          <div class="field-row" data-field="numbers.canAbsorb"><label>Absorb</label><div class="field-value" id="f-numbers-canAbsorb"></div></div>
+          <div class="field-row derived"><label>↑ Increase</label><div class="field-value derived-val" id="d-increasePct"></div></div>
+          <div class="field-row derived" style="grid-column:span 2"><label>Gap / yr</label><div class="field-value derived-val" id="d-gapPerYear"></div></div>
+          <div class="field-row derived"><label>Now /mo</label><div class="field-value derived-val" id="d-monthly-pays"></div></div>
+          <div class="field-row derived"><label>Quote /mo</label><div class="field-value derived-val" id="d-monthly-quote"></div></div>
+          <div class="field-row derived" style="grid-column:span 2"><label>Gap /mo</label><div class="field-value derived-val" id="d-monthly-gap"></div></div>
+          <div class="field-row" data-field="deadline"><label>Board date</label><div class="field-value" id="f-deadline"></div></div>
+          <div class="field-row" data-field="renewalDate"><label>Renewal</label><div class="field-value" id="f-renewalDate"></div></div>
+          <div class="field-row" data-field="doingNothing" style="grid-column:span 2"><label>If nothing changes</label><div class="field-value" id="f-doingNothing"></div></div>
+        </div>
+        <div id="summary-numbers" class="summary-line hidden"></div>
+      </div>
+    </div><!-- /cs-col-a -->
+
+    <div id="cs-col-b">
+      <!-- Objection banner (Feature B) -->
+      <div id="dont-promise-banner" class="hidden"></div>
+      <div id="objection-banner" class="hidden"></div>
+      <div id="objection-chips"></div>
+
+      <!-- Cause -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">4</span>Cause<span class="ready-chip hidden" id="ready-chip-cause">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="cause">Summarise</button></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="cause"><label>Cause</label><div class="field-value" id="f-cause"></div><span class="field-hint">why does it hit hard?</span></div>
+          <div class="field-row" data-field="otherDrivers"><label>Other drivers</label><div class="field-value" id="f-otherDrivers"></div><span class="field-hint">what else is pushing it?</span></div>
+        </div>
+        <div id="targeted-cause" class="targeted-q hidden"></div>
+        <div id="summary-cause" class="summary-line hidden"></div>
+      </div>
+
+      <!-- Impact -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">5</span>Impact<span class="tick" id="tick-implications"></span><span class="ready-chip hidden" id="ready-chip-impact">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="impact">Summarise</button></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="impactOnOthers"><label>Ripple effect</label><div class="field-value" id="f-impactOnOthers"></div></div>
+          <div class="field-row" data-field="personalStake"><label>Personal stake</label><div class="field-value" id="f-personalStake"></div></div>
+          <div class="field-row" data-field="signOff"><label>Signs off</label><div class="field-value" id="f-signOff"></div></div>
+          <div class="field-row" data-field="budget"><label>Budget</label><div class="field-value" id="f-budget"></div></div>
+        </div>
+        <div id="targeted-impact" class="targeted-q hidden"></div>
+        <div id="summary-panel-impact" class="summary-line hidden"></div>
+      </div>
+
+      <!-- Needs -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">6</span>Needs<span class="tick" id="tick-needs"></span><span class="ready-chip hidden" id="ready-chip-needs">✓ Ready</span><button class="btn-summarise btn-small" data-summarise="needs">Summarise</button></div>
+        <div id="needs-list"></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="topNeed"><label>Top need (#)</label><div class="field-value" id="f-topNeed"></div></div>
+          <div class="field-row" data-field="needReason"><label>Why it matters</label><div class="field-value" id="f-needReason"></div></div>
+        </div>
+        <div id="summary-needs" class="summary-line hidden"></div>
+      </div>
+
+      <!-- Next step -->
+      <div class="section">
+        <div class="section-header"><span class="section-num">9</span>Next Step<span class="tick" id="tick-nextstep"></span></div>
+        <div class="fields-grid">
+          <div class="field-row" data-field="nextStep.who"><label>Who</label><div class="field-value" id="f-nextStep-who"></div></div>
+          <div class="field-row" data-field="nextStep.purpose"><label>Purpose</label><div class="field-value" id="f-nextStep-purpose"></div></div>
+          <div class="field-row" data-field="nextStep.dateTime"><label>Date / time</label><div class="field-value" id="f-nextStep-dateTime"></div></div>
+        </div>
+        <div id="close-book-it" class="summary-line hidden"></div>
+        <div id="constraint-chips" class="constraint-row"></div>
+      </div>
+
+      <!-- Parked -->
+      <div class="section" id="parked-section" style="display:none">
+        <div class="section-header">📌 Parked</div>
+        <div id="parked-list"></div>
+      </div>
+    </div><!-- /cs-col-b -->
+  </div><!-- /call-sheet -->
+
+  <!-- Right panel: pitch + brief -->
+  <div id="right-panel">
+    <!-- Help: pitch + brief -->
+    <div id="help-panel">
+      <div id="pitch-panel">
+        <div id="pitch-header">
+          <span class="panel-title">PITCH</span>
+          <span id="pitch-confidence-bar"></span>
+          <button id="btn-pitch-hold" class="btn-small" title="Hold pitch (P)">Hold</button>
+        </div>
+        <div id="pitch-status"></div>
+        <div id="pitch-lines"></div>
+        <div id="pitch-missing"></div>
+      </div>
+      <div id="brief-panel">
+        <div class="panel-title" style="padding:6px 8px 4px">BRIEF</div>
+        <div id="brief-list"></div>
+      </div>
+    </div>
+  </div><!-- /right-panel -->
+
+</div><!-- /main-layout -->
+
+</div><!-- /review-view -->
+
+</div><!-- /main-area -->
+
+<!-- Evidence tooltip -->
+<div id="evidence-tooltip" class="hidden"></div>
+
+<!-- Edit overlay -->
+<div id="edit-overlay" class="hidden">
+  <div id="edit-box">
+    <label id="edit-label"></label>
+    <input id="edit-input" type="text">
+    <div id="edit-actions">
+      <button id="btn-edit-save">Save &amp; Lock</button>
+      <button id="btn-edit-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings overlay -->
+<div id="settings-overlay" class="hidden">
+  <div id="settings-box">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span class="settings-title">⚙ SETTINGS</span>
+      <button id="settings-close" class="btn-small">✕</button>
+    </div>
+
+    <div class="settings-field">
+      <label>Anthropic API Key</label>
+      <input id="settings-an-input" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+      <span class="settings-key-hint" id="settings-an-hint">not set</span>
+    </div>
+
+    <div class="settings-field">
+      <label>Deepgram API Key</label>
+      <input id="settings-dg-input" type="password" autocomplete="off" spellcheck="false" placeholder="deepgram key…">
+      <span class="settings-key-hint" id="settings-dg-hint">not set</span>
+    </div>
+
+    <div class="settings-field">
+      <label>Speech engine</label>
+      <select id="settings-engine">
+        <option value="auto">Auto (Deepgram if available, else Chrome)</option>
+        <option value="deepgram">Deepgram only</option>
+        <option value="chrome">Chrome (Web Speech API)</option>
+      </select>
+    </div>
+
+    <div class="settings-status">
+      <div class="settings-status-row" id="sstat-anthropic">
+        <span class="sstat-dot not-set"></span>
+        <span class="sstat-label">Anthropic:</span>
+        <span class="sstat-value">not set</span>
+      </div>
+      <div class="settings-status-row" id="sstat-deepgram">
+        <span class="sstat-dot not-set"></span>
+        <span class="sstat-label">Deepgram:</span>
+        <span class="sstat-value">not set</span>
+      </div>
+      <div class="settings-status-row" id="sstat-hearing">
+        <span class="sstat-dot not-set"></span>
+        <span class="sstat-label">Hearing:</span>
+        <span class="sstat-value">not tested</span>
+        <button id="btn-hearing-test" class="btn-small">Run test (5s)</button>
+      </div>
+      <div class="settings-hint">Play audio from your Mac speakers, then click Run test — confirms the other person's audio is captured.</div>
+    </div>
+
+    <div class="settings-actions">
+      <span id="settings-save-status"></span>
+      <button id="settings-save-btn" class="btn-secondary">Save &amp; Test</button>
+    </div>
+  </div>
+</div>
+
+<script src="coach-logic.js"></script>
+<script src="summary-logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

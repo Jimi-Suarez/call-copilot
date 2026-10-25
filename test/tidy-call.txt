@@ -1,0 +1,65 @@
+# TIDY CALL — linear, complete, all fields covered
+# Acceptance test: number parsing, her words only, correction, lock
+[00:10] Me: Thanks for your time. I want to make sure this is useful for you. My plan is: understand your situation for about 20 minutes, then in the last 10 decide whether a next step makes sense or we part ways. Does that feel fair?
+[00:25] Her: Yes, that's fine.
+[02:05] Me: Great. Can you walk me through your estate — how many hosts and VMs, how much storage, how big is your IT team?
+[02:30] Her: We run 12 hosts and about 400 virtual machines. Storage is around 150 terabytes. Team of 5 — two of them are seniors who've been on VMware for years.
+[03:00] Her: We mostly run clinical systems — patient records, PACS, a few administrative workloads.
+[04:15] Me: What was it that made you agree to this meeting?
+[04:40] Her: Honestly, the renewal quote. It came back more than double what we pay now. That's what kicked this off.
+[05:10] Her: And it affects the clinical systems refresh we had planned for next year. That would have to be cut if we absorb the full increase.
+[05:45] Her: The budget was already committed to that refresh. We can't just move the money around.
+[06:20] Me: What's driving that to be such a priority right now?
+[06:50] Her: The board meeting is in March. That's when the CFO has to bring a recommendation. So we have a hard deadline.
+[07:30] Me: Is this the main thing to focus on, or will something else overpower it?
+[07:50] Her: This is the main one. Although our storage arrays are also going out of support at end of next year, so that's in the background.
+[08:30] Me: Let's put a number on it. Roughly how much is it?
+[08:55] Her: We currently pay about 400 grand a year. The new quote is 900 thousand.
+[09:20] Me: And what can you absorb without having to cut anything?
+[09:45] Her: If we went to about 600,000 we could probably live with that. That's the ceiling.
+[10:15] Me: So the renewal — is that end of June?
+[10:30] Her: Actually it's mid-July. Not end of June.
+[11:00] Me: When is the board meeting exactly?
+[11:15] Her: Early March. First or second week.
+[11:45] Me: What happens if nothing changes — if you just sign at the new price?
+[12:10] Her: The clinical refresh gets cut entirely. We'd probably need to go back and renegotiate the storage replacement separately, which is its own project.
+[12:45] Me: Why do you think this is going to hit so hard?
+[13:10] Her: Broadcom changed the licensing structure when they took over VMware. We're now in a bundle that includes features we've never used. That's the core of it.
+[13:50] Her: And with the arrays going out of support, it's a double hit on the budget in the same year.
+[14:30] Me: To what extent is the licensing change — paying for what you don't use — the main driver here?
+[14:55] Her: It's the biggest part. I'd say 70% of the increase comes from the bundle restructuring.
+[15:20] Me: What else is driving this to matter right now?
+[15:45] Her: The CFO has to defend a number to the board. If we can't show an alternative, she has no leverage to push back on the VMware quote.
+[16:20] Me: What ripple effect is this having on other people in the organisation?
+[16:50] Her: The clinical team are worried about any change that touches patient systems. And finance are under pressure because this wasn't in the original budget.
+[17:30] Her: If patient systems went down during a migration, that's a clinical incident. That's the thing everyone's scared of.
+[18:05] Me: How does this affect you personally?
+[18:30] Her: I have to stand up in front of the CEO and the board and explain why we're recommending something new. If it goes wrong, it's on me.
+[19:00] Me: Who else needs to sign off on this?
+[19:25] Her: Finance lead and the compliance officer. The compliance lead will want to see anything touching patient data signed off in writing.
+[20:00] Me: Where would the money for this come from?
+[20:20] Her: It would come from the IT capital budget. But it needs the CFO's approval because it's above the threshold I can sign off myself.
+[21:00] Me: OK. What do you need to happen before the board meeting in March?
+[21:30] Her: We need a proper comparison — total cost of ownership against the VMware quote — before the board meets.
+[22:00] Her: We need a migration plan that keeps patient systems up. That's non-negotiable.
+[22:40] Her: And we need the storage sorted in the same move. I don't want two separate projects running simultaneously.
+[23:15] Me: Which of those matters most to you?
+[23:40] Her: The migration plan. Patient safety is ultimately what I'm accountable for. If that goes wrong, nothing else matters.
+[24:10] Me: Why does that matter to you personally?
+[24:35] Her: Because if a patient system goes down mid-migration, that's on me. It ends careers. I've seen it happen.
+[26:00] Me: OK — so I want to check I've heard you right. You need a TCO comparison, a migration plan that protects patient systems, and the storage sorted in the same move. The migration plan matters most because that's what you're accountable for. Is that right?
+[26:20] Her: Yes, that's exactly it.
+[27:00] Me: Can I try a few ideas on you? Since Broadcom changed VMware's licensing, a lot of hospital IT teams are looking at alternatives. Nutanix puts your servers, storage and networking into one system.
+[27:20] Me: We put a tested migration plan in front of you, keeping patient systems up throughout. You told me the migration plan matters most. So here's how that fits.
+[27:40] Me: We run the storage replacement in the same project. You told me you need the storage sorted in the same move. So here's how that fits.
+[27:55] Her: Can you guarantee there'll be no downtime? Patient systems going down is what keeps me up at night.
+[28:10] Me: That's the right concern. I can't promise zero downtime, nobody honest can. What would you need to see in a plan to feel safe?
+[28:25] Her: Agreed cutover windows, written sign-off from the clinical lead, and a named engineer on call.
+[29:00] Me: We said at the start we'd decide whether a next step makes sense. Does it?
+[29:20] Her: Yes. I need to see something concrete before I can take it to the CFO.
+[29:45] Me: What would you need from us before a working session?
+[30:05] Her: A one-page summary of how the comparison would work, so I can brief the compliance lead before she's in the room.
+[30:30] Me: Let's book a working session before your March deadline. Who else should be in the room?
+[30:45] Her: Probably our senior VMware admin. He needs to understand the migration approach.
+[31:05] Me: Good. Let's say mid-January. I'll send dates and a one-page recap today.
+[31:20] Her: Perfect. Thank you.

@@ -1,0 +1,122 @@
+{
+  "moves": [
+    {
+      "id": "M1",
+      "lesson": ["L5"],
+      "tag": "Rules of engagement",
+      "trigger": "call_start_no_roe",
+      "timelimitMin": 2,
+      "phrases": [
+        "Do you mind if we talk about the agenda?",
+        "Here's what I'm thinking — tell me if you'd like a different agenda.",
+        "Does that feel fair?"
+      ],
+      "callback": "At the start we said we'd decide whether a next step makes sense."
+    },
+    {
+      "id": "M2",
+      "lesson": ["L3","L8","L9","L13"],
+      "tag": "Opening question",
+      "trigger": "call_start",
+      "phrases": [
+        "What challenges in this area would be problematic if not solved in the next 6–12 months?",
+        "What motivated you to take this meeting?",
+        "Do you mind if I go back in time? What was the original challenge?"
+      ]
+    },
+    {
+      "id": "M3",
+      "lesson": ["L14","L3"],
+      "tag": "Peel the onion",
+      "trigger": "last_statement_root_cause_or_solution",
+      "phrases": [
+        "What's driving that to be a priority?",
+        "What challenge is going on in your business that's driving this?",
+        "What's that leading to?"
+      ]
+    },
+    {
+      "id": "M4",
+      "lesson": ["L13","L15"],
+      "tag": "Validate priority",
+      "trigger": "energy_low",
+      "phrases": [
+        "Is this the challenge we should focus on, or are there things that would overpower it?",
+        "Where does this rank on your list right now?"
+      ]
+    },
+    {
+      "id": "M5",
+      "lesson": ["L17","L23"],
+      "tag": "Summarise + transition",
+      "trigger": "section_complete",
+      "phrases": [
+        "Let me take a step back and summarise what I've heard… Did I get that right?",
+        "Did I get that right, or am I missing anything?"
+      ]
+    },
+    {
+      "id": "M6",
+      "lesson": ["L18","L19"],
+      "tag": "Open cause → targeted",
+      "trigger": "pain_known_cause_unknown",
+      "openQuestion": "What's your opinion on why this is happening?",
+      "phrases": [
+        "What's your opinion on why this is happening?",
+        "To what extent is [cause] an issue for you?",
+        "Many customers see [cause] — how is that showing up for you?"
+      ]
+    },
+    {
+      "id": "M7",
+      "lesson": ["L24"],
+      "tag": "Quantify monthly",
+      "trigger": "metric_known_no_monthly",
+      "phrases": [
+        "Where is it now, where should it be, and what's the gap worth per month?",
+        "What metric would improve the most if you solved this?"
+      ]
+    },
+    {
+      "id": "M8",
+      "lesson": ["L25","L26"],
+      "tag": "Open impact → targeted",
+      "trigger": "impact_unknown",
+      "openQuestion": "What ripple effects is this having on the rest of the business?",
+      "phrases": [
+        "What ripple effects is this having on the rest of the business?",
+        "What would get derailed if you didn't make progress?",
+        "Who else does this challenge impact, and how?"
+      ]
+    },
+    {
+      "id": "M9",
+      "lesson": ["L28","L30","L31"],
+      "tag": "Permission to pitch",
+      "trigger": "pre_pitch",
+      "phrases": [
+        "What do you think you need to solve the challenge we've discussed?",
+        "Can I try a few additional ideas on you?"
+      ]
+    },
+    {
+      "id": "M10",
+      "lesson": ["L29"],
+      "tag": "Buying criteria",
+      "trigger": "needs_known",
+      "phrases": [
+        "You told me [need] — to what extent is it important that [capability]?"
+      ]
+    },
+    {
+      "id": "M11",
+      "lesson": ["L5"],
+      "tag": "Close with callback",
+      "trigger": "close",
+      "phrases": [
+        "At the start we said we'd decide whether a next step makes sense.",
+        "Let's lock in a working session — who needs to be in the room?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,399 @@
+[
+ {
+  "id": "c-unpredictable-budget",
+  "family": "cost",
+  "label": "Can't forecast the cost / multi-year lock-in",
+  "sheMightSay": [
+   "I can't plan beyond this renewal",
+   "they keep changing the terms"
+  ],
+  "weDo": "give you a multi-year cost comparison you can put in front of finance",
+  "rootCauseQuestion": "To what extent is not being able to forecast the cost the problem, as opposed to the price itself?",
+  "impactQuestion": "What does that do to your planning with finance each year, and is that a concern right now?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "c-hidden-switch-cost",
+  "family": "cost",
+  "label": "Fear of the cost and disruption of switching",
+  "sheMightSay": [
+   "we'd end up paying twice while we move",
+   "switching costs more than it saves"
+  ],
+  "weDo": "put every transition cost in the comparison, including running both side by side",
+  "rootCauseQuestion": "To what extent is the cost of the move itself holding you back?",
+  "impactQuestion": "If the transition costs were clear up front, what would change in the conversation with finance?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim",
+  "caution": "Never claim the move is cheap. Say we put every cost in the comparison."
+ },
+ {
+  "id": "c-procurement-rules",
+  "family": "cost",
+  "label": "Public procurement rules / formal tender needed",
+  "sheMightSay": [
+   "I can't just sign with someone new",
+   "procurement will want a competitive process"
+  ],
+  "weDo": "map what procurement needs, so the evidence you gather fits their process",
+  "rootCauseQuestion": "To what extent do procurement rules decide how fast you can change anything?",
+  "impactQuestion": "Who in procurement has to see this first, and what would they need to see?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "c-capex-opex",
+  "family": "cost",
+  "label": "Funding mismatch: capital available, operating squeezed (or the reverse)",
+  "sheMightSay": [
+   "I've got capital but no revenue budget",
+   "it has to be capital or it's dead"
+  ],
+  "weDo": "show the comparison in capital and operating terms, so it fits the pot you actually have",
+  "rootCauseQuestion": "To what extent does which budget pot it comes from shape the decision?",
+  "impactQuestion": "Who controls that pot, and what would they need to release it?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "c-vendor-relationship",
+  "family": "cost",
+  "label": "Can't get a straight answer from the current vendor / feel too small to matter",
+  "sheMightSay": [
+   "I can't get anyone to call me back",
+   "we're a small account to them"
+  ],
+  "weDo": "give you a straight, written answer on each question, with a named person behind it",
+  "rootCauseQuestion": "To what extent is the relationship with your current vendor part of why you took the meeting?",
+  "impactQuestion": "What has that cost you in time or decisions so far?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "r-cyber",
+  "family": "risk",
+  "label": "Ransomware / cyber resilience",
+  "sheMightSay": [
+   "another trust got hit last month",
+   "insurance is asking harder questions"
+  ],
+  "weDo": "put recovery and cyber-resilience questions into the plan, with your security lead in the room",
+  "rootCauseQuestion": "To what extent is cyber resilience driving how you look at your platform now?",
+  "impactQuestion": "If an attack hit tomorrow, what would fail first and who would feel it?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim",
+  "caution": "Don't claim Nutanix prevents attacks."
+ },
+ {
+  "id": "r-dr",
+  "family": "risk",
+  "label": "Disaster recovery untested or ageing",
+  "sheMightSay": [
+   "we've never properly tested failover",
+   "the DR site is old"
+  ],
+  "weDo": "test recovery against the targets your clinical teams set, before anything moves",
+  "rootCauseQuestion": "To what extent is your recovery plan something you have actually tested?",
+  "impactQuestion": "How long could the ward systems be down before it becomes a patient-safety issue?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "r-app-certification",
+  "family": "risk",
+  "label": "Clinical application suppliers only certify certain platforms",
+  "sheMightSay": [
+   "our patient record supplier only supports certain set-ups",
+   "the supplier has to approve any change"
+  ],
+  "weDo": "check each critical clinical application's supported platforms before committing to any plan",
+  "rootCauseQuestion": "To what extent do your application suppliers limit what you can move to?",
+  "impactQuestion": "Which applications would need the supplier's approval, and how long does that usually take?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "r-eol-versions",
+  "family": "risk",
+  "label": "Old platform versions out of support / patching risk",
+  "sheMightSay": [
+   "we're running versions nobody supports",
+   "audit flagged our patch level"
+  ],
+  "weDo": "agree an upgrade or move path with dates, so nothing sits unsupported",
+  "rootCauseQuestion": "To what extent are unsupported versions a security or audit problem for you?",
+  "impactQuestion": "Who has flagged it, and what happens if it isn't resolved?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "r-audit-regulator",
+  "family": "risk",
+  "label": "Audit finding or regulator pressure",
+  "sheMightSay": [
+   "the auditor raised it",
+   "we have to evidence this to the regulator"
+  ],
+  "weDo": "agree up front what evidence the auditor or regulator needs, and build the plan around it",
+  "rootCauseQuestion": "To what extent is an audit or regulator deadline shaping the timing?",
+  "impactQuestion": "What happens if the finding is still open at the next review?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim",
+  "caution": "Don't claim compliance. Ask who covers it."
+ },
+ {
+  "id": "r-data-sovereignty",
+  "family": "risk",
+  "label": "Data must stay on-premises / in-country",
+  "sheMightSay": [
+   "patient data can't go to a public cloud",
+   "we're not allowed to move it out"
+  ],
+  "weDo": "keep the data where it has to be, and put that constraint in the comparison",
+  "rootCauseQuestion": "To what extent does where the data must live narrow your options?",
+  "impactQuestion": "Who set that rule, and is it likely to change?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-imaging-growth",
+  "family": "technology",
+  "label": "Imaging / clinical data growing fast",
+  "sheMightSay": [
+   "imaging storage doubles every few years",
+   "we keep running out of space"
+  ],
+  "weDo": "size your growth with you over three years and cost it",
+  "rootCauseQuestion": "To what extent is data growth what is forcing the next spend?",
+  "impactQuestion": "What happens to clinical workflows if capacity runs out?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-performance",
+  "family": "technology",
+  "label": "Slow clinical systems at peak times",
+  "sheMightSay": [
+   "the patient record crawls at shift change",
+   "clinicians complain about speed"
+  ],
+  "weDo": "measure where the slowdown actually is before proposing anything",
+  "rootCauseQuestion": "To what extent is performance, not cost, behind this conversation?",
+  "impactQuestion": "Who feels the slowness first, and how does it show up on the ward?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-hardware-refresh",
+  "family": "technology",
+  "label": "Hosts reaching end of life at the same time",
+  "sheMightSay": [
+   "half our servers are five years old",
+   "we're due a hardware refresh anyway"
+  ],
+  "weDo": "line the host refresh up with the platform decision, so you don't buy twice",
+  "rootCauseQuestion": "To what extent is the hardware age forcing the timing?",
+  "impactQuestion": "If the refresh and the licence decision land together, what does that do to the budget?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-cloud-confusion",
+  "family": "technology",
+  "label": "Cloud-first mandate versus reality / cloud costs",
+  "sheMightSay": [
+   "we've been told cloud first",
+   "the cloud bill scared us"
+  ],
+  "weDo": "compare on-premises, hybrid and cloud on your real workloads",
+  "rootCauseQuestion": "To what extent is a cloud direction set above you complicating the decision?",
+  "impactQuestion": "What would happen if you were asked to justify staying on-premises?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim",
+  "caution": "Never run down cloud."
+ },
+ {
+  "id": "t-vdi",
+  "family": "technology",
+  "label": "Virtual desktops for clinicians",
+  "sheMightSay": [
+   "clinicians use virtual desktops all day",
+   "the desktop licensing changed too"
+  ],
+  "weDo": "include the desktop estate in the plan and check its licensing separately",
+  "rootCauseQuestion": "To what extent is the desktop estate part of the same pressure?",
+  "impactQuestion": "How many staff depend on those desktops each shift?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-edge-sites",
+  "family": "technology",
+  "label": "Community clinics / remote sites",
+  "sheMightSay": [
+   "we run kit at ten community sites",
+   "the small sites get forgotten"
+  ],
+  "weDo": "include the smaller sites in the plan so they aren't left behind",
+  "rootCauseQuestion": "To what extent do the remote sites complicate any change?",
+  "impactQuestion": "What happens at those sites if the link or the kit fails?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-datacentre-space",
+  "family": "technology",
+  "label": "Ageing data centre / power, cooling, net-zero targets",
+  "sheMightSay": [
+   "the data centre is full",
+   "we have net-zero targets to hit"
+  ],
+  "weDo": "cost the footprint, power and cooling alongside the licences",
+  "rootCauseQuestion": "To what extent is the physical data centre part of the problem?",
+  "impactQuestion": "What happens to the sustainability targets if nothing changes?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-ops-complexity",
+  "family": "technology",
+  "label": "Routine upgrades and patching take huge team time",
+  "sheMightSay": [
+   "upgrades take whole weekends",
+   "we juggle too many consoles"
+  ],
+  "weDo": "map how much team time goes on routine upgrades and patching today",
+  "rootCauseQuestion": "To what extent is day-to-day operational effort part of why you're here?",
+  "impactQuestion": "What would your team do with that time back, and is it a concern now?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "t-backup",
+  "family": "technology",
+  "label": "Backup and recovery tooling tied to the current platform",
+  "sheMightSay": [
+   "our backup product is built around VMware",
+   "changing platform means changing backup"
+  ],
+  "weDo": "check your backup and recovery tooling against any option before you commit",
+  "rootCauseQuestion": "To what extent does your backup set-up limit your choices?",
+  "impactQuestion": "What would a failed restore mean for the trust?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-key-person",
+  "family": "people-and-organisation",
+  "label": "Key person leaving / knowledge in one head",
+  "sheMightSay": [
+   "Dev is leaving in January",
+   "only one person really understands it"
+  ],
+  "weDo": "put our engineer alongside your team so knowledge isn't held by one person",
+  "rootCauseQuestion": "To what extent is relying on one or two people what worries you most?",
+  "impactQuestion": "What happens to the estate if that person goes before this is sorted?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-burnout",
+  "family": "people-and-organisation",
+  "label": "Team burnout / on-call load",
+  "sheMightSay": [
+   "they're exhausted",
+   "nobody has had a proper holiday"
+  ],
+  "weDo": "agree who does what and when, so the work doesn't land on the same few people",
+  "rootCauseQuestion": "To what extent is team strain part of why this matters now?",
+  "impactQuestion": "What is it costing you in people or in sickness and leavers?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-new-leader",
+  "family": "people-and-organisation",
+  "label": "New CIO/CTO wants a different direction",
+  "sheMightSay": [
+   "we've got a new CIO who wants options",
+   "strategy is being reset"
+  ],
+  "weDo": "give the new leader a clear set of options with numbers, early",
+  "rootCauseQuestion": "To what extent is the new direction driving the timing?",
+  "impactQuestion": "What does the new leader need to see, and by when?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-merger",
+  "family": "people-and-organisation",
+  "label": "Trust merger / consolidation",
+  "sheMightSay": [
+   "we're merging with another trust",
+   "two estates have to become one"
+  ],
+  "weDo": "include the other organisation's estate in the comparison from the start",
+  "rootCauseQuestion": "To what extent is the merger shaping this decision?",
+  "impactQuestion": "Who decides which platform wins, and when?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-competing-programme",
+  "family": "people-and-organisation",
+  "label": "Big programme consuming capacity (e.g. patient-record go-live)",
+  "sheMightSay": [
+   "we have the record go-live in spring",
+   "nothing else can start until then"
+  ],
+  "weDo": "sequence this around the programme, with dates you and we agree",
+  "rootCauseQuestion": "To what extent does the other programme set the window for this?",
+  "impactQuestion": "What are the hard dates we have to stay clear of?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-burned-before",
+  "family": "people-and-organisation",
+  "label": "Burned by a past migration",
+  "sheMightSay": [
+   "last time it ran six months over",
+   "nobody owned it"
+  ],
+  "weDo": "name one accountable owner with dates, and agree up front what good looks like",
+  "rootCauseQuestion": "To what extent does what happened last time shape how you see this?",
+  "impactQuestion": "What would have to be true this time for you to trust it?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim",
+  "caution": "Don't say it will be different. Ask what good looks like."
+ },
+ {
+  "id": "o-board-pressure",
+  "family": "people-and-organisation",
+  "label": "Board or executive asked for a risk position",
+  "sheMightSay": [
+   "the board asked for a plan B",
+   "the chief exec wants it on the risk register"
+  ],
+  "weDo": "put a tested option on the table before the board meets, so you can show you've looked",
+  "rootCauseQuestion": "To what extent is the board's request what's setting the pace?",
+  "impactQuestion": "How would it look at the board if you signed with no alternative?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ },
+ {
+  "id": "o-winter-freeze",
+  "family": "people-and-organisation",
+  "label": "Winter pressure change freeze",
+  "sheMightSay": [
+   "no changes November to March",
+   "winter pressures mean a freeze"
+  ],
+  "weDo": "work back from your freeze dates so nothing lands in the blackout",
+  "rootCauseQuestion": "To what extent do the freeze dates leave a narrow window?",
+  "impactQuestion": "If the window is missed, what is the next one?",
+  "supportingFact": null,
+  "source": "none: discovery or process step, not a Nutanix claim"
+ }
+]

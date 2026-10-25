@@ -1,0 +1,15 @@
+{
+ "numbers": {"paysNow": 95000, "quote": 140000, "canAbsorb": 110000},
+ "contains": {"situation.hosts": "11", "situation.vms": "260", "situation.storageTB": "90", "situation.teamSize": "3", "renewalDate": "30", "signOff": "mo"},
+ "painTypeIn": ["Small team capacity"],
+ "needsCount": 2,
+ "needsContain": ["work alongside", "training"],
+ "topNeed": "support during the move",
+ "needReasonContains": "lose another person",
+ "scratch": ["canteen"],
+ "pitchDetected": {"pitchStartedAt": "24:10", "timeCheck": "LATE by 1 minute (target 23:00)"},
+ "objections": [{"match": "retraining", "key": "My team would need retraining."}],
+ "nextStep": {"whoContains": ["mo"], "dateTimeContains": ["early february"], "purposeContains": "working session"},
+ "mustNotInvent": ["budget beyond 'operating budget, up to fifty'", "board date (none stated; deadline may come from renewal 30 June)"],
+ "rule": "personal stake mentions holiday/hands-on work; canteen contract must be parked, not a field"
+}

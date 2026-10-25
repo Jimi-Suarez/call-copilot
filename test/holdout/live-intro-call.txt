@@ -1,0 +1,9 @@
+# LIVE INTRO CALL — opening detected from natural intro
+# hasRoE positive test: "is that okay with you" triggers agenda detection
+[00:06] Me: My name is Jimmy, inside sales executive here at Nutanix. What I would love to do today is understand exactly what's happening with your virtual estate, and then in the next half an hour we'll figure out if this would be a good fit moving forward. Is that okay with you?
+[00:38] Her: Yes. That's fine.
+[01:20] Me: Great. Can you walk me through your setup — how many hosts and VMs, how much storage?
+[01:45] Her: We have about 20 hosts, 350 virtual machines and around 80 terabytes of storage.
+[02:30] Me: And what made you agree to this meeting today?
+[02:55] Her: Our VMware renewal is coming up and the quote was significantly higher than we expected.
+[03:30] Her: We're talking almost double what we're paying now.

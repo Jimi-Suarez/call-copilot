@@ -1,0 +1,102 @@
+{
+  "mustDo": [
+    {
+      "id": "1a",
+      "what": "Uncover the customer's current situation",
+      "where": "Step 2 situation: hosts, VMs, storage, team",
+      "autoField": "situation"
+    },
+    {
+      "id": "1b",
+      "what": "Uncover pain points / challenges",
+      "where": "Steps 2 and 4: pain, what it affects, why it is a problem, cause",
+      "autoField": "pain"
+    },
+    {
+      "id": "1c",
+      "what": "Uncover needs",
+      "where": "Step 6: needs and which matters most",
+      "autoField": "needs"
+    },
+    {
+      "id": "1d",
+      "what": "Uncover implications of doing nothing",
+      "where": "Step 3: 'what if nothing changes', step 5 impact",
+      "autoField": "implications"
+    },
+    {
+      "id": "1e",
+      "what": "Uncover the timeframe",
+      "where": "Step 3: board and renewal dates",
+      "autoField": "timeframe"
+    },
+    {
+      "id": "2",
+      "what": "Introduce Nutanix: high-level business outcomes, keep her attention",
+      "where": "Pitch tab lines 2 to 5 (outcomes are HER needs)",
+      "autoField": null,
+      "manual": true
+    },
+    {
+      "id": "3",
+      "what": "Overcome objections elegantly",
+      "where": "Objections tab. Mark yourself after the run.",
+      "autoField": null,
+      "manual": true
+    },
+    {
+      "id": "4",
+      "what": "Agree a specific next step",
+      "where": "Step 9 and the Close block on the Pitch tab",
+      "autoField": "nextStep"
+    }
+  ],
+  "criteria": [
+    {
+      "id": 1,
+      "criterion": "Understanding of the customer",
+      "how": "Her words, her numbers, her dates, her personal stake. Never put words in her mouth."
+    },
+    {
+      "id": 2,
+      "criterion": "Level of preparation",
+      "how": "Estate questions ready, targeted questions picked from Lookup, close planned, Nutanix terms known (Basics tab)."
+    },
+    {
+      "id": 3,
+      "criterion": "Presentation skills and communication",
+      "how": "Say the pitch, don't read it. Plain English. No filler 'okay'."
+    },
+    {
+      "id": 4,
+      "criterion": "Understanding of Nutanix at base level",
+      "how": "Say the Basics tab answers in your own words, with no jargon."
+    },
+    {
+      "id": 5,
+      "criterion": "Ability to deal with objections",
+      "how": "Agree, don't over-promise, ask what she needs. Every objection answered."
+    },
+    {
+      "id": 6,
+      "criterion": "Control over the meeting and time management",
+      "how": "Agenda in the first 2 minutes. Pitch by 23:00, close by 27:00."
+    },
+    {
+      "id": 7,
+      "criterion": "Clear next action",
+      "how": "Date, people, purpose, recap sent today."
+    }
+  ],
+  "timeTargets": {
+    "agendaBy": 2,
+    "pitchBy": 23,
+    "closeBy": 27,
+    "endBy": 30
+  },
+  "guidelines": [
+    "Qualify before presenting. Understanding the prospect is key, so spend some time on discovery first.",
+    "Keep the Nutanix introduction simple and outcome-focused, not technical.",
+    "Prepare for a Q&A afterwards (Basics and Objections tabs)."
+  ]
+}

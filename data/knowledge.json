@@ -1,0 +1,216 @@
+{
+ "lookup": [
+  {
+   "painType": "No tested fallback",
+   "sheSays": "\"I can't say to VMware we've tested another option.\"",
+   "weDo": "build a tested way back before anything moves",
+   "supportingFact": "Nutanix Move can create test VMs on the target site in an isolated network, and built-in rollback options keep the source VM (disconnected and annotated). Vendor blog.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/blog/supercharge-your-vm-migrations-to-nutanix-ahv",
+   "caution": "Say what we BUILD together. Don't say Nutanix removes all risk.",
+   "causeQuestion": "To what extent is having no tested alternative weakening your position with VMware?",
+   "impactQuestion": "Is the board asking what your plan B is, and is that a concern right now?"
+  },
+  {
+   "painType": "Migration risk / downtime",
+   "sheSays": "\"If it goes wrong mid-migration, patient systems go down.\"",
+   "weDo": "start with non-critical workloads, test first, and agree the cutover windows with your clinical teams",
+   "supportingFact": "Move pre-seeds data and does delta syncs so cutovers cause minimal disruption. The page gives no downtime figures.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/blog/supercharge-your-vm-migrations-to-nutanix-ahv",
+   "caution": "NEVER promise zero downtime. 'I can't promise zero downtime, what would you need in a plan?'",
+   "causeQuestion": "To what extent is the risk of an outage during a move what is holding you back?",
+   "impactQuestion": "If a migration went wrong, who would feel it first, and how?"
+  },
+  {
+   "painType": "CFO needs numbers",
+   "sheSays": "\"The CFO has to defend a number to the board.\"",
+   "weDo": "cost it side by side with your VMware quote, using your actual numbers",
+   "supportingFact": "Nutanix says the AHV hypervisor is included in its licences at no additional cost, and existing vSphere licences can be applied to the platform. Vendor claim.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition",
+   "caution": "Do NOT say it will be cheaper. Say: 'I haven't seen your estate, that's what the comparison is for.'",
+   "causeQuestion": "To what extent is a lack of real numbers on the alternatives a problem when you talk to finance?",
+   "impactQuestion": "How is finance reacting to the jump, and is that a concern right now?"
+  },
+  {
+   "painType": "Renewal cost shock",
+   "sheSays": "\"The quote is more than double what we pay now.\"",
+   "weDo": "put a costed comparison next to your renewal quote before the board meets",
+   "supportingFact": "Same licensing points as above (AHV included, vSphere licence mobility). Vendor claim.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition",
+   "caution": "Never promise a saving. Compare, don't claim.",
+   "causeQuestion": "To what extent is the licensing change driving the increase, compared with what you actually use?",
+   "impactQuestion": "What gets cut or delayed if the quote stands, and is that a concern right now?"
+  },
+  {
+   "painType": "Small team capacity",
+   "sheSays": "\"My team is stretched and only knows VMware.\"",
+   "weDo": "put our engineer and the reseller alongside your team, with training time agreed up front",
+   "supportingFact": "Nutanix lists migration tools, training, professional services and a migration blueprint. Vendor claim.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition",
+   "caution": "Ask: 'Training time, or support during the move?' Don't promise a learning-curve length.",
+   "causeQuestion": "To what extent is your team's time, or only knowing one platform, an issue?",
+   "impactQuestion": "What does it cost the hospital when the team is tied up with this?"
+  },
+  {
+   "painType": "Storage end of support",
+   "sheSays": "\"The arrays go out of support at the end of next year.\"",
+   "weDo": "keep the storage replacement in the same plan, so it's sorted before the arrays go out of support",
+   "supportingFact": "Nutanix positions hyperconverged infrastructure as a SAN replacement, and says it can also run alongside an existing SAN for current workloads. Vendor claim.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition",
+   "caution": "The date comes from HER. Don't say it fixes the storage on its own, say it goes in the plan.",
+   "causeQuestion": "To what extent is the end-of-support date on the arrays forcing the timing?",
+   "impactQuestion": "What happens to patient-facing systems if the arrays fail before they're replaced?"
+  },
+  {
+   "painType": "Servers and storage as two worlds",
+   "sheSays": "\"Vendors blame each other and my people are stuck in the middle.\"",
+   "weDo": "bring servers, storage and networking into one system you manage from one place",
+   "supportingFact": "A healthcare customer (Gruppo Policlinico di Monza, 2020) said production and DR are managed centrally through Prism. Vendor press release, single customer.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/press-releases/2020/gruppo-policlinico-di-monza-healthcare-system-chooses-nutanix-to-improve-security-reliability-and-dr",
+   "caution": "One customer, 2020, vendor-published. Use as 'one hospital group did X', never as a general promise.",
+   "causeQuestion": "To what extent does managing servers and storage separately slow you down when something breaks?",
+   "impactQuestion": "How much team time goes on vendors pointing at each other, and is that a concern right now?"
+  },
+  {
+   "painType": "Clinical uptime / patient safety",
+   "sheSays": "\"Patient systems are the one thing I can't be wrong about.\"",
+   "weDo": "agree migration windows with your clinical teams and name an engineer who is on call during the cutover",
+   "supportingFact": "The same customer reported RPO and RTO down 80% on average and storage snapshots at minute intervals. Vendor claim, one customer.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/press-releases/2020/gruppo-policlinico-di-monza-healthcare-system-chooses-nutanix-to-improve-security-reliability-and-dr",
+   "caution": "Don't quote the 80% as a promise. Only if she asks for evidence, and name the source.",
+   "causeQuestion": "To what extent does clinical uptime limit how and when you can change anything?",
+   "impactQuestion": "Who in the clinical teams feels it first when systems are unstable?"
+  },
+  {
+   "painType": "Board wants less single-vendor risk",
+   "sheSays": "\"The board wants us less dependent on one vendor.\"",
+   "weDo": "give you a tested alternative on the table before the board meets, so you're not tied to one quote",
+   "supportingFact": "Nutanix Move migrates VMware workloads to AHV on-premises, to edge, and to public cloud. Vendor blog.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/blog/supercharge-your-vm-migrations-to-nutanix-ahv",
+   "caution": "Never run down VMware. She chose it and it has worked for ten years.",
+   "causeQuestion": "To what extent is the board's push on single-vendor risk shaping the decision?",
+   "impactQuestion": "How would it look at the board if you signed the renewal with no alternative?"
+  },
+  {
+   "painType": "Compliance / patient data",
+   "sheSays": "\"Anything touching patient systems needs the compliance lead's sign-off.\"",
+   "weDo": "bring in a compliance expert to answer in writing, and agree who covers it on your side",
+   "supportingFact": "The Monza release names GDPR requirements and security as goals but states no specific security outcome.",
+   "sourceStatus": "Nutanix page",
+   "sourceUrl": "https://www.nutanix.com/press-releases/2020/gruppo-policlinico-di-monza-healthcare-system-chooses-nutanix-to-improve-security-reliability-and-dr",
+   "caution": "Don't claim compliance. 'I'd want an expert to answer that. Who covers it on your side?'",
+   "causeQuestion": "To what extent does compliance sign-off slow or shape any change to patient systems?",
+   "impactQuestion": "Who covers compliance on your side, and what would they need to see?"
+  },
+  {
+   "painType": "Paying for a suite we don't use",
+   "sheSays": "\"We're paying for a lot we don't use.\"",
+   "weDo": "map what you actually use against what you're being quoted for",
+   "supportingFact": "No public Nutanix source. This is a discovery step you run with her.",
+   "sourceStatus": "Role-play / your own plan, not a Nutanix claim",
+   "sourceUrl": null,
+   "caution": "Don't claim savings. It's a question, not a promise.",
+   "causeQuestion": "To what extent are you paying for parts of the licence you don't use?",
+   "impactQuestion": "What would that money otherwise go to?"
+  }
+ ],
+ "basics": [
+  {
+   "she_asks": "What is Nutanix?",
+   "say_plainly": "It puts your servers, your storage and your networking into one system, so you manage it all from one place instead of three separate things.",
+   "source": "Your tick sheet"
+  },
+  {
+   "she_asks": "What does hyperconverged mean?",
+   "say_plainly": "Servers, storage and networking handled in software on standard hardware, managed in one place.",
+   "source": "Your tick sheet"
+  },
+  {
+   "she_asks": "What is AHV?",
+   "say_plainly": "The hypervisor that runs the virtual machines. Nutanix says it is included in the licence at no additional cost.",
+   "source": "Nutanix infographic (vendor claim): https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition"
+  },
+  {
+   "she_asks": "What is Prism?",
+   "say_plainly": "The management console. One hospital group said it manages production and disaster recovery centrally through it, including upgrades and troubleshooting.",
+   "source": "Nutanix press release, 2020 (vendor claim, one customer): https://www.nutanix.com/press-releases/2020/gruppo-policlinico-di-monza-healthcare-system-chooses-nutanix-to-improve-security-reliability-and-dr"
+  },
+  {
+   "she_asks": "How would we move our VMs?",
+   "say_plainly": "A tool called Nutanix Move. It copies the data across ahead of time, can test the VMs in an isolated network first, and has rollback options that keep the original VM. It doesn't give a downtime figure, so never promise zero.",
+   "source": "Nutanix blog (vendor claim): https://www.nutanix.com/blog/supercharge-your-vm-migrations-to-nutanix-ahv"
+  },
+  {
+   "she_asks": "Do we have to throw out our current storage?",
+   "say_plainly": "Nutanix says it can run alongside an existing SAN, or replace it. Which fits depends on your estate, so that's part of the comparison.",
+   "source": "Nutanix infographic (vendor claim): https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition"
+  },
+  {
+   "she_asks": "Can we use our existing VMware licences?",
+   "say_plainly": "Nutanix says existing vSphere licences can be applied to its platform. I'd want to check your exact licences in the comparison.",
+   "source": "Nutanix infographic (vendor claim): https://www.nutanix.com/library/infographics/safeguard-against-risks-arising-from-the-vmware-acquisition"
+  },
+  {
+   "she_asks": "Why are customers looking at Nutanix?",
+   "say_plainly": "Broadcom bought VMware, not merged, causing price hikes and licensing changes that are pushing customers to look elsewhere, including Nutanix.",
+   "source": "Your tick sheet"
+  },
+  {
+   "she_asks": "Are you big enough / stable?",
+   "say_plainly": "About $2.55B annual recurring revenue (ARR), up 16%, with 3,000+ new customers, and the CEO expects lots of VMware migration over the next five years. Only if she asks; don't push it.",
+   "source": "Your tick sheet"
+  }
+ ],
+ "objections": [
+  {
+   "id": "downtime",
+   "she_says": "\"Can you guarantee no downtime?\"",
+   "shes_worried": "Patient systems going down.",
+   "say_this": "\"That's the right thing to worry about. I can't promise zero downtime, and nobody honest can. What would you need to see in a plan to feel safe?\"",
+   "why_it_works": "Admitting the limit earns trust. Her answer is the safety plan."
+  },
+  {
+   "id": "retraining",
+   "she_says": "\"My team would need retraining.\"",
+   "shes_worried": "A stretched team can't cope.",
+   "say_this": "\"That's a real cost, so we put it in the comparison. What would help most: training time, or someone supporting you during the move?\"",
+   "why_it_works": "You treat the cost as real and give her a choice."
+  },
+  {
+   "id": "cost",
+   "she_says": "\"Is it cheaper? The reseller said so.\"",
+   "shes_worried": "She's wasting her time.",
+   "say_this": "\"I can't promise that, because I haven't seen your setup yet. What would you need to see to know if it's worth it?\"  Then: \"You said [her ceiling] is what you can absorb. Is that still true?\"",
+   "why_it_works": "You refuse to promise what you can't prove. It leads to the costed comparison."
+  },
+  {
+   "id": "compliance",
+   "she_says": "\"What about compliance? This is patient data.\"",
+   "shes_worried": "Breaking rules.",
+   "say_this": "\"That's a big one, and I'd want an expert to answer it properly, not me. Who looks after that on your side?\"",
+   "why_it_works": "Honest, and you get the compliance lead's name for the buying box."
+  },
+  {
+   "id": "proof",
+   "she_says": "\"Can you prove it will work for us?\"",
+   "shes_worried": "She doesn't trust a claim.",
+   "say_this": "\"I can't prove that today. That's exactly what the comparison is for.\"",
+   "why_it_works": "Turns 'no' into the reason for the next meeting."
+  }
+ ],
+ "slips_to_avoid": [
+  "ARR means annual recurring revenue, not 'average'",
+  "Never say 'zero downtime'",
+  "Never 'cheaper, safer, faster' without proof",
+  "Never put words in her mouth",
+  "Never run down VMware"
+ ]
+}

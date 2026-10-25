@@ -1,0 +1,18 @@
+{
+ "numbers": {"paysNow": 240000, "quote": 390000, "canAbsorb": 0},
+ "note": "canAbsorb 0 is her stated value ('Zero') -- must be 0, not null",
+ "contains": {"situation.hosts": "10", "situation.vms": "300", "situation.storageTB": "120", "situation.teamSize": "4", "deadline": "january", "renewalDate": "february", "signOff": "ayesha"},
+ "painTypeIn": ["CFO needs numbers", "Paying for a suite we don't use", "Renewal cost shock"],
+ "needsCount": 2,
+ "needsContain": ["side-by-side comparison", "stop paying"],
+ "topNeed": "comparison",
+ "personalStakeContains": "bonus",
+ "objections": [
+  {"match": "is it cheaper", "key": "Is it cheaper? The reseller said so."},
+  {"match": "signed a three-year support deal", "key": "other"},
+  {"match": "prove it'll work", "key": "Can you prove it will work for us?"}
+ ],
+ "nextStep": {"whoContains": ["ayesha"], "dateTimeContains": ["twelfth", "january"], "purposeContains": "comparison"},
+ "outOfOrder": "numbers and her personal pressure arrive before the estate; fields must still fill correctly",
+ "mustNotInvent": ["board date (none stated; deadline = budget sign-off 20 January)"]
+}

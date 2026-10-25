@@ -1,0 +1,40 @@
+# Hold-out B: hospital IT director. Pains: small stretched team + skills gap + key person leaving. Rambling, tangents. Pitch starts LATE (24:10) to test the time check.
+[00:10] Me: Thanks for your time. Roughly 15 to 20 minutes on your set-up, then the last 10 we decide a next step or part ways. Fair?
+[00:30] Her: Yes. Sorry, I'm running between meetings, we've got a ward move happening and everything is chaos.
+[01:00] Me: No problem. What does your estate look like?
+[01:15] Her: Eleven hosts, about 260 VMs, maybe 90 terabytes. There are only three of us.
+[01:50] Me: What made you agree to the meeting?
+[02:05] Her: Honestly the team. The renewal's gone up but what's keeping me up is that we're three people who only know VMware.
+[02:40] Me: Tell me about the renewal.
+[02:50] Her: Ninety-five thousand now, quote is a hundred and forty. I can probably find a hundred and ten.
+[03:30] Her: Oh, and the canteen contract is up for renewal too, which is a separate nightmare, don't get me started.
+[04:10] Me: Let's stay on IT. What does the team situation affect?
+[04:25] Her: Everything. Patching is behind. Projects are stacking. One of the three, Dev, is leaving in January.
+[05:15] Me: What's driving the priority now?
+[05:30] Her: Dev leaving, and the renewal on the thirtieth of June. If I don't have a plan by then I'm stuck.
+[06:30] Me: What happens if nothing changes?
+[06:40] Her: We sign, we limp along with two people, and something breaks.
+[07:30] Me: Why do you think it's hitting so hard?
+[07:40] Her: We never had any slack. Every year we're asked to do more with the same three heads.
+[08:30] Me: What does that do to the people around you?
+[08:40] Her: The two I've got left are exhausted. One of them has said he's looking around.
+[09:30] Me: And for you personally?
+[09:40] Her: I'm doing hands-on work I shouldn't be doing. I haven't taken a proper holiday in eighteen months.
+[10:30] Me: Who else needs to sign off?
+[10:40] Her: The finance director, Mo. And my boss, the CIO.
+[11:30] Me: Where does the money come from?
+[11:40] Her: Operating budget. I can approve up to fifty, above that Mo.
+[12:30] Me: What do you need to happen before June?
+[12:45] Her: Somebody to work alongside my team during any move, because we can't do it alone. And training time agreed up front so I'm not pulling people off the day job.
+[13:40] Me: Which matters most?
+[13:50] Her: The support during the move. Training I can fit in if I have help.
+[14:30] Me: Why does that matter to you personally?
+[14:40] Her: Because I can't lose another person.
+[24:10] Me: Can I try a few ideas on you? Lots of VMware customers are looking at alternatives since the Broadcom licensing change. Nutanix puts servers, storage and networking in one system so you manage it from one place.
+[24:50] Me: We put our engineer and the reseller alongside your team, with training time agreed up front. You told me support during the move matters most. So here's how that fits.
+[25:30] Her: My team would need retraining though. Two of them have only ever known VMware.
+[25:45] Me: That's a real cost, so we put it in the comparison. What would help most, training time or someone supporting you during the move?
+[26:00] Her: Support. Definitely support.
+[26:20] Me: Does a next step make sense?
+[26:30] Her: Yes. Let's do a working session. Early February, I'll check with Mo.
+[26:50] Me: I'll send dates and a recap today.

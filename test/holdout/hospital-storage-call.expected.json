@@ -1,0 +1,15 @@
+{
+ "numbers": {"paysNow": null, "quote": null, "canAbsorb": null},
+ "contains": {"situation.hosts": "14", "situation.vms": "380", "situation.storageTB": "150", "situation.teamSize": "5", "deadline": "november"},
+ "renewalDate": null,
+ "painTypeIn": ["Storage end of support", "Board wants less single-vendor risk", "No tested fallback"],
+ "needsCount": 2,
+ "needsContain": ["tested alternative", "existing storage"],
+ "topNeed": "tested alternative",
+ "pitchDetected": {"pitchStartedAt": "14:00"},
+ "basicsCards": ["What is AHV?", "Do we have to throw out our current storage?", "Can we use our existing VMware licences?", "Are you big enough / stable?"],
+ "objections": "none of her questions are objections EXCEPT possibly 'are you big enough' (acceptable as a basics card, not required as objection)",
+ "nextStep": {"whoContains": ["cto", "engineer"], "dateTimeContains": ["last week of october"], "purposeContains": "working session"},
+ "mustNotInvent": ["numbers.*", "increase %", "gap", "renewalDate"],
+ "readBack": "must not print numbers line when none were given; must not mention renewal"
+}

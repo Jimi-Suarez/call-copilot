@@ -1,0 +1,17 @@
+{
+ "numbers": {"paysNow": 310000, "quote": 420000, "canAbsorb": 350000},
+ "contains": {"situation.hosts": "18", "situation.vms": "520", "situation.storageTB": "210", "situation.teamSize": "7", "deadline": "march", "renewalDate": "april", "signOff": "priya"},
+ "painTypeIn": ["Clinical uptime / patient safety", "Compliance / patient data", "Migration risk / downtime"],
+ "needsCount": 3,
+ "needsContain": ["clinicians believe", "compliance sign-off", "tested rollback"],
+ "topNeed": "compliance",
+ "needReasonContains": "regulator",
+ "pitchDetected": {"nutanixIntroducedSuggestedBy": "15:20", "pitchStartedAt": "14:30", "timeCheck": "on time (<=23:00)"},
+ "pitchLinesFirst": "compliance need first, tagged chosen",
+ "objections": [
+  {"match": "guarantee no downtime", "key": "Can you guarantee no downtime?"},
+  {"match": "what about compliance", "key": "What about compliance? This is patient data."}
+ ],
+ "nextStep": {"whoContains": ["priya", "engineer", "reseller"], "dateTimeContains": ["ninth", "february"], "purposeContains": "working session"},
+ "mustNotInvent": ["scratch commentary"]
+}

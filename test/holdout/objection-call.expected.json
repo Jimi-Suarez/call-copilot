@@ -1,0 +1,16 @@
+{
+  "_comment": "objection-call: pure post-pitch objection call, minimal discovery",
+  "needsCount": 2,
+  "needsContain": ["cutover window"],
+  "objections": [
+    { "match": "no downtime" },
+    { "match": "retraining" },
+    { "match": "cheaper" },
+    { "match": "patient data" }
+  ],
+  "nextStep": {
+    "whoContains": ["sarah"],
+    "dateTimeContains": "february",
+    "purposeContains": "working session"
+  }
+}

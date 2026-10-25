@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live view, discovery</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#0E1116}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width:500px;height:900px;box-sizing:border-box;background:#0E1116;color:#F3F5F7;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column;gap:12px;padding:14px 16px;overflow:hidden">
+
+  <div style="display:flex;align-items:center;gap:12px;height:28px">
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700">
+      <span style="width:10px;height:10px;border-radius:50%;background:#FF6B6B;display:inline-block"></span>LIVE
+      <span style="font-weight:600;color:#9AA4B2;font-variant-numeric:tabular-nums">05:30</span>
+    </div>
+    <div style="flex-grow:1;height:6px;border-radius:3px;background:#2A313C;position:relative">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:18%;border-radius:3px;background:#9AA4B2"></div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:#9AA4B2">Discovery</div>
+  </div>
+
+  <div style="background:#161B22;border:1px solid #2A313C;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;height:196px;box-sizing:border-box">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Ask next</span>
+      <span style="font-size:12px;font-weight:700;color:#9AA4B2;border:1px solid #3A4452;border-radius:6px;padding:3px 7px">M8 · L25</span>
+    </div>
+    <div style="font-size:30px;font-weight:700;line-height:1.18;letter-spacing:-.01em">What would get derailed if nothing changes?</div>
+    <div style="font-size:15px;line-height:1.35;color:#B6BFCB">Or: Is this the challenge we should focus on, or could something overpower it? <span style="color:#9AA4B2">(L15)</span></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;min-height:20px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">She just said</span>
+    <span style="font-size:12px;font-weight:700;color:#F3F5F7;background:#1B222B;border:1px solid #3A4452;border-radius:6px;padding:3px 8px">PROBLEM</span>
+    <span style="font-size:13px;color:#9AA4B2">a metric she owns (risk position)</span>
+  </div>
+
+  <div style="height:64px;box-sizing:border-box;border-radius:12px;background:#2A2310;border:1px solid #6B5518;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span style="font-size:15px;font-weight:700;color:#FFE9B0">Numbers ready to summarise</span>
+      <span style="font-size:13px;color:#E6CF94">Pays now, quote and absorb are all in.</span>
+    </div>
+    <button style="font-size:14px;font-weight:700;color:#0E1116;background:#F2B84B;border:0;border-radius:8px;padding:9px 12px;min-height:36px;cursor:pointer">Summarise  S</button>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Situation</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Pain</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Needs</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #F2B84B;background:linear-gradient(90deg,#F2B84B 50%,transparent 50%);display:inline-block"></span>Impact</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;border-radius:50%;background:#4CD38A;display:inline-block"></span>Timeframe</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Nutanix</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Objections</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#1B222B;border:1px solid #2A313C;font-size:13px;font-weight:600;line-height:1"><span style="width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid #6B7685;display:inline-block"></span>Next step</span>
+    </div>
+    <div style="font-size:13px;color:#B6BFCB">Missing: <span style="color:#F3F5F7;font-weight:600">needs · her personal stake</span></div>
+  </div>
+
+  <div style="background:#161B22;border:1px solid #2A313C;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:11px;flex-grow:1">
+    <div style="display:flex;gap:12px;align-items:baseline">
+      <span style="width:62px;flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Estate</span>
+      <span style="font-size:17px;font-weight:600">18 hosts · 520 VMs · 210 TB · team of 7</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <span style="width:62px;flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2;padding-top:3px">Pain</span>
+      <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:17px;font-weight:600">Patient systems down is on the news</span>
+        <span style="font-size:13px;color:#B6BFCB">Affects every change window, nights only</span>
+      </div>
+      <button style="font-size:13px;font-weight:600;color:#F3F5F7;background:transparent;border:1px solid #3A4452;border-radius:8px;padding:6px 10px;min-height:32px;cursor:pointer">Summarise</button>
+    </div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <span style="width:62px;flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2;padding-top:3px">Money</span>
+      <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:17px;font-weight:600">£310k now · £420k quote · £350k absorb</span>
+        <span style="font-size:13px;color:#B6BFCB">Up £110k a year, about £9.2k a month</span>
+      </div>
+      <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#4CD38A;border:1px solid #2E6B4A;border-radius:8px;padding:6px 8px;min-height:32px;box-sizing:border-box">Ready</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:baseline">
+      <span style="width:62px;flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Dates</span>
+      <span style="font-size:17px;font-weight:600">Trust board in March · renews 1 April</span>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:7px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AA4B2">Dig here</span>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span style="font-size:13px;font-weight:600;padding:7px 11px;border-radius:8px;background:#1B222B;border:1px dashed #4A5563">Board wants a risk position</span>
+      <span style="font-size:13px;font-weight:600;padding:7px 11px;border-radius:8px;background:#1B222B;border:1px dashed #4A5563">Night-only changes, clinician sign-off</span>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.35;color:#8993A1;border-top:1px solid #2A313C;padding-top:9px">
+    <span><b style="color:#9AA4B2">Me</b> What's driving it to be a priority now?</span>
+    <span><b style="color:#9AA4B2">Her</b> Trust board in March. And the contract renews on the first of April.</span>
+  </div>
+
+  <div style="display:flex;gap:14px;font-size:12px;color:#9AA4B2">
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">N</b> Nutanix introduced</span>
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">O</b> Objection handled</span>
+    <span><b style="color:#F3F5F7;border:1px solid #3A4452;border-radius:4px;padding:1px 6px">S</b> Summarise</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":500,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Hold-out A: hospital IT director. Pains: clinical uptime + compliance (money is secondary). Full flow incl. pitch, objections, close.
+[00:10] Me: Thanks for making time. I'd like to spend about 15 to 20 minutes understanding your set-up, then the last 10 minutes we decide a next step or part ways. Does that feel fair?
+[00:30] Her: That's fine. I should say I'm sceptical. The reseller was very keen.
+[00:50] Me: Understood. Can you walk me through your estate?
+[01:05] Her: Eighteen hosts, around 520 VMs, 210 terabytes. Team of seven.
+[01:40] Me: What did the reseller say that made you agree to the meeting?
+[01:55] Her: That our VMware renewal is going up and we should have a plan B. About 35 percent up.
+[02:20] Me: Can you put a number on that?
+[02:30] Her: We pay three hundred and ten thousand a year now. The quote is four twenty.
+[02:55] Me: How much could you absorb without cutting anything?
+[03:05] Her: Three-fifty, maybe. But honestly the money isn't the real issue.
+[03:30] Me: What is?
+[03:40] Her: Patient systems. Theatres, ward systems, the patient record. If any of that goes down it's on the news.
+[04:15] Me: What does that affect over the next 6 to 12 months?
+[04:30] Her: Every change window. We can only touch things at night, with clinicians signed off.
+[05:10] Me: What's driving it to be a priority now?
+[05:25] Her: Trust board in March. And the contract renews on the first of April. They've asked for a risk position.
+[06:10] Me: What happens if nothing changes?
+[06:20] Her: We renew by default and the board asks why we had no alternative.
+[07:00] Me: Why do you think it hits you so hard?
+[07:15] Her: Ten years on one vendor and nobody here has ever tested anything else.
+[08:00] Me: What does it do to the people around you?
+[08:15] Her: The clinical director worries about outages. And our compliance officer, Priya, has to approve anything touching patient data.
+[09:10] Me: How does it land on you personally?
+[09:20] Her: If there's an outage during a migration, it's my job.
+[10:00] Me: Who signs off?
+[10:10] Her: Priya for compliance, the CFO for the money, trust board for the final call.
+[11:00] Me: What do you need to happen before March?
+[11:15] Her: A migration approach the clinicians believe in. Written compliance sign-off from Priya. And a properly tested rollback.
+[12:10] Me: Which matters most?
+[12:20] Her: Compliance. Without Priya's sign-off nothing moves.
+[13:00] Me: Why does that matter to you personally?
+[13:10] Her: Because I'd be the one explaining it to the regulator.
+[14:30] Me: Can I try a few ideas on you? A lot of VMware customers are looking at alternatives since Broadcom changed the licensing. Nutanix puts your servers, storage and networking into one system, so you manage it from one place.
+[15:20] Me: We bring in a compliance expert to answer in writing and agree who covers it on your side. You told me written sign-off from Priya matters most. So here's how that fits.
+[16:10] Me: We agree migration windows with your clinical teams and name an engineer on call during cutover. You told me clinicians need to believe in the approach. So here's how that fits.
+[17:00] Me: How does that sit against what you need?
+[17:10] Her: Sounds sensible. But can you guarantee no downtime? I can't have patient systems drop.
+[17:30] Me: That's the right thing to worry about. I can't promise zero downtime, and nobody honest can. What would you need to see in a plan to feel safe?
+[17:50] Her: A rollback we've actually tested, and a named engineer on the night.
+[18:10] Her: And what about compliance? This is patient data.
+[18:20] Me: That's a big one and I'd want an expert to answer it properly. Who looks after that on your side?
+[18:35] Her: Priya.
+[19:00] Me: We said we'd decide if a next step makes sense. Does it?
+[19:10] Her: Yes. A working session before the trust board. The week of the ninth of February.
+[19:30] Me: Who should be in the room?
+[19:40] Her: Me, Priya, and your engineer. The reseller too.
+[19:55] Me: I'll send dates and a one-page recap today.

@@ -1,0 +1,53 @@
+# MESSY CALL — out of order, budget first, tangent, interrupted, correction
+# Acceptance tests: out of order, number correction, tangent to Parked, her words only
+[00:15] Me: Thanks for making time. Quick agenda: I want to understand your situation for about 20 minutes, then decide if a next step makes sense. Fair?
+[00:30] Her: Sure. Although I should say — what does something like this typically cost? That's going to be the first question I get from finance.
+[01:00] Me: I can't give you a number without understanding your estate first, otherwise I'd just be guessing. What I can do is build a proper comparison with your actual numbers. Would that work?
+[01:15] Her: Fair enough. We pay about four hundred thousand a year now. The renewal quote came back at nine hundred thousand — which was a shock, frankly.
+[01:50] Her: I think we can absorb up to about six hundred thousand. Anything above that and I'm cutting other projects.
+[02:30] Me: OK so those numbers are on the table early. Let me understand the situation behind them. Can you walk me through your infrastructure?
+[02:45] Her: Oh — before I forget. I'm away from December 20th through to January 10th. So if we're doing anything before March it needs to be in my diary before then.
+[03:10] Me: Noted. I'll keep that in mind for timing. The estate?
+[03:25] Her: 12 hosts, around 400 VMs. Storage is about 150 terabytes — a mix of all-flash for the clinical systems and spinning disk for archives.
+[03:55] Her: Team of 5. Two seniors who've done nothing but VMware for a decade. That's actually one of the things that concerns me.
+[04:30] Me: What did the reseller say that kicked this off for you?
+[04:55] Her: The renewal quote. More than double. That was the moment. And separately, our storage arrays go out of support at end of next year. So it's two things hitting at once.
+[05:40] Me: What does the renewal jump affect in your world?
+[06:00] Her: The clinical systems refresh we had planned. That's the first casualty if we just absorb the VMware cost. We'd have to push it back 18 months, maybe more.
+[06:40] Her: Actually — I just had a thought. I may have been given the wrong figure for the quote. Let me double-check. I think it might be closer to 850 thousand, not 900.
+[07:05] Her: Yes, 850. I had the draft quote, not the final one. Sorry.
+[07:30] Me: No problem. So 850 is the number. What's driving this to be a priority right now?
+[07:55] Her: Board meeting in February. That's when the CFO has to present the technology spend for the year. She can't go in with no alternatives on the table.
+[08:40] Me: What happens if nothing changes — if you just sign the renewal?
+[09:05] Her: We sign at 850, the refresh gets pushed, and the storage problem is still unsolved. Honestly it's not a decision, it's just default.
+[09:40] Me: Why is it hitting so hard?
+[10:00] Her: Broadcom changed the licensing. We're in a bundle that includes things we don't use — the advanced vSphere features, some cloud integration we never turned on.
+[10:45] Her: The arrays going out of support is separate but it lands in the same budget year. Double hit.
+[11:20] Me: What else is pushing this right now?
+[11:45] Her: The board wants us less dependent on a single vendor. After the Broadcom acquisition they're nervous. So there's pressure from above as well as from the renewal.
+[12:30] Me: What does this do to other people around you?
+[12:55] Her: My compliance lead needs to be in any conversation about patient data. She's not going to approve a migration without seeing the plan first.
+[13:30] Her: And clinically — look, patient systems going down is the thing nobody will say out loud but everyone is thinking. That's the risk.
+[14:00] Me: How does this land on you personally?
+[14:25] Her: I have to stand up in front of the CEO and defend the recommendation. If we move and it goes wrong, that's my problem. If we stay and the cost isn't justified, that's also my problem.
+[15:00] Me: Who else needs to sign off?
+[15:20] Her: Compliance lead — her name's Sarah, she's the one who'll want the written sign-off. And the CFO obviously for the capital budget.
+[16:00] Me: Where does the budget sit?
+[16:20] Her: It's capital. I can sign up to 250. Anything above that goes to the CFO. She's already flagged she wants a comparison, not just our recommendation.
+[17:00] Me: What do you need to happen before February?
+[17:30] Her: We need an alternative on the table with real numbers — a proper comparison. Not a brochure, actual figures.
+[18:15] Her: Migration plan too. Before we go to the board, I need to know it's physically possible without touching patient systems.
+[19:00] Me: Which of those matters most?
+[19:20] Her: Honestly I need both. The CFO won't approve without the numbers, but I won't go ahead without the migration plan.
+[19:45] Me: If you had to pick one that you'd want answered first?
+[20:00] Her: The migration. If the migration isn't safe, the numbers don't matter.
+[20:20] Me: Can I try a few ideas on you? Since Broadcom changed VMware's licensing, a lot of hospital IT teams are looking at alternatives. Nutanix puts your servers, storage and networking into one system — managed from one place.
+[20:40] Me: We put a tested migration plan in front of you before anything moves, non-critical workloads first, a rollback on standby. You told me the migration matters most. So here's how that fits.
+[21:00] Her: That sounds workable. But can you guarantee there'll be no downtime? Patient systems are the one thing I can't get wrong.
+[21:15] Me: That's the right thing to worry about. I can't promise zero downtime, and nobody honest can. What would you need to see in a plan to feel safe?
+[21:30] Her: Agreed cutover windows with the clinical team and a named engineer on call.
+[22:00] Me: Does a next step make sense?
+[22:20] Her: Yes. I'd want a working session in January — before I go away if possible, so week of December 15th, or after I'm back from the 10th of January.
+[23:00] Her: You, me, Sarah from compliance, and I'd want the reseller there too.
+[23:30] Me: Good. I'll send you some dates and a recap today.
+[23:45] Her: Great.
