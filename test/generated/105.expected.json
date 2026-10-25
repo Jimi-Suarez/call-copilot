@@ -1,0 +1,65 @@
+{
+  "scenario": {
+    "seed": 105,
+    "pain": "Burned by a past migration",
+    "persona": "non-technical",
+    "numBehav": "corrects",
+    "flow": "pain-first",
+    "aeBehavior": "mistakes",
+    "ending": "third-person",
+    "objections": [
+      {
+        "key": "downtime",
+        "timing": "at-close"
+      },
+      {
+        "key": "compliance",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 350000,
+    "quote": 570000,
+    "canAbsorb": 20000
+  },
+  "contains": {
+    "situation.hosts": "23",
+    "situation.vms": "575",
+    "situation.storageTB": "232",
+    "situation.teamSize": "9",
+    "deadline": "june"
+  },
+  "painTypeIn": [
+    "No tested fallback",
+    "Migration risk / downtime",
+    "CFO needs numbers",
+    "Renewal cost shock",
+    "Small team capacity",
+    "Storage end of support",
+    "Servers and storage as two worlds",
+    "Clinical uptime / patient safety",
+    "Board wants less single-vendor risk",
+    "Compliance / patient data",
+    "Paying for a suite we don't use"
+  ],
+  "objections": [
+    {
+      "matchedKey": "downtime",
+      "match": "downtime"
+    },
+    {
+      "matchedKey": "compliance",
+      "match": "compliance"
+    }
+  ],
+  "nextStep": {
+    "purposeContains": "presentation to the CFO",
+    "whoContains": [
+      "priya"
+    ]
+  },
+  "mustNotInvent": [
+    "renewalDate (not mentioned in transcript)"
+  ]
+}

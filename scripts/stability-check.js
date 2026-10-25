@@ -9,6 +9,7 @@ const { spawn } = require('child_process');
 const fs   = require('fs');
 const path = require('path');
 const { runCall, parseTranscript, fv } = require('../lib/extractor');
+const { confirmCost } = require('../lib/confirm');
 
 const RUNS  = 5;
 const PORT  = 3097;
@@ -235,6 +236,7 @@ function acc(r) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 (async () => {
+  await confirmCost('This makes about 100 API calls (~$0.80).');
   console.log('Starting server…');
   const server = await startServer();
   await waitReady();

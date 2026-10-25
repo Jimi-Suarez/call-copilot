@@ -1,0 +1,56 @@
+{
+  "scenario": {
+    "seed": 107,
+    "pain": "Community clinics / remote sites",
+    "persona": "friendly-vague",
+    "numBehav": "vague",
+    "flow": "pain-first",
+    "aeBehavior": "good",
+    "ending": "third-person",
+    "objections": [
+      {
+        "key": "downtime",
+        "timing": "mid-discovery"
+      }
+    ]
+  },
+  "contains": {
+    "situation.hosts": "8",
+    "situation.vms": "283",
+    "situation.storageTB": "62",
+    "situation.teamSize": "7",
+    "deadline": "july",
+    "renewalDate": "july"
+  },
+  "painTypeIn": [
+    "No tested fallback",
+    "Migration risk / downtime",
+    "CFO needs numbers",
+    "Renewal cost shock",
+    "Small team capacity",
+    "Storage end of support",
+    "Servers and storage as two worlds",
+    "Clinical uptime / patient safety",
+    "Board wants less single-vendor risk",
+    "Compliance / patient data",
+    "Paying for a suite we don't use"
+  ],
+  "objections": [
+    {
+      "matchedKey": "downtime",
+      "match": "downtime"
+    }
+  ],
+  "nextStep": {
+    "purposeContains": "cost comparison review",
+    "dateTimeContains": [
+      "12"
+    ],
+    "whoContains": [
+      "rachel"
+    ]
+  },
+  "mustNotInvent": [
+    "exact numbers (not given)"
+  ]
+}

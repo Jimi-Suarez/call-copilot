@@ -26,15 +26,30 @@
       </select>
     </label>
     <span id="replay-progress"></span>
+    <span id="replay-speed-note" class="hidden"></span>
+    <button id="btn-scenario-reveal" class="btn-small hidden">Reveal</button>
+    <button id="btn-gen-more" class="btn-small">＋5 calls</button>
   </div>
   <div id="timer-area"><span id="timer">00:00</span></div>
   <button id="btn-end" class="btn-danger hidden">End</button>
   <button id="btn-load-replay" class="btn-secondary">Load Sample Call</button>
   <button id="btn-live" class="btn-secondary">🎙 Start Live</button>
   <button id="btn-flip-speaker" class="btn-secondary hidden">Me=Spk0</button>
+  <button id="btn-swap-all" class="btn-secondary hidden" title="Swap ALL speaker labels and re-extract (X)">⇄ Swap all</button>
   <div id="level-meter-wrap" class="hidden"><div id="level-meter"></div></div>
   <button id="btn-view-toggle" class="btn-secondary">Review ▸</button>
   <button id="btn-settings" class="btn-secondary btn-icon" title="Settings">⚙</button>
+</div>
+
+<!-- Scenario bar (shown during random replay, revealed at end) -->
+<div id="scenario-bar" class="hidden">
+  <span class="sbar-label">Scenario:</span>
+  <span id="sbar-pain"></span>
+  <span class="sbar-sep">·</span>
+  <span id="sbar-persona"></span>
+  <span class="sbar-sep">·</span>
+  <span id="sbar-obj"></span>
+  <span id="sbar-mistakes" class="hidden"></span>
 </div>
 
 <!-- Live status bar (hidden until live mode) -->
@@ -43,6 +58,7 @@
   <span id="lst-ws"></span>
   <span id="lst-bytes"></span>
   <span id="lst-last"></span>
+  <span id="lst-speaker" style="font-weight:700;color:#4CD38A"></span>
   <span id="lst-error"></span>
 </div>
 
@@ -66,13 +82,19 @@
     </div>
     <div id="lv-next-q">Load a sample call to begin.</div>
     <div id="lv-next-sub"></div>
+    <div id="lv-step-tracker" class="lv-step-tracker hidden"></div>
   </div>
   <div id="lv-she">
     <span class="lv-label">She just said</span>
     <span id="lv-she-tag"></span>
     <span id="lv-she-desc"></span>
   </div>
+  <div id="lv-swap-banner" class="lv-swap-banner hidden">
+    Speakers were swapped — press <kbd>X</kbd> to undo
+    <button id="btn-swap-undo" class="btn-small" style="margin-left:8px">Undo swap</button>
+  </div>
   <div id="lv-alert" class="alert-empty"></div>
+  <div id="lv-readback" class="lv-readback hidden"></div>
   <div id="lv-chips-wrap">
     <div id="lv-chips"></div>
     <div id="lv-missing"></div>
@@ -342,6 +364,11 @@
         <button id="btn-hearing-test" class="btn-small">Run test (5s)</button>
       </div>
       <div class="settings-hint">Play audio from your Mac speakers, then click Run test — confirms the other person's audio is captured.</div>
+      <div class="settings-status-row" id="sstat-cost">
+        <span class="sstat-dot not-set"></span>
+        <span class="sstat-label">Session cost:</span>
+        <span class="sstat-value">—</span>
+      </div>
     </div>
 
     <div class="settings-actions">
@@ -353,6 +380,7 @@
 
 <script src="coach-logic.js"></script>
 <script src="summary-logic.js"></script>
+<script src="speaker-id.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

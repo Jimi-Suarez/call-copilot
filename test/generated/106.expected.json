@@ -1,0 +1,47 @@
+{
+  "scenario": {
+    "seed": 106,
+    "pain": "Small team capacity + Key person leaving / knowledge in one head",
+    "persona": "chatty",
+    "numBehav": "wrong-unit",
+    "flow": "early-jump",
+    "aeBehavior": "mistakes",
+    "ending": "specific",
+    "objections": [
+      {
+        "key": "retraining",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 220000,
+    "quote": 440000,
+    "canAbsorb": 0
+  },
+  "contains": {
+    "situation.hosts": "18",
+    "situation.vms": "355",
+    "situation.storageTB": "194",
+    "situation.teamSize": "9",
+    "deadline": "june"
+  },
+  "painTypeIn": [
+    "Small team capacity"
+  ],
+  "objections": [
+    {
+      "matchedKey": "retraining",
+      "match": "retraining"
+    }
+  ],
+  "nextStep": {
+    "purposeContains": "cost comparison review",
+    "dateTimeContains": [
+      "19"
+    ]
+  },
+  "mustNotInvent": [
+    "renewalDate (not mentioned in transcript)"
+  ]
+}

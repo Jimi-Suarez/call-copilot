@@ -1,0 +1,54 @@
+{
+  "scenario": {
+    "seed": 102,
+    "pain": "Routine upgrades and patching take huge team time",
+    "persona": "defensive-team",
+    "numBehav": "vague",
+    "flow": "early-jump",
+    "aeBehavior": "mistakes",
+    "ending": "third-person",
+    "objections": [
+      {
+        "key": "other",
+        "timing": "right-after-pitch"
+      },
+      {
+        "key": "other",
+        "timing": "at-close"
+      }
+    ]
+  },
+  "contains": {
+    "situation.hosts": "21",
+    "situation.vms": "295",
+    "situation.storageTB": "173",
+    "situation.teamSize": "3",
+    "deadline": "october",
+    "renewalDate": "september"
+  },
+  "painTypeIn": [
+    "No tested fallback",
+    "Migration risk / downtime",
+    "CFO needs numbers",
+    "Renewal cost shock",
+    "Small team capacity",
+    "Storage end of support",
+    "Servers and storage as two worlds",
+    "Clinical uptime / patient safety",
+    "Board wants less single-vendor risk",
+    "Compliance / patient data",
+    "Paying for a suite we don't use"
+  ],
+  "nextStep": {
+    "purposeContains": "cost comparison review",
+    "dateTimeContains": [
+      "12"
+    ],
+    "whoContains": [
+      "david"
+    ]
+  },
+  "mustNotInvent": [
+    "exact numbers (not given)"
+  ]
+}

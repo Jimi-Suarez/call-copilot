@@ -1,0 +1,57 @@
+# Generated: seed 101 | pain: Data must stay on-premises / in-country + Cloud-first mandate versus reality / cloud costs | persona: rushed | objections: downtime@at-close
+[00:10] Me: Hi, thanks for making time today. I know Dave at the partner side set this up — I'm Alex from Nutanix inside sales. How are you doing?
+[00:18] Her: Fine, look, I've got a hard stop at the half hour, so can we just get into it? I'll be honest with you, the main thing on my desk right now is money. We've got a quote in and I need to work out if it's even realistic.
+[00:32] Me: Understood, let's go straight there. What's the number you're looking at?
+[00:38] Her: It's about £370,000 — no, sorry, it's £320,000. And the finance team want roughly £180,000 of that paid up front. That's what's making my eyes water.
+[00:52] Me: Got it, £320k total with £180k up front. And is that a VMware renewal quote or something broader?
+[01:02] Her: VMware. We've been on it ten years. February is when it lands and the CFO wants a decision signed off by November, so I'm not sitting on this.
+[01:14] Me: Okay, November for sign-off, February renewal. Before I talk pricing or alternatives, can I ask a bit about the environment so I'm not guessing?
+[01:24] Her: Quickly, yes.
+[01:27] Me: How many hosts and VMs are we talking about?
+[01:32] Her: Nine hosts, three hundred and thirty-eight VMs give or take.
+[01:38] Me: And storage footprint?
+[01:41] Her: Sixty-five terabytes. Team of four keeping it all alive, which is part of the problem.
+[01:49] Me: That's a lean team for that estate. What's driving the renewal conversation beyond just the number — is it purely cost, or is there something else going on?
+[02:00] Her: Both. The quote jumped. And frankly we've been told cloud-first by the exec, so every time I ask for infrastructure money I get asked why we aren't in Azure.
+[02:14] Me: Right, the cloud-first mandate. Have you costed what a lift to public cloud would actually look like for those 338 VMs?
+[02:22] Her: We've looked. It's not cheaper when you actually model it, and anyway, patient data can't go to a public cloud. Not for the clinical systems. So I'm stuck between a mandate and a reality.
+[02:36] Me: That's a really common gap we see in healthcare — the mandate says one thing, the compliance and economics say another. So the clinical workloads have to stay on-prem, in-country?
+[02:48] Her: Correct. PACS, EPR, the lot. Non-negotiable.
+[02:54] Me: Okay. So let me tell you where Nutanix fits — we're a hyperconverged platform that replaces the vSphere plus SAN stack with one software layer running on standard servers. For an estate your size you typically collapse hosts, drop the VMware licensing, and your team of four manages it from one console. We can do this with zero downtime on the migration, and customers your size usually see thirty to forty percent off the three-year TCO versus a VMware renewal.
+[03:24] Her: Hang on — what is Nutanix, actually? I know the name but I've always had it in my head as a storage thing.
+[03:32] Me: Fair question. We started in hyperconverged — compute, storage and virtualisation in one software stack — but today we're a full private cloud platform. You run your VMs on our hypervisor, AHV, which is included, so you're not paying VMware per-core fees anymore. Same workloads, same operational model, no SAN underneath. It stays on-prem, in your data centre, under your control — which maps to your patient-data requirement.
+[03:58] Her: Okay. And on paper that sounds like it could knock a chunk off the £320k.
+[04:05] Me: It should, meaningfully. Before I quote anything though — can I ask, when you say the quote jumped, is that the ELA renewal post-Broadcom?
+[04:16] Her: Yes. It's nearly doubled from last cycle. That's why the board is suddenly listening to alternatives.
+[04:24] Me: Understood. And the team of four — are they VMware-skilled, or do they also do Hyper-V, Linux, anything else?
+[04:32] Her: VMware mostly. Two of them do some Linux. They're nervous about change, I'll tell you that now.
+[04:40] Me: That's fair, and worth flagging — AHV administration is deliberately close to vCenter workflows, and we'd run them through enablement as part of the project. Partner usually leads that. Can I ask what clinical apps are the most sensitive from an uptime point of view?
+[04:56] Her: EPR and PACS. If EPR drops, the wards notice within minutes. PACS, radiology screams.
+[05:06] Me: Right. And what's your current DR setup for those?
+[05:12] Her: Second site, synchronous replication for EPR, async for PACS. It works, it's expensive.
+[05:20] Me: Okay. Native replication is built into our platform, so that's another line item that usually shrinks. Can I ask about the November deadline — is that a hard board date, or softer?
+[05:32] Her: Hard. CFO wants the decision in the November board pack. Which is why I'm being blunt about time today.
+[05:40] Me: Appreciated. So working backwards from November, we'd want a technical validation and a proper TCO built with the partner through September and October. Does that sound workable?
+[05:52] Her: In principle. But I need the CFO on board before I spend cycles on a POC. He signs the cheque.
+[06:00] Me: That's exactly the right instinct. Would it help if I built a side-by-side — your £320k VMware quote against a Nutanix equivalent for the nine hosts, 338 VMs, 65TB — and presented it with you to the CFO?
+[06:14] Her: That would actually be useful. He responds to numbers, not slides.
+[06:20] Me: Perfect. One thing I want to come back to though — you mentioned patient data staying in-country. Is there a specific framework driving that, NHS DSP toolkit, or internal policy?
+[06:32] Her: DSP toolkit and our own information governance. We've had the conversation with legal, the answer is no.
+[06:40] Me: Clear. Then on-prem Nutanix is a clean fit, and if later you want to burst dev-test or backups to Azure, we can do that selectively without the clinical data leaving. That gives you a story for the cloud-first crowd too.
+[06:54] Her: That's actually the bit I need — something I can tell the exec that isn't "no, we're staying on-prem forever".
+[07:02] Me: Exactly. "Hybrid where it makes sense, on-prem where compliance demands." Can you guarantee there will be — sorry, go on.
+[07:10] Her: No, you go.
+[07:13] Me: I was going to ask about your current hardware refresh — are the nine hosts due for replacement anyway?
+[07:20] Her: Yes, three years in, support runs out next summer. So the refresh is coming either way.
+[07:28] Me: That actually strengthens the business case, because the Nutanix hardware refresh and the software move happen as one project, not two.
+[07:36] Her: Right. Look, before we go further — can you guarantee there will be no downtime when we move patient systems? Because that's the question the CFO and the Chief Clinical Officer will ask me, and I need an honest answer.
+[07:50] Me: Honest answer: I shouldn't have said "zero downtime" earlier, that was a sales reflex and I want to walk it back. Migrations of EPR and PACS are planned with maintenance windows — usually overnight or at weekends — and we move VMs live where we can, but we plan for brief, controlled cutovers on the critical apps. What I can commit to is that no customer your size on our platform has lost clinical data in migration, and we'd run the plan jointly with the partner and your team before anything moves.
+[08:22] Her: Thank you for correcting that. I'd have caught it later and it would have hurt your credibility. Honest answers land better here.
+[08:32] Me: Noted, and genuinely appreciated. So — proposed next step: I build the side-by-side TCO against your £320k quote, factoring the £180k upfront, and we present together to the CFO. Does the week of the 19th work?
+[08:48] Her: The 19th works. Afternoon preferably. It'd be you and me in the room with him.
+[08:56] Me: Perfect, you and I presenting jointly. I'll coordinate with Dave at the partner so he's aligned. I'll send a holding invite today and a draft TCO 48 hours before so you can pre-read.
+[09:10] Her: Good. Send it to me and I'll forward to the CFO's PA. Anything else urgent, I really do have to go.
+[09:18] Me: Nothing urgent — just one quick ask: can you share the VMware quote line items so I'm comparing like for like?
+[09:26] Her: I'll get Dave to pass them over, saves me digging.
+[09:30] Me: Perfect. Thanks for the time, and the straight talk.
+[09:34] Her: Thanks. Talk week of the 19th.

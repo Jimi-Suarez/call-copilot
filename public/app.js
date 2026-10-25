@@ -1,6 +1,9 @@
 // ── State ──────────────────────────────────────────────────────────────────
 let knowledge = null;
+let callScript = null;
+let objectionLibrary = null;
 let pclubCoach = null;
+let generatedCalls = [];
 
 const state = {
   notes: createEmptyNotes(),
@@ -12,15 +15,27 @@ const state = {
   callStart: null,
   timerInterval: null,
   pitchHeld: false,
+  numbersDeclined: false,
+  pitchOverride: false,
+  _pauseAsked: false,
+  redFlags: [],          // [{ uttId, flags:[{id,correction}] }]
+  redFlagsCorrected: new Set(),
   // replay
   replayMode: false,
   replayUtterances: [],
   replayIndex: 0,
   replayInterval: null,
   replayPaused: false,
+  replayCard: null,
+  _openingForced: false,
+  _lastCardText: '',
+  _lastCardChangedSec: 0,
   // live mode
   liveMode: false,
   liveSpeaker0IsMe: true,
+  calibrating: false,       // true between startLive and first utterance
+  meSpkIdx: null,           // 0 or 1 once locked
+  speakersAutoSwapped: false, // guard against double auto-swap
   sessionStart: null,
   micStream: null,
   audioCtx: null,
@@ -32,6 +47,8 @@ const state = {
   openingTicks: { o1: null, o2: null, o3: null, o4: null }, // null=auto, true=force-done
   nutanixIntroSuggested: false,
   objections: [],   // { id, quote, matchedKey, utteranceId, timestamp, status: 'open'|'handled'|'dismissed', seenAt }
+  objResumeStepId: null, // step id active when first objection fired; resume here when queue empties
+  pendingBasics: null,   // most recent basics question {entry, utteranceId, ts}
   forceFlush: false,
   // live status tracking
   activeEngine: null,      // 'deepgram' | 'chrome'
@@ -45,6 +62,8 @@ const state = {
   interimText: null,
   interimSpeaker: null,
   transcriptScrollLocked: false,
+  callOrder: 'pain-first',
+  askedSteps: new Set(),
 };
 // Expose for E2E tests (const is not on window automatically)
 window.state = state;
@@ -73,6 +92,8 @@ function createEmptyNotes() {
     deadline:      makeField(),
     renewalDate:   makeField(),
     doingNothing:  makeField(),
+    quoteType:     makeField(),   // 'recurring' | 'oneoff' | 'unknown'
+    available:     makeField(),   // oneoff: what she has set aside / can spend
     cause:         makeField(),
     otherDrivers:  makeField(),
     impactOnOthers:makeField(),
@@ -263,42 +284,44 @@ function computeDerived() {
   if (n.quote.value != null)     d.monthlyQuote   = Math.round(n.quote.value / 12);
   if (d.gapPerYear != null)      d.monthlyGap     = Math.round(d.gapPerYear / 12);
 
-  // Sheet D21: numbers read-back (section 6.5: partial-safe, canAbsorb = 0 is valid)
-  if (n.quote.value != null && n.paysNow.value != null && n.canAbsorb.value != null) {
+  // Numbers read-back: one short sentence, numbers first, her words
+  if (n.quote.value != null && n.paysNow.value != null) {
+    const inc = n.quote.value - n.paysNow.value;
+    let s = `Quote ${fmtNum(n.quote.value)}, paying ${fmtNum(n.paysNow.value)} — ${fmtNum(inc)} more.`;
+    if (n.canAbsorb.value != null) s += ` Absorb ${fmtNum(n.canAbsorb.value)}.`;
     const dl = state.notes.deadline.value;
-    const rd = state.notes.renewalDate.value;
-    const datePart = dl ? ` Deadline: ${dl}.` : '';
-    const renewalPart = rd ? ` Renewal: ${rd}.` : '';
-    d.numbersSummary = `So the quote is ${fmtNum(n.quote.value)} against ${fmtNum(n.paysNow.value)} now. You can absorb ${fmtNum(n.canAbsorb.value)}.${datePart}${renewalPart} Did I get that right?`;
-    d.numbersSummaryPartial = false;
+    if (dl) s += ` Deadline ${dl}.`;
+    s += ' Did I get that right?';
+    d.numbersSummary = s;
+    d.numbersSummaryPartial = (n.canAbsorb.value == null);
   } else {
     const parts = [];
     if (n.paysNow.value != null) parts.push(`paying ${fmtNum(n.paysNow.value)}`);
     if (n.quote.value != null)   parts.push(`quote ${fmtNum(n.quote.value)}`);
     if (n.canAbsorb.value != null) parts.push(`absorb ${fmtNum(n.canAbsorb.value)}`);
-    if (parts.length) { d.numbersSummary = `So far I've got: ${parts.join(', ')}. Did I get that right?`; d.numbersSummaryPartial = true; }
+    if (parts.length) { d.numbersSummary = `${parts.join(', ')}. Did I get that right?`; d.numbersSummaryPartial = true; }
   }
 
-  // Sheet D25: cause read-back (section 6.5: partial-safe)
+  // Cause read-back: one short sentence
   const cause = state.notes.cause.value;
   const drivers = state.notes.otherDrivers.value;
   if (cause && drivers) {
-    d.causeSummary = `So it hits hard because ${cause}, and right now it matters because ${drivers}. Did I get that right?`;
+    d.causeSummary = `Hits hard because ${cause}; matters now because ${drivers}. Did I get that right?`;
     d.causeSummaryPartial = false;
   } else if (cause) {
-    d.causeSummary = `So it hits hard because ${cause}. Did I get that right?`;
+    d.causeSummary = `Hits hard because ${cause}. Did I get that right?`;
     d.causeSummaryPartial = true;
   }
 
-  // Needs read-back (section 6.5 replaces xlsx D37 all-or-nothing condition)
-  const filled = state.notes.needs.filter(n => n.value);
+  // Needs read-back: up to 3 items, one sentence
+  const filled = state.notes.needs.filter(n => n.value).slice(0, 3);
   if (filled.length > 0) {
     const topIdx = resolveTopNeedIndex(filled);
     const topText = filled[topIdx].value;
     if (filled.length === 1) {
-      d.needsSummary = `So you need: ${filled[0].value}. Did I get that right?`;
+      d.needsSummary = `You need: ${filled[0].value}. Did I get that right?`;
     } else {
-      d.needsSummary = `So you need: ${filled.map(n => n.value).join('; ')}. The most important is: ${topText}. Did I get that right?`;
+      d.needsSummary = `You need: ${filled.map(n => n.value).join('; ')}. Most important: ${topText}. Did I get that right?`;
     }
     d.needsSummaryPartial = !state.notes.topNeed.value;
   }
@@ -536,25 +559,48 @@ function computeBriefTicks() {
   const n = state.notes;
   const filled = (arr) => arr.filter(Boolean).length;
 
-  // Check for Nutanix intro auto-suggest: Me said something matching a pitch opener
+  // Outcome-led Nutanix intro detection (tightened — technical descriptions don't count)
   const meLines = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text.toLowerCase());
-  const nutanixIntroDetected = meLines.some(t =>
-    (t.includes('nutanix') && (t.includes('put') || t.includes('manage') || t.includes('idea') || t.includes('try') || t.includes('brings') || t.includes('one system'))) ||
-    t.includes('can i try a few ideas')
-  );
+  const nutanixIntroDetected = CoachLogic.detectNutanixIntro(meLines);
 
   // Objection status for tick 3
   const openObj = (state.objections || []).filter(o => o.status === 'open');
-  const handledObj = (state.objections || []).filter(o => o.status === 'handled');
   const allHandled = openObj.length === 0 && (state.objections || []).length > 0;
   const noneRaised = (state.objections || []).length === 0;
 
   return [
     { id: '1b', what: 'Pain uncovered', status: (()=>{const c=filled([n.pain.value,n.whatItAffects.value,n.whyProblem.value,n.cause.value]); return c>=3?'done':c>=1?'partial':'yet';})() },
     { id: '1a', what: 'Situation uncovered', status: (n.situation.hosts.value || n.situation.vms.value || n.situation.workloads.value) ? 'done' : 'yet' },
-    { id: '1c', what: 'Needs uncovered', status: n.needs.filter(nd => nd.value).length >= 1 ? 'done' : 'yet' },
-    { id: '1d', what: 'Implications uncovered', status: filled([n.doingNothing.value, n.impactOnOthers.value, n.personalStake.value]) >= 2 ? 'done' : 'yet' },
+    {
+      id: '1c', what: 'Needs uncovered',
+      status: (()=>{
+        const cnt = n.needs.filter(nd => nd.value).length;
+        if (cnt >= 1 && n.topNeed.value && n.needReason.value) return 'done';
+        if (cnt >= 1) return 'partial';
+        return 'yet';
+      })()
+    },
+    {
+      id: '1d', what: 'Implications uncovered',
+      status: (()=>{
+        if (n.doingNothing.value && n.personalStake.value) return 'done';
+        if (n.doingNothing.value || n.impactOnOthers.value || n.personalStake.value) return 'partial';
+        return 'yet';
+      })()
+    },
     { id: '1e', what: 'Timeframe uncovered', status: filled([n.deadline.value, n.renewalDate.value]) >= 1 ? 'done' : 'yet' },
+    {
+      id: 'num', what: 'Numbers captured',
+      status: (()=>{
+        if (state.numbersDeclined) return 'done';
+        const c = filled([n.numbers.paysNow.value, n.numbers.quote.value, n.numbers.canAbsorb.value]);
+        if (c === 3) return 'done';
+        if (c > 0) return 'partial';
+        return 'yet';
+      })(),
+      clickable: true,
+      suggestion: state.numbersDeclined ? 'declined — marked covered' : null
+    },
     {
       id: '2', what: 'Nutanix introduced',
       status: state.manualTicks['2'] || (nutanixIntroDetected ? 'done' : 'yet'),
@@ -567,7 +613,13 @@ function computeBriefTicks() {
       clickable: true,
       suggestion: allHandled && state.manualTicks['3'] === null ? 'All objections handled — tick done?' : (noneRaised ? 'none raised' : null)
     },
-    { id: '4',  what: 'Next step agreed', status: filled([n.nextStep.dateTime.value, n.nextStep.who.value]) >= 2 ? 'done' : 'yet' }
+    {
+      id: '4', what: 'Next step agreed',
+      status: (()=>{
+        const c = filled([n.nextStep.dateTime.value, n.nextStep.who.value, n.nextStep.purpose.value]);
+        return c >= 3 ? 'done' : c >= 2 ? 'partial' : 'yet';
+      })()
+    }
   ];
 }
 
@@ -739,19 +791,83 @@ function setExtractStatus(msg) {
 // ── Replay mode ───────────────────────────────────────────────────────────────
 async function loadSamples() {
   try {
-    const resp = await fetch('/api/samples');
-    const files = await resp.json();
+    const sampResp = await fetch('/api/samples');
+    const files = await sampResp.json();
+
+    // Generated endpoint may not be present on older server versions — fail gracefully
+    try {
+      const genResp = await fetch('/api/generated');
+      if (genResp.ok) generatedCalls = await genResp.json();
+    } catch {}
+
     const sel = document.getElementById('sample-select');
-    sel.innerHTML = files.map(f => `<option value="${f}">${f.replace('.txt', '')}</option>`).join('');
+    let html = '<option value="__random__">Random (new each time)</option>';
+    if (files.length) {
+      html += `<optgroup label="Sample calls">${
+        files.map(f => `<option value="${f}">${f.replace('.txt', '')}</option>`).join('')
+      }</optgroup>`;
+    }
+    if (generatedCalls.length) {
+      html += `<optgroup label="Generated (${generatedCalls.length})">${
+        generatedCalls.map(c => `<option value="${c.filename}">${c.seed} — ${c.pain}</option>`).join('')
+      }</optgroup>`;
+    }
+    sel.innerHTML = html;
   } catch (e) {
     console.error('Could not load samples', e);
   }
 }
 
+function pickRandomGenerated() {
+  if (!generatedCalls.length) return null;
+  const seeds = generatedCalls.map(c => c.seed);
+  let played = [];
+  try { played = JSON.parse(localStorage.getItem('cc-played-generated') || '[]'); } catch {}
+  let unplayed = seeds.filter(s => !played.includes(s));
+  if (!unplayed.length) { played = []; unplayed = seeds; }
+  const seed = unplayed[Math.floor(Math.random() * unplayed.length)];
+  played.push(seed);
+  localStorage.setItem('cc-played-generated', JSON.stringify(played));
+  return generatedCalls.find(c => c.seed === seed) || null;
+}
+
+function updateSpeedNote() {
+  const speedSel = document.getElementById('replay-speed');
+  const noteEl   = document.getElementById('replay-speed-note');
+  if (!noteEl || !speedSel) return;
+  const fast = parseInt(speedSel.value) === 100;
+  noteEl.textContent = 'Fast: may outrun extraction';
+  noteEl.classList.toggle('hidden', !fast);
+}
+
 async function startReplay() {
   const sel = document.getElementById('sample-select');
-  const filename = sel.value;
+  let filename = sel.value;
   if (!filename) return;
+
+  state.replayCard = null;
+  document.getElementById('btn-scenario-reveal')?.classList.add('hidden');
+  document.getElementById('scenario-bar')?.classList.add('hidden');
+  updateSpeedNote();
+
+  if (filename === '__random__') {
+    const card = pickRandomGenerated();
+    if (!card) {
+      document.getElementById('replay-controls').classList.remove('hidden');
+      document.getElementById('replay-progress').textContent =
+        'No generated calls yet — press ＋5 calls to generate some';
+      return;
+    }
+    filename = card.filename;
+    state.replayCard = card;
+    // Load expected.json for planted mistakes (fire-and-forget)
+    const expPath = filename.replace('.txt', '.expected.json');
+    fetch(`/test/${expPath}`).then(r => r.ok ? r.json() : null).then(exp => {
+      if (exp && state.replayCard && state.replayCard.seed === card.seed) {
+        state.replayCard.plantedMistakes = exp.plantedMistakes || [];
+      }
+    }).catch(() => {});
+  }
 
   const resp = await fetch(`/test/${filename}`);
   const text = await resp.text();
@@ -760,6 +876,7 @@ async function startReplay() {
 
   // Reset state
   state.notes = createEmptyNotes();
+  state.askedSteps = new Set();
   state.transcript = [];
   state.recentUtterances = [];
   state.replayUtterances = utterances;
@@ -768,6 +885,18 @@ async function startReplay() {
   state.lastExtractTime = 0;
   state.extractInFlight = false;
   state.totalTokens = 0;
+  state._openingForced = false;
+  state._lastCardText = '';
+  state._lastCardChangedSec = 0;
+  state.numbersDeclined = false;
+  state.pitchOverride = false;
+  state._pauseAsked = false;
+  state.redFlags = [];
+  state.redFlagsCorrected = new Set();
+  state.coiSaid = false;
+  state.readbackSaid = false;
+  state.softCloseDetected = null;
+  state.pitchedNeeds = new Set();
 
   // Replay clock shows call timestamps, not real elapsed time
   state.callStart = null;
@@ -803,6 +932,8 @@ function scheduleNextUtterance() {
       // Final flush — force regardless of batch size, wait for any in-flight call
       state.forceFlush = true;
       await maybeExtract();
+      const _missingEl = document.getElementById('lv-missing');
+      if (_missingEl) _missingEl.innerHTML = 'Missing: <em>extracting final batch…</em>';
       let maxWait = 90; // up to 18 seconds
       while ((state.extractInFlight || state.recentUtterances.some(u => u.speaker === 'Her')) && maxWait-- > 0) {
         await new Promise(r => setTimeout(r, 200));
@@ -812,6 +943,9 @@ function scheduleNextUtterance() {
       }
       state.forceFlush = false;
       document.getElementById('replay-progress').textContent = 'Done';
+      if (state.replayCard) {
+        document.getElementById('btn-scenario-reveal')?.classList.remove('hidden');
+      }
       renderAll();
       return; // no more ticks
     }
@@ -822,7 +956,13 @@ function scheduleNextUtterance() {
 
     document.getElementById('timer').textContent = utt.ts;
     addUtteranceToDOM(utt);
-    checkDontPromise(utt);
+    checkRedFlags(utt);
+    checkCoiSaid(utt);
+    checkReadbackSaid(utt);
+    checkSoftClose(utt);
+    checkPitchedNeeds(utt);
+    checkObjBrowserSide(utt);
+    checkObjAutoHandle(utt);
     if (utt.speaker === 'Me') checkParkedFollowUps();
     document.getElementById('replay-progress').textContent =
       `${state.replayIndex} / ${state.replayUtterances.length}`;
@@ -860,6 +1000,22 @@ async function startLive() {
   state.lastExtractTime = 0;
   state.extractInFlight = false;
   state.totalTokens = 0;
+  state._openingForced = false;
+  state._lastCardText = '';
+  state._lastCardChangedSec = 0;
+  state.numbersDeclined = false;
+  state.pitchOverride = false;
+  state._pauseAsked = false;
+  state.redFlags = [];
+  state.redFlagsCorrected = new Set();
+  state.coiSaid = false;
+  state.readbackSaid = false;
+  state.softCloseDetected = null;
+  state.pitchedNeeds = new Set();
+  state.calibrating = true;
+  state.meSpkIdx = null;
+  state.speakersAutoSwapped = false;
+  state.askedSteps = new Set();
   state.sessionStart = Date.now();
   state.liveMode = true;
 
@@ -874,6 +1030,10 @@ async function startLive() {
 
   const btnLive = document.getElementById('btn-live');
   if (btnLive) btnLive.textContent = '⏹ Stop Live';
+  document.getElementById('btn-flip-speaker')?.classList.remove('hidden');
+  document.getElementById('btn-swap-all')?.classList.remove('hidden');
+  document.getElementById('lv-swap-banner')?.classList.add('hidden');
+  updateLiveStatus();
 
   // Reset live status
   state.dgBytesSent = 0;
@@ -951,6 +1111,8 @@ async function startDeepgramMic() {
     state.dgWs.onopen = () => {
       state.dgWsState = 'open';
       updateLiveStatus();
+      // On reconnect (has already received results): re-run speaker ID checks
+      if (state.dgGotResult && state.liveMode) runSpeakerIDFromTranscript();
     };
 
     state.dgWs.onmessage = (e) => {
@@ -983,7 +1145,7 @@ async function startDeepgramMic() {
           const spkIdx = alt.words?.[0]?.speaker ?? 0;
           const speaker = (spkIdx === 0) === state.liveSpeaker0IsMe ? 'Me' : 'Her';
           const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
-          addLiveUtterance({ ts: secToTs(elapsed), speaker, text: alt.transcript.trim() });
+          addLiveUtterance({ ts: secToTs(elapsed), speaker, spkIdx, text: alt.transcript.trim() });
         }
       } catch {}
     };
@@ -1088,6 +1250,13 @@ function updateLiveStatus() {
     set('lst-last', '');
   }
   set('lst-error', state.liveErrorMsg || '');
+  if (state.meSpkIdx != null) {
+    set('lst-speaker', `Me = spk${state.meSpkIdx}`);
+  } else if (state.calibrating) {
+    set('lst-speaker', "Say 'Hi, I'm Jimi' now");
+  } else {
+    set('lst-speaker', '');
+  }
 }
 
 function addLiveUtterance(utt) {
@@ -1098,8 +1267,16 @@ function addLiveUtterance(utt) {
   state.transcript.push(fullUtt);
   state.recentUtterances.push(fullUtt);
   addUtteranceToDOM(fullUtt);
-  checkDontPromise(fullUtt);
+  checkSpeakerID(fullUtt, utt.spkIdx);       // calibration + name trigger
+  checkRedFlags(fullUtt);
+  checkCoiSaid(fullUtt);
+  checkReadbackSaid(fullUtt);
+  checkSoftClose(fullUtt);
+  checkPitchedNeeds(fullUtt);
+  checkObjBrowserSide(fullUtt);
+  checkObjAutoHandle(fullUtt);
   if (utt.speaker === 'Me') checkParkedFollowUps();
+  runSpeakerHeuristic();                      // content-based inversion check
   maybeExtract().then(() => renderAll());
 }
 
@@ -1168,6 +1345,28 @@ function handleIncomingObjections(newObjs) {
   renderObjections();
 }
 
+function _renderUniversalCard(obj, openCount) {
+  const card = _getObjCard(obj);
+  if (!card) return '';
+  const queueBadge = openCount > 1
+    ? `<span class="obj-queue-badge">${openCount} queued</span>` : '';
+  const neverHtml = card.never
+    ? `<div class="obj-card-never">Never say: ${escHtml(card.never)}</div>` : '';
+  return `
+    <div class="obj-card-hdr">
+      <span class="obj-card-tag">${escHtml(card.label)}</span>
+      ${queueBadge}
+      <button class="btn-small obj-dismiss obj-handled-btn" data-obj-id="${escHtml(obj.id)}" data-action="handled">Handled <kbd>O</kbd></button>
+    </div>
+    <div class="obj-card-steps">
+      <div class="obj-card-step"><span class="obj-step-label">ANSWER</span><span class="obj-step-text">${escHtml(card.answer)}</span></div>
+      <div class="obj-card-step"><span class="obj-step-label">ASK</span><span class="obj-step-text">${escHtml(card.ask)}</span></div>
+      <div class="obj-card-step"><span class="obj-step-label">BRIDGE</span><span class="obj-step-text">${escHtml(card.bridge)}</span></div>
+      <div class="obj-card-step"><span class="obj-step-label">CHECK</span><span class="obj-step-text">${escHtml(card.check)}</span></div>
+    </div>
+    ${neverHtml}`;
+}
+
 function renderObjections() {
   const banner = document.getElementById('objection-banner');
   const chips = document.getElementById('objection-chips');
@@ -1178,66 +1377,63 @@ function renderObjections() {
   const handled     = state.objections.filter(o => o.status === 'handled');
 
   chips.innerHTML = [
-    ...open.map(o =>        `<span class="obj-chip open"         data-obj-id="${o.id}" title="${escHtml(o.quote)}">${o.matchedKey}</span>`),
-    ...handledAuto.map(o => `<span class="obj-chip handled-auto" data-obj-id="${o.id}" title="${escHtml(o.quote)}">${o.matchedKey} ✓?</span>`),
-    ...handled.map(o =>     `<span class="obj-chip handled"      title="${escHtml(o.quote)}">${o.matchedKey} ✓</span>`)
+    ...open.map(o =>        `<span class="obj-chip open"         data-obj-id="${o.id}" title="${escHtml(o.quote)}">${escHtml(o.matchedKey)}</span>`),
+    ...handledAuto.map(o => `<span class="obj-chip handled-auto" data-obj-id="${o.id}" title="${escHtml(o.quote)}">${escHtml(o.matchedKey)} ✓?</span>`),
+    ...handled.map(o =>     `<span class="obj-chip handled"      title="${escHtml(o.quote)}">${escHtml(o.matchedKey)} ✓</span>`)
   ].join('');
 
   if (open.length > 0) {
     banner.classList.remove('hidden');
-    const obj = open[open.length - 1];
-    const playbook = getObjectionPlaybook(obj.matchedKey);
-    banner.innerHTML = `
-      <div class="obj-header">
-        <span class="obj-ts">${escHtml(obj.timestamp || '')}</span>
-        <span class="obj-tag">${escHtml(obj.matchedKey)}</span>
-        <button class="btn-small obj-dismiss" data-obj-id="${obj.id}" data-action="handled">Mark handled <kbd>O</kbd></button>
-      </div>
-      <div class="obj-quote">"${escHtml(obj.quote)}"</div>
-      <div class="obj-worried"><strong>She's worried about:</strong> ${escHtml(playbook.worried)}</div>
-      <div class="obj-saythis"><strong>Say this:</strong> ${escHtml(playbook.sayThis)}</div>
-      ${playbook.reminder ? `<div class="obj-reminder">${escHtml(playbook.reminder)}</div>` : ''}
-    `;
+    const obj = open[0]; // FIFO: oldest first
+    banner.innerHTML = _renderUniversalCard(obj, open.length);
   } else if (handledAuto.length > 0) {
     banner.classList.remove('hidden');
     const obj = handledAuto[handledAuto.length - 1];
     banner.innerHTML = `
-      <div class="obj-header">
-        <span class="obj-ts">${escHtml(obj.timestamp || '')}</span>
-        <span class="obj-tag">${escHtml(obj.matchedKey)}</span>
-        <span class="obj-auto-label">Handled, auto: check</span>
+      <div class="obj-card-hdr">
+        <span class="obj-card-tag">${escHtml(obj.matchedKey.toUpperCase())}</span>
+        <span class="obj-auto-label">Auto-handled — confirm?</span>
         <button class="btn-small" data-obj-id="${obj.id}" data-action="confirm">Confirm <kbd>O</kbd></button>
         <button class="btn-small obj-reopen" data-obj-id="${obj.id}" data-action="reopen">Reopen</button>
       </div>
-      <div class="obj-quote">"${escHtml(obj.quote)}"</div>
+      <div class="obj-card-quote">"${escHtml(CoachLogic.truncateWords(obj.quote, 80))}"</div>
     `;
   } else {
     banner.classList.add('hidden');
+    if (state.objResumeStepId) state.objResumeStepId = null;
   }
 }
 
 function getObjectionPlaybook(matchedKey) {
-  if (!knowledge) return { worried: 'unknown', sayThis: 'Acknowledge and ask an open question.', reminder: '' };
-  const keyMap = {
-    downtime:    0,
-    retraining:  1,
-    cost:        2,
-    compliance:  3,
-    proof:       4
-  };
-  const idx = keyMap[matchedKey];
-  if (idx !== undefined && knowledge.objections[idx]) {
-    const o = knowledge.objections[idx];
-    return {
-      worried:  o.shes_worried,
-      sayThis:  o.say_this,
-      reminder: o.why_it_works
-    };
+  // Try new library first
+  if (objectionLibrary) {
+    const entry = objectionLibrary.find(e => e.id === matchedKey);
+    if (entry) {
+      const card = CoachLogic.buildObjectionCard(entry, '', state.notes);
+      return {
+        worried:  entry.shes_worried || 'Her concern about this.',
+        sayThis:  card.answer + ' ' + card.ask,
+        reminder: card.bridge,
+        neverSay: entry.never || '',
+        card:     card,
+      };
+    }
+  }
+  // Fallback: knowledge.json legacy entries
+  if (knowledge && knowledge.objections) {
+    const o = knowledge.objections.find(obj => obj.id === matchedKey);
+    if (o) return { worried: o.shes_worried, sayThis: o.say_this, reminder: o.why_it_works, neverSay: o.never_say || '', card: null };
+  }
+  if (matchedKey === 'unknown') {
+    const card = CoachLogic.buildObjectionCard(UNKNOWN_OBJ_ENTRY, '', state.notes);
+    return { worried: 'Something she\'s worried about.', sayThis: card.answer + ' ' + card.ask, reminder: card.bridge, neverSay: '', card };
   }
   return {
     worried: 'Something about the proposal.',
     sayThis: '"That\'s a fair concern. Can you tell me more about what\'s behind that?"',
-    reminder: 'Listen. Ask what specifically worries them. Don\'t over-explain.'
+    reminder: 'Listen. Ask what specifically worries them. Don\'t over-explain.',
+    neverSay: '',
+    card: null,
   };
 }
 
@@ -1251,25 +1447,293 @@ function dismissObjection(id, action) {
   renderCoach();
 }
 
-// Check Me lines for don't-promise slips
-function checkDontPromise(utt) {
+// Check Me lines for red-flag slips using coach-logic rules.
+function checkRedFlags(utt) {
   if (utt.speaker !== 'Me') return;
-  const lower = utt.text.toLowerCase();
-  const triggers = ['zero downtime', 'guarantee', 'cheaper', 'faster', 'safer'];
-  const hit = triggers.find(t => lower.includes(t));
-  if (!hit) return;
-  showDontPromiseWarning(utt, hit);
+  const flags = CoachLogic.detectRedFlags(utt.text);
+  if (!flags.length) return;
+  // Record for chip override
+  const existing = state.redFlags.find(r => r.uttId === utt.id);
+  if (!existing) state.redFlags.push({ uttId: utt.id, flags });
+  if (!state.redFlagsCorrected.has(utt.id)) showRedFlagAlert(utt, flags[0]);
 }
 
-function showDontPromiseWarning(utt, trigger) {
+function showRedFlagAlert(utt, flag) {
   const banner = document.getElementById('dont-promise-banner');
   if (!banner) return;
-  banner.innerHTML = `<strong>Don't promise:</strong> You said "${escHtml(trigger)}" — ${escHtml(utt.text.slice(0, 80))}`;
+  const trigWord = flag.triggeredBy || flag.id;
+  banner.innerHTML = `
+    <strong>You said "${escHtml(trigWord)}" — walk it back:</strong>
+    <div class="flag-correction">${escHtml(flag.correction)}</div>
+    <button class="btn-small flag-corrected-btn" data-correct-flag="${escHtml(utt.id)}">Corrected</button>`;
   banner.classList.remove('hidden');
-  // Highlight in transcript
   const uttEl = document.getElementById(`utt-${utt.id}`);
-  if (uttEl) uttEl.classList.add('dont-promise');
-  setTimeout(() => banner.classList.add('hidden'), 8000);
+  if (uttEl) { uttEl.classList.remove('dont-promise'); uttEl.classList.add('red-flag'); }
+}
+
+function checkCoiSaid(utt) {
+  if (utt.speaker !== 'Me' || state.coiSaid) return;
+  const nn = state.notes.numbers;
+  if (nn.paysNow.value == null || nn.quote.value == null) return;
+  const coiScript = CoachLogic.buildCostOfInactionScript(
+    nn.paysNow.value, nn.quote.value,
+    nn.canAbsorb.value != null ? nn.canAbsorb.value : undefined,
+    false,
+    state.notes.doingNothing.value != null ? state.notes.doingNothing.value : undefined
+  );
+  if (CoachLogic.coiMatchesSpeech(coiScript, utt.text)) {
+    state.coiSaid = true;
+  }
+}
+
+function checkReadbackSaid(utt) {
+  if (utt.speaker !== 'Me' || state.readbackSaid) return;
+  const lower = utt.text.toLowerCase();
+  if (lower.includes('did i get that right') || lower.includes('have i got that right')) {
+    state.readbackSaid = true;
+    const el = document.getElementById('lv-readback');
+    if (el) el.classList.add('hidden');
+  }
+}
+
+function checkSoftClose(utt) {
+  if (utt.speaker !== 'Me') return;
+  const phrase = CoachLogic.detectSoftClose(utt.text);
+  if (phrase) state.softCloseDetected = phrase;
+}
+
+function checkPitchedNeeds(utt) {
+  if (utt.speaker !== 'Me') return;
+  const filled = state.notes.needs.filter(nd => nd.value);
+  if (!utt.text.toLowerCase().includes('you told me')) return;
+  filled.forEach((nd, idx) => {
+    if (!state.pitchedNeeds.has(idx) && CoachLogic.needIsPitched([utt.text], nd.value)) {
+      state.pitchedNeeds.add(idx);
+    }
+  });
+}
+
+// ── Objection engine — browser-side detection ────────────────────────────────
+
+// Generic card entry for objections that don't match the library.
+const UNKNOWN_OBJ_ENTRY = {
+  id: 'unknown',
+  label: 'NOT IN LIBRARY',
+  answer: 'Let me make sure I\'ve understood — [her words].',
+  ask: 'Can you say more about what specifically worries you?',
+  bridge: 'Once I understand it clearly, we can address it properly.',
+  check: 'Does that cover it?',
+  never: '',
+  ifRepeated: '',
+  bridgeTo: null,
+};
+
+// Returns the rendered 4-step card for a state.objections entry.
+function _getObjCard(obj) {
+  if (!obj) return null;
+  if (obj.matchedKey === 'unknown') {
+    return CoachLogic.buildObjectionCard(UNKNOWN_OBJ_ENTRY, obj.quote, state.notes);
+  }
+  // Check loaded library first
+  const lib = objectionLibrary || [];
+  const entry = lib.find(e => e.id === obj.matchedKey);
+  if (entry) return CoachLogic.buildObjectionCard(entry, obj.quote, state.notes);
+  // Fallback: synthesise a minimal card from knowledge.json (old 5)
+  if (knowledge && knowledge.objections) {
+    const ko = knowledge.objections.find(o => o.id === obj.matchedKey);
+    if (ko) {
+      const synthetic = {
+        id: ko.id,
+        answer: ko.say_this || '',
+        ask: 'What would you need to see?',
+        bridge: ko.why_it_works || '',
+        check: 'Does that cover it?',
+        never: ko.never_say || '',
+      };
+      return CoachLogic.buildObjectionCard(synthetic, obj.quote, state.notes);
+    }
+  }
+  return null;
+}
+
+// Called on every Her utterance: runs instant browser-side detection and queues matches.
+function checkObjBrowserSide(utt) {
+  if (utt.speaker !== 'Her') return;
+  const now = Date.now();
+  const lib = objectionLibrary || [];
+  const matches = CoachLogic.detectObjection(utt.text, lib);
+
+  // Check basics questions (show in card but don't queue as objection)
+  if (matches.length === 0 && knowledge && knowledge.basics && utt.text.includes('?')) {
+    const basic = _detectBasicsQuestion(utt.text);
+    if (basic) {
+      state.pendingBasics = { entry: basic, utteranceId: utt.id, ts: utt.ts };
+      return;
+    }
+  }
+
+  if (matches.length > 0) {
+    for (const m of matches) {
+      _addObjToState({ matchedKey: m.id, quote: utt.text.slice(0, 150), utteranceId: utt.id, timestamp: utt.ts }, now);
+    }
+  } else if (CoachLogic.hasObjMarkers(utt.text)) {
+    // Unknown fallback
+    _addObjToState({ matchedKey: 'unknown', quote: utt.text.slice(0, 150), utteranceId: utt.id, timestamp: utt.ts }, now);
+  }
+}
+
+function _detectBasicsQuestion(text) {
+  if (!knowledge || !knowledge.basics) return null;
+  const lower = text.toLowerCase();
+  for (const b of knowledge.basics) {
+    const askWords = b.she_asks.toLowerCase().split(/\s+/)
+      .filter(w => w.length > 3 && !['what','does','mean','have','away','your','that'].includes(w));
+    if (askWords.some(w => lower.includes(w))) return b;
+  }
+  return null;
+}
+
+function _addObjToState(obj, now) {
+  const DEDUP_MS = 60000;
+  // Dedup: same matchedKey within 60s
+  const recent = state.objections.find(o =>
+    o.matchedKey === obj.matchedKey && (now - o.seenAt) < DEDUP_MS
+  );
+  if (recent) return;
+
+  // Store resume step if this is the first open objection
+  if (state.objections.filter(o => o.status === 'open').length === 0 && !state.objResumeStepId) {
+    const meLines = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+    const stepResult = callScript
+      ? CoachLogic.computeScriptNext(state.notes, callScript, state.callOrder, knowledge, meLines)
+      : null;
+    state.objResumeStepId = (stepResult && stepResult.stepId) || null;
+  }
+
+  state.objections.push({
+    id: `obj-${now}-${Math.random().toString(36).slice(2,6)}`,
+    quote: obj.quote,
+    matchedKey: obj.matchedKey || 'unknown',
+    utteranceId: obj.utteranceId,
+    timestamp: obj.timestamp,
+    status: 'open',
+    seenAt: now,
+  });
+
+  // Log to notes scratch
+  state.notes.scratch.push({
+    type: 'objection',
+    id: obj.matchedKey,
+    quote: obj.quote,
+    ts: obj.timestamp,
+    handled: false,
+  });
+
+  renderObjections();
+}
+
+// Auto-handle: if Me's text matches the bridge/ask of the active objection, mark handled-auto.
+function checkObjAutoHandle(utt) {
+  if (utt.speaker !== 'Me') return;
+  const openObjs = state.objections.filter(o => o.status === 'open');
+  if (!openObjs.length) return;
+  const obj = openObjs[0]; // FIFO: handle oldest first
+  const card = _getObjCard(obj);
+  if (card && CoachLogic.isObjHandledByMe(utt.text, card)) {
+    obj.status = 'handled-auto';
+    renderObjections();
+  }
+  // Clear resume step if queue is now empty
+  if (state.objections.filter(o => o.status === 'open').length === 0) {
+    state.objResumeStepId = null;
+  }
+}
+
+// ── Speaker ID: calibration, name trigger, inversion heuristic ───────────────
+
+// Called after a live utterance is added.  spkIdx is the raw Deepgram speaker index.
+function checkSpeakerID(utt, spkIdx) {
+  if (!state.liveMode) return;
+  spkIdx = spkIdx ?? 0;
+
+  // Calibration window: first utterance locks Me
+  if (state.calibrating) {
+    state.calibrating = false;
+    state.liveSpeaker0IsMe = (spkIdx === 0);
+    state.meSpkIdx = spkIdx;
+    const swapBtn = document.getElementById('btn-swap-all');
+    if (swapBtn) swapBtn.classList.remove('hidden');
+    updateLiveStatus();
+    return;
+  }
+
+  // Name trigger (always on): first-person intro with Jimi's name
+  if (SpeakerID.isNameTrigger(utt.text)) {
+    const shouldBe0 = (spkIdx === 0);
+    if (state.liveSpeaker0IsMe !== shouldBe0) {
+      // Labels are inverted — correct everything
+      state.liveSpeaker0IsMe = shouldBe0;
+      swapAllLabels(false);
+    }
+    state.meSpkIdx = spkIdx;
+    updateLiveStatus();
+  }
+}
+
+// Run after 6+ utterances to detect inversion and auto-swap once.
+function runSpeakerHeuristic() {
+  if (!state.liveMode || state.speakersAutoSwapped) return;
+  const result = SpeakerID.detectInversion(state.transcript);
+  if (result.inverted) {
+    state.speakersAutoSwapped = true;
+    swapAllLabels(true);
+  }
+}
+
+// Re-run speaker checks on existing transcript (e.g. after Deepgram reconnect).
+function runSpeakerIDFromTranscript() {
+  if (!state.liveMode) return;
+  for (const utt of state.transcript) {
+    if (SpeakerID.isNameTrigger(utt.text)) {
+      if (utt.speaker !== 'Me') {
+        state.liveSpeaker0IsMe = !state.liveSpeaker0IsMe;
+        swapAllLabels(false);
+      }
+      return;
+    }
+  }
+  runSpeakerHeuristic();
+}
+
+// Swap all Me/Her labels, flip liveSpeaker0IsMe, reset notes, re-extract.
+async function swapAllLabels(showBanner) {
+  state.transcript = SpeakerID.applySwap(state.transcript);
+  state.liveSpeaker0IsMe = !state.liveSpeaker0IsMe;
+
+  const banner = document.getElementById('lv-swap-banner');
+  if (banner) banner.classList.toggle('hidden', !showBanner);
+
+  // Rebuild DOM transcript with corrected labels
+  const list = document.getElementById('transcript-list');
+  if (list) {
+    list.innerHTML = '';
+    state.transcript.forEach(u => addUtteranceToDOM(u));
+  }
+
+  // Reset all derived state
+  state.notes = createEmptyNotes();
+  state.coiSaid = false;
+  state.readbackSaid = false;
+  state.softCloseDetected = null;
+  state.pitchedNeeds = new Set();
+  state.redFlags = [];
+  state.redFlagsCorrected = new Set();
+  state.recentUtterances = [...state.transcript];
+  state.forceFlush = true;
+  renderAll();
+  await maybeExtract();
+  state.forceFlush = false;
+  renderAll();
 }
 
 // ── Transcript merge helper (for display only) ────────────────────────────────
@@ -1308,7 +1772,12 @@ function computeOpeningTicks() {
 // ── Live column ───────────────────────────────────────────────────────────────
 function getLivePhase() {
   const opening = computeOpeningTicks();
-  if (!opening.o1 || !opening.o2 || !opening.o3 || !opening.o4) return 'opening';
+  const allDone = opening.o1 && opening.o2 && opening.o3 && opening.o4;
+
+  if (!allDone && !state._openingForced &&
+      !CoachLogic.shouldExitOpeningPhase(state.transcript, state.notes)) {
+    return 'opening';
+  }
 
   const ticks = computeBriefTicks();
   const nutTick   = ticks.find(t => t.id === '2');
@@ -1316,7 +1785,8 @@ function getLivePhase() {
   const needsTick = ticks.find(t => t.id === '1c');
   const nutMet    = nutTick && (nutTick.status === 'done' || nutTick.status === 'suggest');
   const openObj   = state.objections.some(o => o.status === 'open');
-  const pitchRdy  = (painTick?.status === 'done' || painTick?.status === 'partial') && needsTick?.status === 'done';
+  const pitchRdy  = (painTick?.status === 'done' || painTick?.status === 'partial') &&
+                    (needsTick?.status === 'done' || needsTick?.status === 'partial');
   if (nutMet) return openObj ? 'objection' : 'close';
   return pitchRdy ? 'pitch' : 'discovery';
 }
@@ -1333,7 +1803,8 @@ function renderLive() {
   const nutMet    = nutTick && (nutTick.status === 'done' || nutTick.status === 'suggest');
   const painTick  = ticks.find(t => t.id === '1b');
   const needsTick = ticks.find(t => t.id === '1c');
-  const pitchRdy  = (painTick?.status === 'done' || painTick?.status === 'partial') && needsTick?.status === 'done';
+  const pitchRdy  = (painTick?.status === 'done' || painTick?.status === 'partial') &&
+                    (needsTick?.status === 'done' || needsTick?.status === 'partial');
 
   // Timer — use last transcript timestamp (works for replay and live)
   const lastUtt = state.transcript[state.transcript.length - 1];
@@ -1358,13 +1829,26 @@ function renderLive() {
   const nextStepTick = ticks.find(t => t.id === '4');
 
   // NEXT card
+  const openObjsForCard = state.objections.filter(o => o.status === 'open');
   if (phase === 'opening') {
     _renderLiveNextOpening(computeOpeningTicks(), compact);
+  } else if (openObjsForCard.length > 0) {
+    // Universal objection card replaces Ask Next
+    _renderObjCardInNext(openObjsForCard);
   } else {
-    const { mainQ, backupQ, mainLesson, mainMove } = CoachLogic.computeCoachNext(n, state.transcript, knowledge);
+    const meLines = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+    const scriptResult = callScript
+      ? CoachLogic.computeScriptNext(n, callScript, state.callOrder, knowledge, meLines)
+      : CoachLogic.computeCoachNext(n, state.transcript, knowledge);
+    const { mainQ, sectionLabel: scriptSection, stepLabel: scriptStep,
+            stepIndex: scriptStepIdx, totalSteps: scriptTotalSteps,
+            minutesEnd: scriptMinutesEnd } = scriptResult;
+    const backupQ = null;
+    const mainLesson = null;
+    const mainMove = null;
     let displayQ = mainQ || '';
     let nextLabel = 'ASK NEXT';
-    let nextSub = backupQ ? 'Or: ' + backupQ : '';
+    let nextSub = '';
     let moveRef = '';
     if (nutMet) {
       nextLabel = 'SAY NEXT';
@@ -1373,17 +1857,11 @@ function renderLive() {
         nextStepTick && nextStepTick.status === 'done',
         (key) => getObjectionPlaybook(key).sayThis
       ) || '';
-      if (phase === 'objection') {
-        const openObjs = state.objections.filter(o => o.status === 'open');
-        if (openObjs.length) {
-          const pb = getObjectionPlaybook(openObjs[openObjs.length - 1].matchedKey);
-          nextSub = pb.reminder || '';
-        }
-      } else if (phase === 'close') {
+      if (phase === 'close') {
         nextSub = 'Call back: "At the start we said we\'d decide if a next step makes sense."';
-      } else {
-        nextSub = '';
       }
+      const nextSubEl = document.getElementById('lv-next-sub');
+      if (nextSubEl) nextSubEl.textContent = nextSub ? CoachLogic.truncateWords(nextSub, 70) : '';
     } else {
       if (mainMove) moveRef = mainMove + (mainLesson ? ' · ' + mainLesson : '');
     }
@@ -1392,6 +1870,18 @@ function renderLive() {
     if (nextLabelEl) nextLabelEl.textContent = nextLabel;
     const moveRefEl = document.getElementById('lv-move-ref');
     if (moveRefEl) { moveRefEl.textContent = moveRef; moveRefEl.classList.toggle('hidden', !moveRef); }
+    // Step tracker: "PAIN · 2 of 4 · what it affects"
+    const trackerEl = document.getElementById('lv-step-tracker');
+    if (trackerEl) {
+      if (!nutMet && scriptSection) {
+        const stepNum = (scriptStepIdx || 0) + 1;
+        trackerEl.textContent = `${scriptSection} · ${stepNum} of ${scriptTotalSteps || '?'} · ${scriptStep || ''}`;
+        trackerEl.classList.remove('hidden');
+      } else {
+        trackerEl.textContent = '';
+        trackerEl.classList.add('hidden');
+      }
+    }
     const nextQEl = document.getElementById('lv-next-q');
     if (nextQEl) {
       nextQEl.textContent = displayQ || 'Load a sample call to begin.';
@@ -1400,8 +1890,10 @@ function renderLive() {
         ? '22px'
         : (len > 90 ? '20px' : len > 60 ? '24px' : len > 40 ? '27px' : '30px');
     }
-    const nextSubEl = document.getElementById('lv-next-sub');
-    if (nextSubEl) nextSubEl.textContent = nextSub ? CoachLogic.truncateWords(nextSub, 70) : '';
+    if (!nutMet) {
+      const nextSubEl = document.getElementById('lv-next-sub');
+      if (nextSubEl) nextSubEl.textContent = nextSub ? CoachLogic.truncateWords(nextSub, 70) : '';
+    }
   }
 
   // She just said
@@ -1434,8 +1926,9 @@ function renderLive() {
   _renderLiveAlert(phase, ticks);
 
   // 8 chips
-  const chipLabels = { '1a':'Situation','1b':'Pain','1c':'Needs','1d':'Impact','1e':'Timeframe','2':'Nutanix','3':'Objections','4':'Next step' };
+  const chipLabels = { '1a':'Situation','1b':'Pain','1c':'Needs','1d':'Impact','1e':'Timeframe','num':'Numbers','2':'Nutanix','3':'Objections','4':'Next step' };
   const chipsEl = document.getElementById('lv-chips');
+  const hasUncorrectedFlags = state.redFlags.some(r => !state.redFlagsCorrected.has(r.uttId));
   if (chipsEl) {
     chipsEl.innerHTML = ticks.map(t => {
       let dot;
@@ -1446,7 +1939,10 @@ function renderLive() {
       } else {
         dot = (t.status === 'done' || t.status === 'suggest') ? 'done' : t.status === 'partial' ? 'partial' : 'yet';
       }
-      return `<span class="lv-chip"><span class="lv-chip-dot ${dot}"></span>${escHtml(chipLabels[t.id] || t.id)}</span>`;
+      // Uncorrected red flags keep Nutanix and Objections chips amber
+      if (hasUncorrectedFlags && (t.id === '2' || t.id === '3') && dot === 'done') dot = 'partial';
+      const declAttr = t.id === 'num' && t.status !== 'done' ? ' data-decline-numbers="1" style="cursor:pointer" title="Click: she declined to share numbers"' : '';
+      return `<span class="lv-chip"${declAttr}><span class="lv-chip-dot ${dot}"></span>${escHtml(chipLabels[t.id] || t.id)}</span>`;
     }).join('');
   }
   const missingEl = document.getElementById('lv-missing');
@@ -1479,6 +1975,18 @@ function renderLive() {
     txEl.innerHTML = last4.map(u =>
       `<span><b>${escHtml(u.speaker)}</b> ${escHtml(u.text.length > 110 ? u.text.slice(0, 110) + '…' : u.text)}</span>`
     ).join('');
+  }
+
+  // Watchdog: opening card unchanged for ≥ 120 call-seconds → permanently force-exit opening
+  if (phase === 'opening') {
+    const _wText = (OPENING_ITEMS.find(item => !computeOpeningTicks()[item.id])?.script) || '';
+    const _wSec  = lastTs ? tsToSec(lastTs) : 0;
+    if (_wText !== state._lastCardText) {
+      state._lastCardText = _wText;
+      state._lastCardChangedSec = _wSec;
+    } else if (state.transcript.length > 3 && _wSec - state._lastCardChangedSec >= 120) {
+      state._openingForced = true;
+    }
   }
 }
 
@@ -1513,51 +2021,175 @@ function _renderLiveMidOpening(midEl, opening) {
   }).join('');
 }
 
+// Renders the universal 4-step card into #lv-next (replaces Ask Next while an objection is open).
+function _renderObjCardInNext(openObjs) {
+  const nextQEl     = document.getElementById('lv-next-q');
+  const nextSubEl   = document.getElementById('lv-next-sub');
+  const trackerEl   = document.getElementById('lv-step-tracker');
+  const nextLabelEl = document.getElementById('lv-next-label');
+  if (!nextQEl) return;
+
+  const obj  = openObjs[0]; // FIFO: oldest first
+  const card = _getObjCard(obj);
+  if (!card) return;
+
+  const queueBadge = openObjs.length > 1
+    ? `<span class="obj-queue-badge">${openObjs.length} queued</span>` : '';
+
+  if (nextLabelEl) nextLabelEl.innerHTML =
+    `OBJECTION ${queueBadge}`;
+
+  const neverHtml = card.never
+    ? `<div class="obj-card-never">Never say: ${escHtml(card.never)}</div>` : '';
+
+  nextQEl.style.fontSize = '';
+  nextQEl.innerHTML = `
+    <div class="obj-universal-card">
+      <div class="obj-card-tag-row"><span class="obj-card-tag">${escHtml(card.label)}</span></div>
+      <div class="obj-card-steps">
+        <div class="obj-card-step"><span class="obj-step-label">ANSWER</span><span class="obj-step-text">${escHtml(card.answer)}</span></div>
+        <div class="obj-card-step"><span class="obj-step-label">ASK</span><span class="obj-step-text">${escHtml(card.ask)}</span></div>
+        <div class="obj-card-step"><span class="obj-step-label">BRIDGE</span><span class="obj-step-text">${escHtml(card.bridge)}</span></div>
+        <div class="obj-card-step"><span class="obj-step-label">CHECK</span><span class="obj-step-text">${escHtml(card.check)}</span></div>
+      </div>
+      ${neverHtml}
+    </div>`;
+
+  if (trackerEl) { trackerEl.textContent = ''; trackerEl.classList.add('hidden'); }
+  if (nextSubEl) nextSubEl.textContent = '';
+}
+
 function _renderLiveAlert(phase, ticks) {
   const alertEl = document.getElementById('lv-alert');
   if (!alertEl) return;
   const n = state.notes;
-  const nutTick     = ticks.find(t => t.id === '2');
-  const nutMet      = nutTick && (nutTick.status === 'done' || nutTick.status === 'suggest');
-  const painTick    = ticks.find(t => t.id === '1b');
-  const needsTick   = ticks.find(t => t.id === '1c');
+  const nutTick      = ticks.find(t => t.id === '2');
+  const nutMet       = nutTick && (nutTick.status === 'done' || nutTick.status === 'suggest');
+  const painTick     = ticks.find(t => t.id === '1b');
+  const needsTick    = ticks.find(t => t.id === '1c');
   const nextStepTick = ticks.find(t => t.id === '4');
-  const openObjs    = state.objections.filter(o => o.status === 'open');
-  const pitchRdy    = (painTick?.status === 'done' || painTick?.status === 'partial') && needsTick?.status === 'done';
-  const numRdy      = n.numbers.paysNow.value !== null && n.numbers.quote.value !== null && n.numbers.canAbsorb.value !== null;
+  const openObjs     = state.objections.filter(o => o.status === 'open');
+  const pitchRdy     = (painTick?.status === 'done' || painTick?.status === 'partial') &&
+                       (needsTick?.status === 'done' || needsTick?.status === 'partial');
+  const numRdy       = n.numbers.paysNow.value !== null && n.numbers.quote.value !== null && n.numbers.canAbsorb.value !== null;
+
+  // Elapsed minutes (from transcript or live clock)
+  const lastUtt = state.transcript[state.transcript.length - 1];
+  const lastTs  = lastUtt?.ts || null;
+  const elapsedMin = lastTs ? tsToSec(lastTs) / 60
+    : (state.liveMode && state.sessionStart ? (Date.now() - state.sessionStart) / 60000 : 0);
+
+  // Tentative date detection
+  const dateVal = n.nextStep.dateTime.value || '';
+  const dateTentative = /i'?ll need to check|need to check|let me check|check my|tbd|to be confirmed/i.test(dateVal);
 
   alertEl.className = '';
+  if (state.calibrating) {
+    alertEl.className = 'alert-amber';
+    alertEl.innerHTML = `<div class="lv-alert-body"><span class="lv-alert-title">Calibration — say "Hi, I'm Jimi" now</span><span class="lv-alert-sub">Locks your speaker channel. Works alone — no need to wait for the other person.</span></div>`;
+    return;
+  }
   if (openObjs.length) {
     alertEl.className = 'alert-red';
-    const obj = openObjs[openObjs.length - 1];
-    const pb  = getObjectionPlaybook(obj.matchedKey);
+    const obj = openObjs[0]; // FIFO
+    const queueSuffix = openObjs.length > 1 ? ` (${openObjs.length} queued)` : '';
     alertEl.innerHTML = `
       <div class="lv-alert-body">
-        <span class="lv-alert-title">"${escHtml(CoachLogic.truncateWords(obj.quote, 48))}"</span>
-        <span class="lv-alert-sub">${escHtml(pb.worried)}</span>
+        <span class="lv-alert-title">Objection: ${escHtml(obj.matchedKey.replace(/-/g,' '))}${escHtml(queueSuffix)}</span>
+        <span class="lv-alert-sub">"${escHtml(CoachLogic.truncateWords(obj.quote, 48))}"</span>
       </div>
-      <button class="btn-lv-red" data-obj-id="${obj.id}" data-action="handled">Handled&nbsp;<kbd style="background:none;border:none;font:inherit;font-weight:700">O</kbd></button>`;
+      <button class="btn-lv-red" data-obj-id="${escHtml(obj.id)}" data-action="handled">Handled&nbsp;<kbd style="background:none;border:none;font:inherit;font-weight:700">O</kbd></button>`;
   } else if (nextStepTick?.status === 'done') {
-    alertEl.className = 'alert-green';
+    alertEl.className = dateTentative ? 'alert-amber' : 'alert-green';
     const nsFields = [n.nextStep.who.value, n.nextStep.purpose.value, n.nextStep.dateTime.value].filter(Boolean).length;
+    const sub = dateTentative ? 'Date not locked — confirm a specific date' : escHtml(CoachLogic.truncateWords(n.nextStep.dateTime.value || n.nextStep.who.value || '', 50));
     alertEl.innerHTML = `
       <div class="lv-alert-body">
         <span class="lv-alert-title">Next step agreed</span>
-        <span class="lv-alert-sub">${escHtml(CoachLogic.truncateWords(n.nextStep.dateTime.value || n.nextStep.who.value || '', 50))}</span>
+        <span class="lv-alert-sub">${sub}</span>
       </div>
-      <span class="lv-green-badge">${nsFields} of 3</span>`;
-  } else if (pitchRdy && !nutMet) {
+      <span class="${dateTentative ? 'lv-amber-badge' : 'lv-green-badge'}">${nsFields} of 3</span>`;
+  } else if (!nutMet && n.numbers.paysNow.value != null && n.numbers.quote.value != null && n.doingNothing.value != null && !state.coiSaid) {
+    const qt = (n.quoteType && n.quoteType.value) || 'recurring';
+    const avail = n.available ? n.available.value : null;
+    const coiScript = CoachLogic.buildCostOfInactionScript(
+      n.numbers.paysNow.value, n.numbers.quote.value,
+      n.numbers.canAbsorb.value != null ? n.numbers.canAbsorb.value : undefined,
+      false, undefined, qt,
+      avail != null ? avail : undefined,
+      n.deadline ? n.deadline.value : undefined
+    );
+    const workings = CoachLogic.buildCOIWorkings(
+      n.numbers.paysNow.value, n.numbers.quote.value,
+      avail != null ? avail : n.numbers.canAbsorb.value,
+      qt
+    );
     alertEl.className = 'alert-amber';
-    const filled = n.needs.filter(nd => nd.value);
-    const topIdx = resolveTopNeedIndex(filled);
-    const topText = filled[topIdx]?.value || '';
     alertEl.innerHTML = `
       <div class="lv-alert-body">
-        <span class="lv-alert-title">Ready to pitch</span>
-        <span class="lv-alert-sub">Pain and ${filled.length} need${filled.length !== 1 ? 's' : ''} captured.${topText ? ' Top: ' + escHtml(CoachLogic.truncateWords(topText, 25)) : ''}</span>
+        <span class="lv-alert-title">Say this — L24 cost of inaction</span>
+        <span class="lv-say-this-text">${escHtml(coiScript)}</span>
+        ${workings ? `<span style="font-size:11px;color:#9AA4B2;margin-top:2px">${escHtml(workings)}</span>` : ''}
       </div>
-      <button class="btn-lv-amber" data-tick-action="2">Pitched&nbsp;<kbd style="background:none;border:none;font:inherit;font-weight:700">N</kbd></button>`;
-  } else if (numRdy) {
+      <button class="btn-lv-amber" data-action="coi-said">Said&nbsp;it</button>`;
+  } else if (nutMet && !state.coiSaid && n.numbers.paysNow.value != null && n.numbers.quote.value != null) {
+    // Pitched without saying COI — show skipped notice
+    alertEl.className = 'alert-amber';
+    alertEl.innerHTML = `
+      <div class="lv-alert-body">
+        <span class="lv-alert-title">Skipped: cost of inaction</span>
+        <span class="lv-alert-sub">Numbers in but COI line not said before pitching (L24)</span>
+      </div>
+      <button class="btn-lv-amber" data-action="coi-said">Dismiss</button>`;
+  } else if (pitchRdy && !state.readbackSaid && !state.pitchOverride) {
+    // L17: readback gate — must play back before pitching
+    alertEl.className = 'alert-amber';
+    alertEl.innerHTML = `
+      <div class="lv-alert-body">
+        <span class="lv-alert-title">Play back first — press S</span>
+        <span class="lv-alert-sub">Summarise pain and needs in her words before pitching (L17)</span>
+      </div>
+      <button class="btn-lv-amber" data-pitch-override="1">Pitch&nbsp;anyway</button>`;
+  } else if (pitchRdy && !nutMet) {
+    const meTextsGate = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+    const gate = !state.pitchOverride && callScript
+      ? CoachLogic.computePitchGate(state.notes, callScript, meTextsGate) : null;
+    if (gate) {
+      alertEl.className = 'alert-amber';
+      alertEl.innerHTML = `
+        <div class="lv-alert-body">
+          <span class="lv-alert-title">Before you pitch: still to ask</span>
+          <span class="lv-say-this-text">${escHtml(gate.q)}</span>
+        </div>
+        <button class="btn-lv-amber" data-pitch-override="1">Pitch&nbsp;anyway</button>`;
+    } else {
+      const pitchAlert = CoachLogic.computePitchAlert(n, state.numbersDeclined);
+      const gaps = pitchAlert ? pitchAlert.gaps : [];
+      if (state.pitchOverride || gaps.length === 0) {
+        alertEl.className = 'alert-amber';
+        const filled = n.needs.filter(nd => nd.value);
+        const topIdx = resolveTopNeedIndex(filled);
+        const topText = filled[topIdx]?.value || '';
+        alertEl.innerHTML = `
+          <div class="lv-alert-body">
+            <span class="lv-alert-title">Ready to pitch</span>
+            <span class="lv-alert-sub">Pain and ${filled.length} need${filled.length !== 1 ? 's' : ''} captured.${topText ? ' Top: ' + escHtml(CoachLogic.truncateWords(topText, 25)) : ''}</span>
+          </div>
+          <button class="btn-lv-amber" data-tick-action="2">Pitched&nbsp;<kbd style="background:none;border:none;font:inherit;font-weight:700">N</kbd></button>`;
+      } else {
+        const urgency = elapsedMin >= 18
+          ? '<span class="lv-alert-urgent">Pitch now — 12 min left</span>'
+          : elapsedMin >= 14 ? '<span class="lv-alert-window">Pitch window open</span>' : '';
+        alertEl.className = elapsedMin >= 18 ? 'alert-red' : 'alert-amber';
+        alertEl.innerHTML = `
+          <div class="lv-alert-body">
+            <span class="lv-alert-title">Gaps: ${escHtml(gaps.join(', '))}${urgency ? '' : ''}</span>
+            <span class="lv-alert-sub">${urgency || 'Cover these before pitching'}</span>
+          </div>
+          <button class="btn-lv-amber" data-pitch-override="1">Pitch&nbsp;anyway</button>`;
+      }
+    }
+  } else if (numRdy && !state.numbersDeclined) {
     alertEl.className = 'alert-amber';
     const d = computeDerived();
     const gap = d.gapPerYear != null ? ` Up ${fmtNum(d.gapPerYear)} a year.` : '';
@@ -1567,17 +2199,43 @@ function _renderLiveAlert(phase, ticks) {
         <span class="lv-alert-sub">Pays now, quote and absorb are all in.${escHtml(gap)}</span>
       </div>
       <button class="btn-lv-amber" data-summarise="numbers">Summarise&nbsp;<kbd style="background:none;border:none;font:inherit;font-weight:700">S</kbd></button>`;
+  } else if (pitchRdy && !nutMet && elapsedMin >= 18) {
+    alertEl.className = 'alert-red';
+    alertEl.innerHTML = `<div class="lv-alert-body"><span class="lv-alert-title">Pitch now: 12 minutes left for the rest</span><span class="lv-alert-sub">Discovery criteria met</span></div>`;
+  } else if (pitchRdy && !nutMet && elapsedMin >= 14) {
+    alertEl.className = 'alert-amber';
+    alertEl.innerHTML = `<div class="lv-alert-body"><span class="lv-alert-title">Pitch window open</span><span class="lv-alert-sub">Situation, pain, timeframe and needs covered</span></div>`;
+  } else if (callScript && !nutMet) {
+    // Minutes nudge: amber if 2+ minutes over the current section's target end
+    const meTextsNudge = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+    const nudgeResult = CoachLogic.computeScriptNext(n, callScript, state.callOrder, knowledge, meTextsNudge);
+    if (nudgeResult.minutesEnd != null && elapsedMin > nudgeResult.minutesEnd + 2) {
+      alertEl.className = 'alert-amber';
+      alertEl.innerHTML = `<div class="lv-alert-body"><span class="lv-alert-title">${escHtml(nudgeResult.sectionLabel || '')} running over</span><span class="lv-alert-sub">Target: finish by ${nudgeResult.minutesEnd} min — now at ${Math.floor(elapsedMin)} min</span></div>`;
+    } else {
+      alertEl.className = 'alert-empty';
+      alertEl.innerHTML = '';
+    }
   } else {
-    alertEl.className = 'alert-empty';
-    alertEl.innerHTML = '';
+    // Check for unanswered Her question (lowest priority)
+    const unanswered = CoachLogic.detectUnansweredQuestion(state.transcript);
+    if (unanswered) {
+      alertEl.className = 'alert-amber';
+      alertEl.innerHTML = `<div class="lv-alert-body"><span class="lv-alert-title">She asked — answer it</span><span class="lv-alert-sub">"${escHtml(CoachLogic.truncateWords(unanswered.question, 60))}"</span></div>`;
+    } else {
+      alertEl.className = 'alert-empty';
+      alertEl.innerHTML = '';
+    }
   }
 }
 
 function _renderLiveMidTranscript(midEl) {
   const merged = mergedTranscript(state.transcript);
+  const flaggedUttIds = new Set(state.redFlags.filter(r => !state.redFlagsCorrected.has(r.uttId)).map(r => r.uttId));
   let html = merged.map(u => {
     const t = u.text.length > 200 ? u.text.slice(0, 200) + '…' : u.text;
-    return `<div class="utterance"><span class="utt-ts">${escHtml(u.ts)}</span><span class="utt-sp ${u.speaker === 'Me' ? 'me' : 'her'}">${escHtml(u.speaker)}</span><span class="utt-text">${escHtml(t)}</span></div>`;
+    const flagClass = flaggedUttIds.has(u.id) ? ' red-flag' : '';
+    return `<div class="utterance${flagClass}"><span class="utt-ts">${escHtml(u.ts)}</span><span class="utt-sp ${u.speaker === 'Me' ? 'me' : 'her'}">${escHtml(u.speaker)}</span><span class="utt-text">${escHtml(t)}</span></div>`;
   }).join('');
   if (state.interimText) {
     html += `<div class="utterance utt-interim"><span class="utt-ts"></span><span class="utt-sp ${state.interimSpeaker === 'Me' ? 'me' : 'her'}">${escHtml(state.interimSpeaker || '')}</span><span class="utt-text">${escHtml(state.interimText)}</span></div>`;
@@ -1654,19 +2312,63 @@ function _renderLiveMidPitch(midEl, n) {
     return;
   }
   const topIdx = resolveTopNeedIndex(filled);
-  let html = `<div class="lv-pitch-intro">A lot of VMware customers are looking at alternatives since Broadcom changed the licensing. Nutanix puts your servers, storage and networking into one system — managed from one place.</div>`;
+  const meLines = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+
+  // Determine which needs have been pitched (auto-detected or manually clicked)
+  const pitched = new Set(state.pitchedNeeds);
+  filled.forEach((nd, idx) => {
+    if (!pitched.has(idx) && CoachLogic.needIsPitched(meLines, nd.value)) pitched.add(idx);
+  });
+  const allPitched = pitched.size >= filled.length;
+
+  let html = '';
+
+  // Permission line (L31)
+  html += `<div class="lv-pitch-permission"><span class="lv-pitch-perm-label">Open with</span>"Can I try a few additional ideas on you?"</div>`;
+
+  // Soft close warning (L31)
+  if (state.softCloseDetected) {
+    html += `<div class="lv-soft-close-warn"><strong>Soft close detected:</strong> "${escHtml(state.softCloseDetected)}"<br>Say instead: <em>"We said we'd decide if a next step makes sense. Does it?"</em></div>`;
+  }
+
+  html += `<div class="lv-pitch-intro">A lot of VMware customers are looking at alternatives since Broadcom changed the licensing. Nutanix puts your servers, storage and networking into one system — managed from one place.</div>`;
+
   for (let i = 0; i < filled.length; i++) {
     const nd = filled[i];
     const isTop = i === topIdx;
+    const isPitched = pitched.has(i);
     const pitchLine = _buildPitchLine(nd);
     if (isTop) {
       const lbl = nd.painType ? `Top need · ${nd.painType.toLowerCase()}` : 'Top need';
-      html += `<div class="lv-pitch-top"><span class="lv-pitch-top-label">${escHtml(lbl)}</span><span class="lv-pitch-top-text">${escHtml(pitchLine)}</span></div>`;
+      html += `<div class="lv-pitch-top${isPitched ? ' pitched' : ''} lv-pitch-need-clickable" data-action="need-pitched" data-need-idx="${i}">
+        <span class="lv-pitch-top-label">${escHtml(lbl)}${isPitched ? ' ✓' : ''}</span>
+        <span class="lv-pitch-top-text">${escHtml(pitchLine)}</span>
+      </div>`;
     } else {
-      html += `<div class="lv-pitch-need"><span class="lv-pitch-need-label">Need ${i + 1}</span><span class="lv-pitch-other-text">${escHtml(pitchLine)}</span></div>`;
+      html += `<div class="lv-pitch-need${isPitched ? ' pitched' : ''} lv-pitch-need-clickable" data-action="need-pitched" data-need-idx="${i}">
+        <span class="lv-pitch-need-label">Need ${i + 1}${isPitched ? ' ✓' : ''}</span>
+        <span class="lv-pitch-other-text">${escHtml(pitchLine)}</span>
+      </div>`;
     }
   }
-  html += `<div class="lv-pitch-checkin">How does that sit against what you need? <span>Then stop talking.</span></div>`;
+
+  // Coverage indicator (L31)
+  if (filled.length > 1) {
+    if (!allPitched) {
+      const notYetNums = filled.map((_, i) => i).filter(i => !pitched.has(i)).map(i => `need ${i + 1}`).join(' and ');
+      html += `<div class="lv-pitch-coverage">${pitched.size} of ${filled.length} pitched: ${notYetNums} not yet — click a line to mark said</div>`;
+    } else {
+      html += `<div class="lv-pitch-coverage green">All ${filled.length} needs pitched</div>`;
+    }
+  }
+
+  // Check-in line — only after all needs pitched or override (L31)
+  if (allPitched || state.pitchOverride) {
+    html += `<div class="lv-pitch-checkin">How does that sit against what you need? <span>Then stop talking.</span></div>`;
+  } else {
+    html += `<div class="lv-pitch-checkin-dim">How does that sit? — say all needs first</div>`;
+  }
+
   midEl.innerHTML = html;
 }
 
@@ -1674,7 +2376,7 @@ function _buildPitchLine(nd) {
   if (knowledge) {
     const pt = nd.painType;
     const lk = pt ? knowledge.lookup.find(l => l.painType === pt) : null;
-    if (lk && lk.weDo) return `${lk.weDo} You told me ${shortQuote(nd.value, 8)}.`;
+    if (lk && lk.weDo) return `We ${lk.weDo}. You told me ${shortQuote(nd.value, 8)}. So here's how that fits.`;
   }
   return `You told me ${shortQuote(nd.value, 10)}. So here's how that fits.`;
 }
@@ -1713,7 +2415,20 @@ function _renderLiveMidClose(midEl, n) {
     return `${escHtml(o.matchedKey)}: <b style="color:${col}">${lbl}</b>`;
   }).join(' · ');
 
+  // Pause prompt: show once before close if fewer than 2 objections raised
+  const showPause = CoachLogic.shouldShowPausePrompt(state.objections, state._pauseAsked);
+  if (showPause) {
+    // Auto-tick once Me asks something matching "pause" or "concern" or "hold back"
+    const meLines = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text.toLowerCase());
+    const askedPause = meLines.some(t => t.includes('give you pause') || t.includes('else hold') || t.includes('what else'));
+    if (askedPause) state._pauseAsked = true;
+  }
+
+  const pauseHtml = (showPause && !state._pauseAsked)
+    ? `<div class="lv-pause-prompt">Ask: <strong>"What else would give you pause?"</strong></div>` : '';
+
   midEl.innerHTML = `
+    ${pauseHtml}
     <div class="lv-close-block"><span class="lv-close-label">Who</span><span class="lv-close-val">${escHtml(who)}</span></div>
     <div class="lv-close-block"><span class="lv-close-label">What</span><span class="lv-close-val">${escHtml(what)}</span></div>
     <div class="lv-close-block"><span class="lv-close-label">When</span><span class="lv-close-val">${escHtml(when)}</span></div>
@@ -2135,7 +2850,11 @@ function setHearingRow(row, state, msg) {
 }
 
 function renderCoach() {
-  const { mainQ, backupQ, mainLesson, mainMove } = CoachLogic.computeCoachNext(state.notes, state.transcript, knowledge);
+  const meLines2 = state.transcript.filter(u => u.speaker === 'Me').map(u => u.text);
+  const scriptRes2 = callScript
+    ? CoachLogic.computeScriptNext(state.notes, callScript, state.callOrder, knowledge, meLines2)
+    : CoachLogic.computeCoachNext(state.notes, state.transcript, knowledge);
+  const _res2 = scriptRes2; const mainQ = _res2.mainQ; const backupQ = null; const mainLesson = null; const mainMove = null;
 
   const ticks = computeBriefTicks();
   const painMet  = ticks.find(t => t.id === '1b' && (t.status === 'done' || t.status === 'partial'));
@@ -2485,9 +3204,34 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 's' || e.key === 'S') {
     const n = state.notes;
     const numRdy = n.numbers.paysNow.value !== null && n.numbers.quote.value !== null && n.numbers.canAbsorb.value !== null;
-    if (numRdy) toggleSummary('numbers');
-    else if (n.pain.value && n.whatItAffects.value) toggleSummary('pain');
-    else if (n.needs.filter(nd => nd.value).length) toggleSummary('needs');
+    const needsFilled = n.needs.filter(nd => nd.value).length > 0;
+    const pitchRdyNow = n.pain.value && needsFilled;
+    // L17: readback has priority when pitch is ready and readback not yet said
+    if (pitchRdyNow && !state.readbackSaid) {
+      const el = document.getElementById('lv-readback');
+      if (el) {
+        if (!el.classList.contains('hidden')) {
+          el.classList.add('hidden');
+        } else {
+          el.innerHTML = escHtml(CoachLogic.buildReadbackScript(state.notes)) +
+            `<div class="lv-readback-actions"><button class="btn-lv-said" data-action="readback-said">Said it</button></div>`;
+          el.classList.remove('hidden');
+        }
+      }
+    } else if (numRdy) {
+      toggleSummary('numbers');
+    } else if (n.pain.value && n.whatItAffects.value) {
+      toggleSummary('pain');
+    } else if (needsFilled) {
+      toggleSummary('needs');
+    }
+  }
+
+  if (e.key === 'x' || e.key === 'X') {
+    if (state.liveMode && state.transcript.length > 0) {
+      swapAllLabels(false);
+      document.getElementById('lv-swap-banner')?.classList.add('hidden');
+    }
   }
 
   if (e.key === 'Escape') {
@@ -2502,6 +3246,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resp = await fetch('/data/knowledge.json');
     knowledge = await resp.json();
   } catch (e) { console.error('Could not load knowledge.json', e); }
+
+  // Load call script
+  try {
+    const resp = await fetch('/data/script.json');
+    callScript = await resp.json();
+  } catch (e) { console.error('Could not load script.json', e); }
+
+  // Load objection library
+  try {
+    const resp = await fetch('/data/objections.json');
+    const parsed = await resp.json();
+    objectionLibrary = parsed.objections || [];
+  } catch (e) { console.error('Could not load objections.json', e); }
 
   // Load pclub coach data
   try {
@@ -2529,6 +3286,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnLive) btnLive.addEventListener('click', startLive);
   const btnFlip = document.getElementById('btn-flip-speaker');
   if (btnFlip) btnFlip.addEventListener('click', flipSpeaker);
+
+  // Swap ALL speakers (historical) button + banner undo
+  document.getElementById('btn-swap-all')?.addEventListener('click', () => {
+    if (state.transcript.length > 0) {
+      swapAllLabels(false);
+      document.getElementById('lv-swap-banner')?.classList.add('hidden');
+    }
+  });
+  document.getElementById('btn-swap-undo')?.addEventListener('click', () => {
+    swapAllLabels(false);
+    document.getElementById('lv-swap-banner')?.classList.add('hidden');
+  });
 
   // Objection dismiss
   document.addEventListener('click', (e) => {
@@ -2561,6 +3330,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     state.manualTicks[id] = (cur === 'done') ? 'yet' : 'done';
     if (id === '2' && state.manualTicks[id] === 'done') state.nutanixIntroSuggested = true;
     renderAll();
+  });
+
+  // Numbers chip: click to mark "she declined"
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-decline-numbers]')) return;
+    state.numbersDeclined = !state.numbersDeclined;
+    renderAll();
+  });
+
+  // Pitch anyway button
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-pitch-override]')) return;
+    state.pitchOverride = true;
+    renderAll();
+  });
+
+  // COI "Said it" button
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-action="coi-said"]')) return;
+    state.coiSaid = true;
+    renderAll();
+  });
+
+  // Readback "Said it" button
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-action="readback-said"]')) return;
+    state.readbackSaid = true;
+    const el = document.getElementById('lv-readback');
+    if (el) el.classList.add('hidden');
+    renderAll();
+  });
+
+  // Need-pitched click (pitch tab need lines)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="need-pitched"]');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.needIdx, 10);
+    if (!isNaN(idx)) {
+      state.pitchedNeeds.add(idx);
+      renderAll();
+    }
   });
 
   // View toggle
@@ -2646,6 +3456,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Buttons
   document.getElementById('btn-replay-start').addEventListener('click', startReplay);
   document.getElementById('btn-replay-pause').addEventListener('click', toggleReplayPause);
+  document.getElementById('replay-speed')?.addEventListener('change', updateSpeedNote);
+
+  document.getElementById('btn-scenario-reveal')?.addEventListener('click', () => {
+    const bar = document.getElementById('scenario-bar');
+    const c = state.replayCard;
+    if (!bar || !c) return;
+    document.getElementById('sbar-pain').textContent    = `pain: ${c.pain}`;
+    document.getElementById('sbar-persona').textContent = `persona: ${c.persona}`;
+    document.getElementById('sbar-obj').textContent     = `objections: ${c.objLabel}`;
+    const mistakesEl = document.getElementById('sbar-mistakes');
+    if (mistakesEl) {
+      const mistakes = c.plantedMistakes || [];
+      if (mistakes.length > 0) {
+        mistakesEl.innerHTML = ' · <strong>Planted:</strong> ' + mistakes.map(m =>
+          `"${escHtml(m.text)}" (${escHtml(m.ruleBroken)})`
+        ).join(' · ');
+        mistakesEl.classList.remove('hidden');
+      } else {
+        mistakesEl.classList.add('hidden');
+      }
+    }
+    bar.classList.remove('hidden');
+    document.getElementById('btn-scenario-reveal')?.classList.add('hidden');
+  });
+
+  // Red-flag "Corrected" button in the dont-promise banner
+  document.getElementById('dont-promise-banner')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-correct-flag]');
+    if (!btn) return;
+    const uttId = btn.dataset.correctFlag;
+    state.redFlagsCorrected.add(uttId);
+    const uttEl = document.getElementById(`utt-${uttId}`);
+    if (uttEl) uttEl.classList.remove('red-flag');
+    document.getElementById('dont-promise-banner')?.classList.add('hidden');
+    renderLive();
+  });
+
+  document.getElementById('btn-gen-more')?.addEventListener('click', generateMore);
   document.getElementById('btn-pitch-hold').addEventListener('click', () => {
     state.pitchHeld = !state.pitchHeld;
     const panel = document.getElementById('pitch-panel');
@@ -2717,6 +3565,50 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderAll();
 });
 
+// ── Generate more calls ───────────────────────────────────────────────────────
+async function generateMore() {
+  const confirmed = window.confirm(
+    'Generate 5 more training calls using claude-opus-4-7.\n\nEstimated cost: ~$1.60 (5 × ~$0.32). Continue?'
+  );
+  if (!confirmed) return;
+
+  const btn = document.getElementById('btn-gen-more');
+  if (btn) { btn.textContent = 'Generating…'; btn.disabled = true; }
+
+  try {
+    const resp = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ n: 5 }),
+    });
+
+    const reader  = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const events = buf.split('\n\n');
+      buf = events.pop();
+      for (const ev of events) {
+        const line = ev.replace(/^data: /, '').trim();
+        if (!line) continue;
+        try {
+          const msg = JSON.parse(line);
+          if (msg.type === 'progress' && btn) btn.textContent = `${msg.i}/${msg.total}…`;
+        } catch {}
+      }
+    }
+  } catch (e) {
+    console.error('generate error', e);
+  } finally {
+    if (btn) { btn.textContent = '＋5 calls'; btn.disabled = false; }
+    await loadSamples();
+  }
+}
+
 // ── Settings panel ───────────────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('settings-overlay').classList.remove('hidden');
@@ -2732,8 +3624,23 @@ async function loadSettings() {
     const resp = await fetch('/api/settings/status');
     if (resp.ok) renderSettingsStatus(await resp.json());
   } catch {}
+  try {
+    const ur = await fetch('/api/usage');
+    if (ur.ok) renderSessionCost(await ur.json());
+  } catch {}
   const engineSel = document.getElementById('settings-engine');
   if (engineSel) engineSel.value = localStorage.getItem('liveEngine') || 'auto';
+}
+
+function renderSessionCost(data) {
+  const row = document.getElementById('sstat-cost');
+  if (!row) return;
+  const calls = data.calls || 0;
+  const cost  = (data.costUsd || 0).toFixed(4);
+  const dotClass = calls > 0 ? 'connected' : 'not-set';
+  row.innerHTML = `<span class="sstat-dot ${dotClass}"></span>
+    <span class="sstat-label">Session cost:</span>
+    <span class="sstat-value">${calls > 0 ? `$${cost}  (${calls} calls)` : '—'}</span>`;
 }
 
 function renderSettingsStatus(data) {

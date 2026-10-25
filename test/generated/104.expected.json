@@ -1,0 +1,46 @@
+{
+  "scenario": {
+    "seed": 104,
+    "pain": "Ageing data centre / power, cooling, net-zero targets + Board wants less single-vendor risk",
+    "persona": "rushed",
+    "numBehav": "gives-freely",
+    "flow": "tangent",
+    "aeBehavior": "average",
+    "ending": "specific",
+    "objections": [
+      {
+        "key": "compliance",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 180000,
+    "quote": 440000,
+    "canAbsorb": 20000
+  },
+  "contains": {
+    "situation.hosts": "15",
+    "situation.vms": "576",
+    "situation.storageTB": "132",
+    "situation.teamSize": "7",
+    "deadline": "july",
+    "renewalDate": "december"
+  },
+  "painTypeIn": [
+    "Board wants less single-vendor risk"
+  ],
+  "objections": [
+    {
+      "matchedKey": "compliance",
+      "match": "compliance"
+    }
+  ],
+  "nextStep": {
+    "purposeContains": "presentation to the CFO",
+    "dateTimeContains": [
+      "5"
+    ]
+  },
+  "mustNotInvent": []
+}

@@ -1,0 +1,53 @@
+# Generated: seed 105 | pain: Burned by a past migration | persona: non-technical | objections: downtime@at-close, compliance@right-after-pitch
+[00:10] Me: Hi, is that Sarah? This is James from Nutanix. Marcus at the reseller said you'd be expecting my call — thanks for making time.
+[00:22] Her: Yes, hi James. Marcus did mention you. I've got about twenty-five minutes before I have to be back on the ward IT escalation.
+[00:35] Me: Perfect, I'll be respectful of that. Before I dive in, can you tell me in your own words what prompted Marcus to connect us?
+[00:48] Her: Honestly? I'm dreading our next infrastructure refresh. We've been on VMware for about ten years and the renewal quote we've just seen has made the exec team go a bit pale.
+[01:05] Me: I hear that a lot right now. Can you say more about what's giving you pause?
+[01:14] Her: Well, the number is one thing. But what's really sitting with me is the last migration we did — not VMware, a different system — ran six months over. Six months. We had clinicians doing workarounds on paper for weeks. I cannot go through that again.
+[01:38] Me: That sounds genuinely painful, and I'm sorry you lived through it. When something runs that far over, it's usually not the tech — it's the plan. Can I ask what the renewal quote actually came in at?
+[01:55] Her: It was about £620,000, I think. No, sorry — it's £570,000. The £620 was with some add-on they tried to bundle.
+[02:10] Me: Got it, £570,000. And is that an annual figure, or multi-year?
+[02:18] Her: That's for the next cycle. We'd be paying £350,000 of that fairly immediately to lock the renewal in.
+[02:30] Me: Okay. And is there a deadline on that decision?
+[02:36] Her: Yes. The CFO wants a decision signed off by the board in June. If we're going to look at alternatives, it has to be now.
+[02:50] Me: Understood. Sarah, so I can speak to you properly rather than throw jargon at you — would you say you're more on the technical side or the strategy side day to day?
+[03:05] Her: Strategy, definitely. I manage the team, I own the budget, I translate to the exec. I rely on my engineers for the deep technical stuff. If you say vSphere or hyper-whatever to me I'll glaze over.
+[03:22] Me: Noted, and I'll keep it in plain English. Can you give me a rough shape of the estate? How many servers, how many virtual machines, that kind of thing?
+[03:35] Her: I can. We've got 23 hosts, and the team tells me around 575 VMs sitting on them.
+[03:46] Me: And storage?
+[03:49] Her: 232 terabytes, give or take.
+[03:54] Me: And how big is the team looking after all of this?
+[04:00] Her: Nine. Which sounds like a lot but it really isn't when you're a 24/7 hospital.
+[04:10] Me: No, it really isn't. What kind of workloads are the critical ones — the ones where if they go down, you get a phone call at 2am?
+[04:22] Her: The EPR — electronic patient record — is the big one. PACS for imaging. Pathology. Pharmacy. Basically anything a clinician touches at the bedside.
+[04:38] Me: And on the VMware renewal — is the pain purely cost, or is there something else driving the review?
+[04:48] Her: It's mostly cost. The licensing model changed and the number nearly tripled. But also, two of my engineers have said they're frustrated with how complex the stack has become. Separate storage team, separate virtualisation team, separate networking. Everything's a ticket.
+[05:12] Me: That operational complexity is a huge piece of what we solve, actually. So let me tell you where Nutanix fits — we collapse the servers, the storage, and the virtualisation into one platform, managed from one screen. Most customers coming off VMware see a thirty to forty percent reduction in total cost, and we can do this with zero downtime during the migration.
+[05:40] Her: Zero downtime? That's a strong claim given what I just told you about last time.
+[05:48] Me: It's — let me be more careful with that, actually. What I should say is we migrate workloads live, VM by VM, and the vast majority of moves happen with no user-visible impact. There are always specific workloads that need a planned window, and we'd scope those with you upfront. I shouldn't have said zero.
+[06:12] Her: Thank you for correcting that. I'd rather hear the truth now than find out in month four.
+[06:20] Me: Fair, and that's the right instinct. The platform also includes our own hypervisor called AHV, which is included in the licence — that's often where the cost savings come from, you're not paying VMware for that layer anymore.
+[06:38] Her: What about compliance? Everything touches patient data here. We're under DSPT, we've got auditors in twice a year, and if I show up with a new platform I need to be able to answer every question Priya throws at me.
+[06:55] Me: Who's Priya?
+[06:58] Her: Our compliance and information governance lead. Nothing goes near patient data without her sign-off. She's tough, and rightly so.
+[07:10] Me: Then she needs to be in the room early, not late. Nutanix is used across the NHS and in healthcare systems globally — we hold the certifications you'd expect, data stays encrypted at rest and in flight, and we can map our controls against DSPT directly. I'd want to get our healthcare compliance specialist on a call with Priya so she can ask the hard questions of someone who speaks her language, not me.
+[07:40] Her: That would actually help a lot. She's been burned by vendors who wave a certificate at her and can't answer follow-ups.
+[07:52] Me: Understood. Going back to the migration fear for a second — when the last one ran six months over, do you know what actually caused the overrun?
+[08:05] Her: Scope creep, and the vendor underestimated how many bespoke integrations we had. They did a discovery that was too shallow and then it all came out during cutover.
+[08:20] Me: That's exactly the pattern. What we do differently — and I'd want our solutions architect to walk you through this properly — is a deep discovery before we commit to a plan, with your engineers in the room. We'd inventory every workload, every integration, before anyone signs anything.
+[08:42] Her: That's the kind of thing I need to hear. The CFO will want to hear it too.
+[08:50] Me: Which brings me to a question — what does a good next step look like for you? Given the June deadline.
+[09:02] Her: Realistically, I need to get you in front of the CFO before the end of this month. If he's not comfortable, nothing else matters. But I won't put you in that room without Priya having had a conversation first.
+[09:20] Me: That's completely sensible. So could we aim for a session this month with you, the CFO, and have Priya either in the room or having been pre-briefed by our compliance person?
+[09:35] Her: Yes. Let's plan a session with you, me, and Priya first — the compliance conversation — and then the CFO presentation after that, same month.
+[09:50] Me: Perfect. I'll come back to you today with two or three slots for the Priya call. On the CFO session, what matters most to him — is it the headline number, the risk profile, or the operational story?
+[10:08] Her: Honestly, all three, but the number opens the door. He's looking at £570,000 and wondering why.
+[10:20] Me: Understood. We'll build the business case around that £570 figure and the £350 you'd be committing up front, and show him what the three-year picture looks like with us versus staying put.
+[10:38] Her: Good. One more thing — can you guarantee there will be no downtime when we move patient systems?
+[10:48] Me: I'm not going to repeat the mistake I made earlier. I can't guarantee zero downtime on every workload — anyone who tells you that is selling you something. What I can commit to is: we scope every system individually, the clinical-critical ones get planned windows agreed with your team, and the migration method for live VMs genuinely does happen without user impact in the vast majority of cases. I'd rather you trust me on the hard answer than the easy one.
+[11:22] Her: That's the right answer. Priya will ask the same question and she'll want the same honesty.
+[11:32] Me: Then I'll make sure our architect gives her exactly that. So to recap — I'll send times today for a call with you and Priya, and we'll lock the CFO presentation for later this month, same group plus him. Does that work?
+[11:50] Her: That works. Send it to me and I'll loop Priya in directly.
+[12:00] Me: Brilliant, Sarah. Thank you for being so open about the last migration — it genuinely helps me put the right people in front of you. I'll have those times in your inbox within the hour.
+[12:15] Her: Thank you, James. Speak soon.

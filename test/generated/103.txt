@@ -1,0 +1,69 @@
+# Generated: seed 103 | pain: Storage end of support + Trust merger / consolidation | persona: sceptical | objections: compliance@right-after-pitch, downtime@right-after-pitch
+[00:10] Me: Morning, thanks for making the time. I know Dave at the reseller set this up. Before I dive in, I was going to suggest we spend about 25 minutes, I'd love to understand your environment and what's on your plate, share a bit about where Nutanix fits, and then we agree if there's anything worth a second conversation. Does that work?
+[00:38] Her: That's fine, but let me be upfront with you. Budget is tight. The trust is under real financial pressure this year, so unless you're going to tell me something saves me money, I'm not sure where this goes.
+[01:00] Me: Completely fair, and I'd rather know that now than at the end. Can I ask what's driving the pressure, is it a flat capex envelope, opex scrutiny, or something more specific?
+[01:18] Her: All of it, honestly. Every line item gets questioned. And I've been fine on VMware for ten years, so you can imagine the reaction if I walk in asking to change platforms.
+[01:35] Me: Understood. I'm not here to tell you VMware is bad, you clearly know it inside out. Can I ask what prompted you to even take Dave's call about this?
+[01:52] Her: Two things really. The arrays go out of support at the end of next year, so I've got a decision to make on storage anyway. And we're merging with another trust, which means everyone's estate is getting looked at.
+[02:15] Me: Those are both significant. Let's take the storage first, what are you running today, and roughly what size?
+[02:28] Her: Three-tier setup. Hosts, fibre channel, SAN. The arrays are the ones going end of support.
+[02:40] Me: And in terms of scale, how many hosts and VMs are we talking?
+[02:48] Her: Eight hosts, around 335 VMs. Storage is about 183 terabytes usable.
+[03:05] Me: Thanks. And the team looking after it?
+[03:12] Her: Team of eight across infrastructure. Not all full-time on virtualisation.
+[03:22] Me: Got it. On the merger, is the other trust also VMware, or something different?
+[03:33] Her: Mixed. That's part of the headache. Nobody's decided whose standard wins yet.
+[03:45] Me: Okay. And is there a date by which the merged IT strategy needs to be agreed?
+[03:55] Her: There's a board sign-off milestone in March for the infrastructure direction. The array support piece and the Broadcom renewal both feed into that.
+[04:15] Me: When does the VMware renewal land?
+[04:22] Her: May.
+[04:28] Me: So March decision, May renewal, storage end of support end of next year. That's a lot converging. Before I say anything about Nutanix, what about compliance, how are you thinking about that in the mix?
+[04:48] Her: That's actually my next question for you. What about compliance? Everything touches patient data here. I can't be the person who moves clinical systems onto something and ends up on the front page.
+[05:08] Me: Completely hear you. Honest answer, I'm not going to make a compliance claim on a first call, that's a conversation with our healthcare SE and your info-sec lead, and we'd want to look at your specific controls. What I can say is we have a lot of NHS trusts running clinical workloads, and we can share how they handled their DPIA and info-gov sign-off. Would that be useful at the right point?
+[05:38] Her: Possibly. And can you guarantee there will be no downtime when we move patient systems?
+[05:48] Me: No, I won't guarantee that, nobody honest will. What I can tell you is migrations are planned per workload, usually live, with rollback, and we'd do it with you and the partner. The goal is zero clinical impact, and most trusts achieve it, but it takes planning, not a promise on a sales call.
+[06:15] Her: At least that's a straight answer. So what actually is Nutanix? I've heard the name for years but I've never looked properly.
+[06:30] Me: Short version, we collapse the compute, storage and virtualisation layers into one software stack that runs on standard servers. So instead of hosts plus SAN plus hypervisor licences from three vendors, it's one platform. You can run it with VMware on top, or with our own hypervisor AHV which is included.
+[07:00] Her: And why are customers looking at Nutanix? Be honest, is it just the Broadcom thing?
+[07:12] Me: Honestly, Broadcom is the trigger for a lot of conversations this year, I won't pretend otherwise. But the reasons people stay are usually the storage refresh avoidance, simpler operations for small teams, and the licensing being more predictable. For you specifically, the array end of support and the merger are the two levers I'd want to explore, because those are real events on a calendar.
+[07:45] Her: The array piece is the one that matters most to me. If I don't have to buy another SAN, that's a meaningful number.
+[07:58] Me: That's often where the business case starts. Can I ask, have you had initial quotes for the array refresh yet, or is that still to come?
+[08:10] Her: I'm not going to get into numbers on a first call. I don't share that on a first call, sorry.
+[08:20] Me: No problem, I'd probably say the same. Can I ask it differently, is the refresh something you've scoped internally, or are you waiting on the merger direction before you cost it?
+[08:38] Her: Scoped internally, roughly. The merger might change the scale but not the need.
+[08:50] Me: Makes sense. And on the VMware renewal in May, have you had the Broadcom quote yet?
+[09:02] Her: I've had a number. I'm not sharing it.
+[09:10] Me: Fine. Is it in the range where you can absorb it in this year's budget, or is it the kind of number that triggers a rethink?
+[09:22] Her: I'm not answering that on a first call either. You'll have to earn that one.
+[09:30] Me: Fair enough, noted. Let me ask about the team of eight instead, how much of their time currently goes on storage and virtualisation admin versus project work?
+[09:48] Her: Too much on keeping the lights on. Patching, firmware, capacity planning on the arrays. Project work slips constantly.
+[10:08] Me: That's a common pattern. One of the operational points we'd want to show you is what the day-to-day looks like for a team your size on a consolidated platform. Not as a pitch, just so you can judge whether it would actually free people up.
+[10:30] Her: That would be relevant, but I need to see it in a trust context, not a generic demo.
+[10:42] Me: Agreed. On the merger, who's leading the infrastructure workstream, is that you or someone on the other side?
+[10:55] Her: Joint. I lead for our side, their head of infrastructure leads for theirs. We're meant to produce a joint recommendation by March.
+[11:12] Me: And is Nutanix on their radar at all, or is this the first look from either side?
+[11:22] Her: I think they've looked. I haven't.
+[11:30] Me: Okay. If it's useful, we could structure a session that includes both of you, so you're not comparing notes separately. But only if that fits how you want to run it.
+[11:48] Her: Maybe. I'd want to discuss with him first.
+[11:55] Me: Understood. Let me ask about workloads, what's running on the 335 VMs, broadly, is it EPR, PACS, back office, or a mix?
+[12:12] Her: Mix. EPR is hosted externally. We've got PACS, pathology, departmental systems, VDI for the clinical floor, plus all the usual back office.
+[12:32] Me: And VDI, roughly how many desktops?
+[12:40] Her: Few hundred. It's grown.
+[12:48] Me: Okay. VDI tends to be where trusts see the biggest operational difference, worth noting for later. On backup and DR, is that another vendor again, or integrated?
+[13:05] Her: Separate vendor. Replication to a second site.
+[13:15] Me: And is that contract tied to the array lifecycle, or independent?
+[13:22] Her: Independent, different renewal.
+[13:30] Me: Got it. So, taking stock, you've got array end of support end of next year, Broadcom renewal in May, March board sign-off for the merged direction, team of eight stretched on BAU, and a mixed estate on the other trust's side. Does that capture it?
+[13:55] Her: That's roughly it, yes.
+[14:02] Me: And of those, which one keeps you up at night most?
+[14:10] Her: The March deadline. Everything else has to feed into that. If I don't have a defensible recommendation by then, I'm the problem.
+[14:28] Me: Then that's the clock we'd want to work back from. Realistically, to be useful by March, you'd want options on the table by January so you can test them internally. Does that line up with how you're thinking?
+[14:48] Her: Roughly, yes. December or January.
+[15:00] Me: Okay. I don't want to push a next step you're not ready for. What I'd normally suggest at this point is a technical session with one of our healthcare SEs and ideally Dave from the partner, focused on your estate and the compliance questions specifically. Not a demo deck, a working session. Would that be worth an hour?
+[15:28] Her: Look, I appreciate the approach, but I need to think about it. I've got another meeting I need to jump to.
+[15:40] Me: Understood. Can I follow up next week to see where your head's at?
+[15:48] Her: You can email me. I'm not committing to anything today.
+[15:55] Me: That's fair. I'll send a short recap of what you shared, nothing more, and a couple of links on how other trusts handled info-gov. No pressure.
+[16:12] Her: Fine. I really do have to go.
+[16:18] Me: Of course. Thanks for the time, appreciate the straight talk.
+[16:25] Her: Thanks. Bye.

@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const Anthropic = require('@anthropic-ai/sdk');
 const WebSocket = require('ws');
+const { buildCard, buildPrompt, buildExpected, parseFirstLine } = require('./lib/gen-card');
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -18,6 +19,19 @@ const DEBRIEF_MODEL = process.env.DEBRIEF_MODEL || 'claude-sonnet-4-6';
 
 const knowledge = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/knowledge.json'), 'utf8'));
 const PAIN_TYPES = knowledge.lookup.map(l => l.painType);
+
+const USAGE_LOG     = path.join(__dirname, 'sessions/usage.log');
+const GENERATED_DIR = path.join(__dirname, 'test/generated');
+function logUsage(model, usage) {
+  const input  = usage.input_tokens  || 0;
+  const output = usage.output_tokens || 0;
+  const cacheWrite = usage.cache_creation_input_tokens || 0;
+  const cacheRead  = usage.cache_read_input_tokens     || 0;
+  // haiku-4-5 pricing per million tokens: input $0.80, output $4.00, cache_write $1.00, cache_read $0.08
+  const costUsd = (input * 0.0000008) + (output * 0.000004) + (cacheWrite * 0.000001) + (cacheRead * 0.00000008);
+  const line = JSON.stringify({ ts: new Date().toISOString(), model, input, output, cacheWrite, cacheRead, costUsd: +costUsd.toFixed(6) }) + '\n';
+  try { fs.appendFileSync(USAGE_LOG, line); } catch {}
+}
 
 const EXTRACTION_SYSTEM = `You are extracting discovery information from a Nutanix sales call transcript.
 The AE is labelled "Me". The prospect (hospital IT lead) is labelled "Her".
@@ -56,7 +70,14 @@ The AE is labelled "Me". The prospect (hospital IT lead) is labelled "Her".
 4. NUMBERS — parse to plain integers, no currency symbols:
    "six hundred grand" → 600000 | "600k" → 600000 | "point six of a million" → 600000
    "400 thousand" → 400000 | "280k" → 280000 | "850" in thousands context → 850000
+   RANGES: "twenty or thirty thousand" → 25000 (midpoint). "around fifty or sixty" → 55000.
+   CONTEXT: extract only the amount being described, ignore reference amounts after "of the extra":
+     "twenty or thirty thousand of the extra hundred and seventy" → 25000 (canAbsorb);
+     "of the extra hundred and seventy" is context (the increase she can absorb FROM), NOT the value.
    If ambiguous (annual vs monthly?), leave null and add a scratch note.
+   QUOTE TYPE: after extracting numbers, also detect:
+   - quoteType: "recurring" if she says "a year"/"annual"/"renewal"/"subscription"; "oneoff" if "one-off"/"capital"/"refresh"/"purchase"/"replace"; "unknown" if no context clue.
+   - available: what she has set aside or can absorb for a one-off purchase (e.g. "we have £150k set aside" → available = 150000). Distinct from canAbsorb which is for recurring overspend.
 
 5. DATES — extract minimal phrase: month or period only, no prefixes.
    "Board meeting in February" → "February"  (not "Board meeting in February")
@@ -161,6 +182,7 @@ The AE is labelled "Me". The prospect (hospital IT lead) is labelled "Her".
 // Tool schema for structured extraction output
 const EXTRACT_TOOL = {
   name: 'update_notes',
+  cache_control: { type: 'ephemeral' },
   description: 'Update the call notes with newly discovered information. Only include fields that should change based on the recent transcript.',
   input_schema: {
     type: 'object',
@@ -268,7 +290,7 @@ app.post('/extract', async (req, res) => {
         model: EXTRACT_MODEL,
         max_tokens: 2048,
         temperature: 0,
-        system: EXTRACTION_SYSTEM,
+        system: [{ type: 'text', text: EXTRACTION_SYSTEM, cache_control: { type: 'ephemeral' } }],
         tools: [EXTRACT_TOOL],
         tool_choice: { type: 'tool', name: 'update_notes' },
         messages: [{ role: 'user', content: userPrompt }]
@@ -279,6 +301,7 @@ app.post('/extract', async (req, res) => {
       debugLog({ event: 'bad-patch-retry', attempt: attempts, type: typeof candidate });
       attempts++;
     }
+    logUsage(EXTRACT_MODEL, response.usage);
 
     const toolUse = response.content.find(b => b.type === 'tool_use');
     const rawPatch = Array.isArray(toolUse?.input?.patch) ? toolUse.input.patch : [];
@@ -301,21 +324,40 @@ app.post('/extract', async (req, res) => {
       fields: patch.map(p => p.field),
       objCount: rawObj.length,
       inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens
+      outputTokens: response.usage.output_tokens,
+      cacheWrite: response.usage.cache_creation_input_tokens || 0,
+      cacheRead:  response.usage.cache_read_input_tokens     || 0
     });
 
     res.json({
       patch,
       objections: rawObj,
       tokenUsage: {
-        inputTokens: response.usage.input_tokens,
-        outputTokens: response.usage.output_tokens
+        inputTokens:  response.usage.input_tokens,
+        outputTokens: response.usage.output_tokens,
+        cacheWrite:   response.usage.cache_creation_input_tokens || 0,
+        cacheRead:    response.usage.cache_read_input_tokens     || 0
       }
     });
   } catch (err) {
     debugLog({ event: 'extract-error', message: err.message });
     console.error('[extract]', err.message);
     res.status(500).json({ error: err.message, patch: [] });
+  }
+});
+
+// Session cost summary from usage log
+app.get('/api/usage', (req, res) => {
+  try {
+    if (!fs.existsSync(USAGE_LOG)) return res.json({ calls: 0, costUsd: 0 });
+    const lines = fs.readFileSync(USAGE_LOG, 'utf8').trim().split('\n').filter(Boolean);
+    let calls = 0, costUsd = 0;
+    for (const line of lines) {
+      try { const r = JSON.parse(line); calls++; costUsd += r.costUsd || 0; } catch {}
+    }
+    res.json({ calls, costUsd: +costUsd.toFixed(4) });
+  } catch {
+    res.json({ calls: 0, costUsd: 0 });
   }
 });
 
@@ -335,6 +377,99 @@ app.get('/api/samples', (req, res) => {
   } catch {
     res.json([]);
   }
+});
+
+// List generated calls with metadata parsed from their first line
+app.get('/api/generated', (req, res) => {
+  try {
+    if (!fs.existsSync(GENERATED_DIR)) return res.json([]);
+    const files = fs.readdirSync(GENERATED_DIR).filter(f => /^\d+\.txt$/.test(f));
+    const calls = [];
+    for (const f of files) {
+      const seed = parseInt(f);
+      try {
+        const txt = fs.readFileSync(path.join(GENERATED_DIR, f), 'utf8');
+        const firstLine = txt.split('\n').find(l => l.startsWith('# Generated:')) || '';
+        const meta = parseFirstLine(firstLine);
+        calls.push({ seed, filename: `generated/${f}`, ...meta });
+      } catch {}
+    }
+    calls.sort((a, b) => a.seed - b.seed);
+    res.json(calls);
+  } catch {
+    res.json([]);
+  }
+});
+
+// Generate N more calls via SSE (client reads progress events)
+app.post('/api/generate', async (req, res) => {
+  const n = Math.min(parseInt(req.body?.n) || 5, 20);
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  const send = (data) => { try { res.write(`data: ${JSON.stringify(data)}\n\n`); } catch {} };
+
+  try {
+    if (!fs.existsSync(GENERATED_DIR)) fs.mkdirSync(GENERATED_DIR, { recursive: true });
+
+    const existing = fs.readdirSync(GENERATED_DIR)
+      .filter(f => /^\d+\.txt$/.test(f))
+      .map(f => parseInt(f));
+    const startSeed = existing.length > 0 ? Math.max(...existing) + 1 : 100;
+
+    const toGen = [];
+    for (let i = 0; i < n; i++) toGen.push(startSeed + i);
+
+    send({ type: 'start', count: toGen.length, startSeed });
+
+    const INPUT_PRICE  = 0.000015;
+    const OUTPUT_PRICE = 0.000075;
+
+    for (let i = 0; i < toGen.length; i++) {
+      const seed      = toGen[i];
+      const card      = buildCard(seed);
+      const prompt    = buildPrompt(card);
+      const painLabel = card.pains.map(p => p.label).join(' + ') || 'none';
+      const objLabel  = card.objections.map(o => `${o.key}@${o.timing}`).join(', ') || 'none';
+
+      send({ type: 'progress', seed, pain: painLabel, persona: card.persona, i: i + 1, total: toGen.length });
+
+      let resp;
+      try {
+        resp = await client.messages.create({
+          model: 'claude-opus-4-7',
+          max_tokens: 5000,
+          messages: [{ role: 'user', content: prompt }],
+        });
+      } catch (e) {
+        send({ type: 'error', seed, message: e.message });
+        continue;
+      }
+
+      const text    = resp.content.find(b => b.type === 'text')?.text || '';
+      const txMatch = text.match(/===TRANSCRIPT===([\s\S]*?)===END===/);
+      if (!txMatch) {
+        send({ type: 'error', seed, message: 'could not parse transcript markers' });
+        continue;
+      }
+      const transcript = txMatch[1].trim();
+      const expected   = buildExpected(card);
+
+      fs.writeFileSync(path.join(GENERATED_DIR, `${seed}.txt`),           transcript + '\n');
+      fs.writeFileSync(path.join(GENERATED_DIR, `${seed}.expected.json`), JSON.stringify(expected, null, 2) + '\n');
+
+      const cost = ((resp.usage.input_tokens * INPUT_PRICE) + (resp.usage.output_tokens * OUTPUT_PRICE)).toFixed(4);
+      send({ type: 'done', seed, pain: painLabel, persona: card.persona, objLabel, cost });
+    }
+
+    send({ type: 'complete', count: toGen.length });
+  } catch (e) {
+    send({ type: 'fatal', message: e.message });
+  }
+  res.end();
 });
 
 // Produce a compact summary of filled notes for the extraction prompt

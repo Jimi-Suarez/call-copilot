@@ -9,6 +9,7 @@ const { spawn }    = require('child_process');
 const { runCall, parseTranscript } = require('../lib/extractor');
 const fs   = require('fs');
 const path = require('path');
+const { confirmCost } = require('../lib/confirm');
 
 const E2E_PORT = 3096;
 const BASE     = `http://localhost:${E2E_PORT}`;
@@ -191,6 +192,7 @@ function acc(resultPromise) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 (async () => {
+  await confirmCost('This makes about 32 API calls (~$0.25).');
   let server, browser;
   const results = [];
 

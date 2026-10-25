@@ -120,6 +120,13 @@
    "caution": "Don't claim savings. It's a question, not a promise.",
    "causeQuestion": "To what extent are you paying for parts of the licence you don't use?",
    "impactQuestion": "What would that money otherwise go to?"
+  },
+  {
+   "painType": "Hardware failing / warranty ending",
+   "weDo": "cost a replacement side by side with extending the old hardware's warranty, using your real numbers, before the budget window closes",
+   "caution": "Don't promise it is cheaper or that it prevents outages.",
+   "causeQuestion": "To what extent is ageing hardware behind the outages you've had?",
+   "impactQuestion": "When that system goes down, who feels it first, and what do they do?"
   }
  ],
  "basics": [
@@ -175,35 +182,48 @@
    "she_says": "\"Can you guarantee no downtime?\"",
    "shes_worried": "Patient systems going down.",
    "say_this": "\"That's the right thing to worry about. I can't promise zero downtime, and nobody honest can. What would you need to see in a plan to feel safe?\"",
-   "why_it_works": "Admitting the limit earns trust. Her answer is the safety plan."
+   "why_it_works": "Admitting the limit earns trust. Her answer is the safety plan.",
+   "never_say": "zero downtime, or any specific downtime figure"
   },
   {
    "id": "retraining",
    "she_says": "\"My team would need retraining.\"",
    "shes_worried": "A stretched team can't cope.",
    "say_this": "\"That's a real cost, so we put it in the comparison. What would help most: training time, or someone supporting you during the move?\"",
-   "why_it_works": "You treat the cost as real and give her a choice."
+   "why_it_works": "You treat the cost as real and give her a choice.",
+   "never_say": "any specific learning-curve length (e.g. 'in three weeks')"
   },
   {
    "id": "cost",
    "she_says": "\"Is it cheaper? The reseller said so.\"",
    "shes_worried": "She's wasting her time.",
    "say_this": "\"I can't promise that, because I haven't seen your setup yet. What would you need to see to know if it's worth it?\"  Then: \"You said [her ceiling] is what you can absorb. Is that still true?\"",
-   "why_it_works": "You refuse to promise what you can't prove. It leads to the costed comparison."
+   "why_it_works": "You refuse to promise what you can't prove. It leads to the costed comparison.",
+   "never_say": "cheaper (without seeing her actual numbers)"
   },
   {
    "id": "compliance",
    "she_says": "\"What about compliance? This is patient data.\"",
    "shes_worried": "Breaking rules.",
    "say_this": "\"That's a big one, and I'd want an expert to answer it properly, not me. Who looks after that on your side?\"",
-   "why_it_works": "Honest, and you get the compliance lead's name for the buying box."
+   "why_it_works": "Honest, and you get the compliance lead's name for the buying box.",
+   "never_say": "claim compliance yourself — that requires an expert"
   },
   {
    "id": "proof",
    "she_says": "\"Can you prove it will work for us?\"",
    "shes_worried": "She doesn't trust a claim.",
    "say_this": "\"I can't prove that today. That's exactly what the comparison is for.\"",
-   "why_it_works": "Turns 'no' into the reason for the next meeting."
+   "why_it_works": "Turns 'no' into the reason for the next meeting.",
+   "never_say": "I can prove it will work for you"
+  },
+  {
+   "id": "warranty-gap",
+   "she_says": "what about the warranty gap / we'd lose our warranty",
+   "shes_worried": "She's worried she'll have no vendor support if hardware fails during a migration",
+   "say_this": "That's a fair concern. I can't promise a warranty transfer — what would you need to see in a plan to feel covered? We can map what the gap looks like before anything moves.",
+   "why_it_works": "Agree, admit the limit, ask what she needs, bridge to the plan. No claim about Nutanix.",
+   "never_say": "Nutanix covers the warranty / you won't have a gap"
   }
  ],
  "slips_to_avoid": [

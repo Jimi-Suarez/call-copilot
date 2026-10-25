@@ -1,0 +1,65 @@
+# Generated: seed 100 | pain: Audit finding or regulator pressure | persona: defensive-team | objections: other@right-after-pitch
+[00:10] Me: Morning Sarah, thanks for making the time. Can you hear me alright?
+[00:16] Her: Yes, loud and clear.
+[00:19] Me: Brilliant. So I've got us down for about 25 minutes. What I'd like to do is spend most of that understanding your environment and what's driving you to look, then I'll share whether Nutanix is even relevant, and if it is we agree a sensible next step. Does that work?
+[00:36] Her: That's fine. I should say up front, Marcus at the reseller pushed me into this. We've been running VMware for ten years and my team knows it inside out.
+[00:48] Me: Understood, and that's useful context. I'm not here to tell you to rip anything out. Can I ask what Marcus heard from you that made him think a conversation with us was worth having?
+[01:05] Her: There's a few things bubbling. Costs are one. And we had an audit come back with some findings we need to address.
+[01:16] Me: Okay, can we take those one at a time? On the audit side, what did the auditor actually raise?
+[01:24] Her: They flagged our disaster recovery posture. We've got a documented runbook but we haven't done a full failover test in over a year, and some of the replication is on older kit. The auditor raised it as a material finding.
+[01:40] Me: That's helpful. Is there a date by which you have to show remediation?
+[01:46] Her: We've committed to the board that we'll have a plan funded and underway. CFO sign-off needs to happen in February.
+[01:55] Me: Got it. And on the cost side, what's changed?
+[02:03] Her: Our renewal quote came in significantly higher than what we're paying now. It was a surprise.
+[02:11] Me: Can you share the numbers, roughly?
+[02:15] Her: We're at about twenty thousand, and the quote is thirty-eight thousand three hundred.
+[02:22] Me: And is that a monthly figure or annual?
+[02:26] Her: Sorry, monthly. So annually we're at two hundred and forty thousand and the renewal would take us to four hundred and sixty thousand.
+[02:36] Me: Thank you, that's a meaningful jump. Before I ask anything else, is it fair to say the audit finding is the thing with the hard deadline, and the cost is the thing that opened the door to looking around?
+[02:50] Her: That's a fair summary, yes.
+[02:53] Me: Okay. Can you walk me through the estate at a high level? Hosts, VMs, storage, that sort of thing.
+[03:02] Her: We've got thirteen hosts across two sites, running five hundred and eighty-five VMs, and about seventy terabytes of storage on the SAN.
+[03:13] Me: And team-wise, who looks after it?
+[03:17] Her: I've got a team of six. Two of them are senior VMware engineers, the others cover networking, storage, backup and a bit of everything.
+[03:27] Me: And how long have those senior engineers been with you?
+[03:31] Her: Both over eight years. They're very good. Are you saying my people don't know what they're doing?
+[03:38] Me: Not at all, and I want to be clear about that. The reason I ask about the team is the opposite — anything we'd ever propose has to work for the people running it day to day, not against them. If your seniors are deep in VMware, that's an asset, not a problem.
+[03:55] Her: Alright. I'm a bit sensitive about it because every vendor conversation seems to imply we should have done something different years ago.
+[04:04] Me: That's a fair thing to be sensitive about. Can I ask — of the five hundred and eighty-five VMs, roughly what proportion are clinical versus back office?
+[04:15] Her: I'd say sixty percent clinical, forty percent corporate. The EPR is the big one, plus PACS, pathology, a few departmental systems.
+[04:26] Me: And when you think about the DR finding, is the concern all five hundred and eighty-five VMs, or specifically the clinical tier?
+[04:35] Her: Primarily the clinical tier. The auditor was specific that recovery time for the EPR and PACS was the main gap.
+[04:44] Me: Okay. And today, what's the actual RTO you can demonstrate for those, versus what you've committed to?
+[04:52] Her: We've committed to four hours for the EPR. Honestly, if we had to do it cold today, I'd be nervous about hitting that.
+[05:02] Me: That nervousness — is that a kit issue, a process issue, or both?
+[05:08] Her: Both. The replication target is older, and we haven't rehearsed properly because taking the time to do it is hard with the team size we have.
+[05:19] Me: Understood. On the renewal quote — is that just the hypervisor licensing, or does it include support, the SAN, anything else?
+[05:28] Her: It's the hypervisor and the management suite. The SAN support is separate and that's also up for refresh in the next eighteen months.
+[05:38] Me: Okay, so there's a second cost event coming behind this one. Has anyone put a number on the SAN refresh yet?
+[05:46] Her: Not formally. The soft number we've been working with is around three hundred thousand for the hardware.
+[05:53] Me: Thank you. One more on the audit — does the remediation plan need to be a like-for-like fix, or is the board open to a broader modernisation if the numbers work?
+[06:05] Her: The board wants the finding closed. How we close it is up to me, as long as it's defensible and funded by February.
+[06:14] Me: That's helpful. And who else is involved in the decision — is it you, the CFO, anyone on the clinical side?
+[06:22] Her: Me and the CFO on the money. The CMIO has to be comfortable that clinical systems aren't at risk during any change.
+[06:32] Me: Makes sense. Can I ask about the clinical application vendors — have any of them been part of the conversation yet?
+[06:40] Her: Not yet. That's actually one of my worries.
+[06:45] Me: Noted, let's come back to that. On backup, what are you using today?
+[06:51] Her: Veeam. That part works well, I don't want to change it.
+[06:55] Me: Good, you wouldn't need to. Alright, let me pause and check — anything I haven't asked that you'd want me to understand before I say anything about Nutanix?
+[07:08] Her: I think you've covered the main things. Costs, the audit, the team.
+[07:14] Me: One last one — if you did nothing, signed the renewal, and papered over the DR finding with a tactical fix, what does that cost you, roughly, in time and money?
+[07:26] Her: The renewal is the four-sixty. A tactical DR fix is probably another eighty to a hundred thousand on top. And it still leaves me with the SAN refresh next year.
+[07:38] Me: Okay. So what does Nutanix actually do?
+[07:42] Her: Yes, that was going to be my next question.
+[07:46] Me: Short version — we combine the compute, storage and virtualisation layer into one software stack that runs on standard servers. Practically, for an estate like yours, that means the SAN goes away at the next refresh, DR and replication are built in rather than bolted on, and you can keep running VMware's hypervisor or move to ours over time, your choice. I'm deliberately not pitching you a product today because I don't yet know if the numbers work for your situation.
+[08:18] Her: Right. Our clinical application supplier might not certify a different platform. That's a real blocker for us.
+[08:27] Me: That's a legitimate concern and I'd rather surface it now than later. Two things on it. First, you don't have to change the hypervisor to get most of the benefit — a lot of customers keep VMware on our hardware stack initially. Second, for the vendors that do matter to you, the honest answer is we'd need to check each one. Who are the two or three where certification would be the deciding factor?
+[08:53] Her: The EPR vendor is the big one. PACS second.
+[08:58] Me: Okay. Would it be reasonable, as a next step, for me to come back to you with the current certification status for those two specifically, before we talk about anything else?
+[09:10] Her: Possibly. Look, I've got to be honest, I'm not sure I want to open this up into a big evaluation when my team is already stretched.
+[09:20] Me: That's fair, and I don't want to create work that doesn't lead anywhere. Can I ask it this way — if the certification came back clean for the EPR and PACS, would it be worth a thirty-minute follow-up to look at whether the numbers close the gap on your renewal and the DR finding together?
+[09:38] Her: Maybe. I genuinely need to think about it. And I've got a meeting I'm late for — I'm sorry, I need to drop.
+[09:46] Me: No problem. I'll email you a short summary of what we discussed and the certification question, and leave the next step for you to decide. Does that work?
+[09:56] Her: Yes, send me the summary and I'll come back to you.
+[10:00] Me: Thanks Sarah, appreciate the time.
+[10:03] Her: Thank you, bye.

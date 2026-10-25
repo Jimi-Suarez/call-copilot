@@ -1,0 +1,71 @@
+# Generated: seed 300 | pain: Backup and recovery tooling tied to the current platform | persona: friendly-vague | objections: other@mid-discovery
+[00:10] Me: Hi Diane, thanks for making time today. I know Mark at Camwell introduced us, so I appreciate you taking the call.
+[00:22] Her: Oh, no problem, no problem. Mark's lovely, he's been looking after us for, gosh, I don't know, years now. He said you'd be worth a chat.
+[00:35] Me: That's good to hear. Before I dive in, can you give me a bit of context on what's going on in your environment right now?
+[00:44] Her: Yeah, so, we're a hospital trust, obviously, and we've been on VMware for, oh, about ten years I'd say. It's been fine, mostly, you know, it does what it does. But the renewal that came through this time was, well, it was a bit of a shock honestly.
+[01:05] Me: A shock in what way?
+[01:08] Her: Just the number. It's gone up quite a lot. Our account manager said it's the new licensing model, something about cores and bundles, I sort of switched off halfway through if I'm honest.
+[01:22] Me: Understood, you're not the first person to say that this year. Can I ask what you're paying today versus what they've quoted?
+[01:31] Her: Yeah of course. We're on about £520,000 a year right now, and the renewal came in at £740,000. So that's, what, over 40% up? Something like that.
+[01:46] Me: That's a significant jump. And do you have a sense of what the business could actually absorb if push came to shove?
+[01:55] Her: Realistically I think I could get maybe £40,000 more signed off without too much fuss. Beyond that I'd be going back to the CFO with a proper business case and, you know, that's a whole thing.
+[02:11] Me: Got it. So there's a real gap between what you can swallow and what they're asking.
+[02:17] Her: Exactly, yeah.
+[02:20] Me: Help me understand the estate a bit. How many hosts and VMs are we talking about?
+[02:27] Her: Let me think, we've got 13 hosts, and about 317 VMs across them. Storage is somewhere around 234 terabytes I think, give or take.
+[02:40] Me: Perfect. And the team looking after all this?
+[02:44] Her: There's nine of us in infrastructure. Well, eight really, one's going on maternity in a few weeks, which is another headache.
+[02:53] Me: Congratulations to her at least. Diane, when you think about the platform itself, is it only the cost that's bothering you, or are there other things rubbing?
+[03:05] Her: Oh, mostly cost. The platform's been reliable, I will say that. The thing that does worry me a bit though is our backup product, it's sort of built around VMware, you know, all the integrations and the snapshots and whatnot. If we did move, that'd be another thing to unpick.
+[03:25] Me: That's a really important point, and actually one I want to come back to. Which backup tool are you running?
+[03:33] Her: Veeam. We've been on it for ages.
+[03:37] Me: Okay, good news there, Veeam supports Nutanix natively, including our hypervisor AHV, so you wouldn't be throwing that investment away. But let's park that for a sec, I don't want to jump too far ahead.
+[03:51] Her: Sure, sure. Oh, and speaking of things being tangled up, we're also in the middle of this new wing build, the east wing, and that's going to need its own comms room eventually, so I've got that in the back of my mind too. The project manager keeps sending me these updates I don't have time to read.
+[04:12] Me: Sounds like a lot going on.
+[04:15] Her: You have no idea. And then we've got the away day in October which I'm supposed to be organising, and nobody can agree on a venue. Someone suggested a boat on the Thames which, you know, I can't see going down well with the finance team.
+[04:31] Me: Ha, probably not. Can I bring us back to the renewal for a sec?
+[04:36] Her: Yes, sorry, I do go off on one.
+[04:40] Me: No, it's helpful context. So, when does the current VMware agreement actually expire?
+[04:47] Her: June. So we've got a bit of runway but not loads.
+[04:52] Me: And is there a decision deadline internally before that, for sign-off?
+[04:58] Her: Yeah, I need board and CFO sign-off by January really, because of how our budget cycle works. Anything after that gets messy.
+[05:09] Me: Okay, so January is the real pressure point. That's about five months away.
+[05:15] Her: Yep, which is why I'm taking calls like this one.
+[05:19] Me: Makes sense. Can I ask, are you evaluating alternatives, or is Nutanix the first conversation you've had?
+[05:27] Her: Well, honestly, we're already talking to VMware about a direct discount. They've hinted they can do something. So I suppose my question is, why would I change now when I might just get the number down?
+[05:42] Me: That's a fair question and I'd be asking the same thing. Can I give you a straight answer?
+[05:48] Her: Please do.
+[05:50] Me: A discount might get you through this renewal, but it doesn't change the trajectory. The licensing model is what it is now, and most of our customers who took the discount last cycle are back at the table this cycle with the same problem, just bigger. So the question isn't really this renewal, it's where you want to be in three years.
+[06:14] Her: Mmm. Yeah, that's sort of what I've been thinking actually. It feels like kicking the can.
+[06:21] Me: Right. And the second thing is, Nutanix isn't just a swap, there are operational savings that compound. Smaller footprint, one support call instead of three, your team of nine spending less time on firefighting.
+[06:36] Her: That would be nice. They are stretched.
+[06:40] Me: You mentioned AHV a moment ago, you'd heard of it?
+[06:44] Her: Mark mentioned it but I don't really know what it is, if I'm honest.
+[06:49] Me: So AHV is our built-in hypervisor. It's included with the Nutanix platform, no separate licence. It's what lets customers get off the VMware licensing treadmill entirely. It runs the same VMs, Veeam backs it up, and your team manages it from one console.
+[07:10] Her: And it's, what, as mature as VMware?
+[07:14] Me: It's been in production for over a decade, running some pretty large healthcare and government estates. I can share some references in your sector if that would help.
+[07:25] Her: Yeah, that would be useful actually.
+[07:28] Me: Will do. Diane, going back to the backup piece, when you say your backup is built around VMware, what specifically worries you? Is it the integration, the recovery process, the staff knowledge?
+[07:42] Her: Bit of all three I suppose. We've got runbooks, the team knows the workflows, and I just don't want to be rebuilding all that from scratch.
+[07:52] Me: Totally get it. The honest answer is Veeam on Nutanix uses the same console your team already knows. The runbooks mostly carry over. There's a learning curve on AHV itself but it's days, not months, and we fund the training as part of the transition.
+[08:12] Her: Okay. That's reassuring, sort of.
+[08:16] Me: What else is on your mind as a concern?
+[08:20] Her: Honestly? Just the disruption. We're a hospital, we can't have things falling over. And the team is already busy with the east wing stuff, I can't dump a massive migration on top.
+[08:34] Me: Understood. Most of our hospital customers do a phased migration, workload by workload, over three to six months. It's not a big bang. And a lot of it runs alongside the existing VMware kit until you're ready to decommission.
+[08:51] Her: Right.
+[08:53] Me: Can I ask who else is involved in this decision besides you and the CFO?
+[08:59] Her: The CIO obviously, he signs off on anything strategic. And then there's our head of clinical systems who gets a voice because everything touches patient-facing apps eventually.
+[09:12] Me: Have they been part of the VMware renewal conversation yet?
+[09:16] Her: Only at a high level. The CIO knows the number's gone up and he's not thrilled.
+[09:23] Me: Would it be worth getting the three of you on a call with one of our solutions architects? Not a pitch, more a technical conversation about what a migration would actually look like given your estate.
+[09:36] Her: Possibly, yeah. Let me think about timing. The CIO's away for two weeks from Monday and then we've got the quarterly board prep.
+[09:46] Me: Okay. What if I sent you a short summary document, something you can forward to him before he goes, and we pencil a technical call for when he's back?
+[09:57] Her: Yeah, just send me something and I'll have a look. I can't commit to the call yet but let me see what the diary looks like.
+[10:06] Me: No problem. What would be most useful in that document, the commercial comparison or the technical overview?
+[10:14] Her: Oh, bit of both really. Something I can skim.
+[10:19] Me: Got it. I'll keep it tight, two or three pages. Diane, one last thing, if we could show you a path that keeps you within that £40,000 absorb figure and solves the backup worry, would that be a conversation worth having properly?
+[10:36] Her: Yeah, I mean, of course, if the numbers work then absolutely.
+[10:42] Me: Perfect. I'll get that over to you by end of week.
+[10:46] Her: Lovely, thanks. And listen, sorry again for rambling about boats and canteens and all that.
+[10:52] Me: Honestly not a problem, it's been a really useful call. Enjoy the rest of your afternoon.
+[10:58] Her: You too, bye now.

@@ -1,0 +1,48 @@
+{
+  "scenario": {
+    "seed": 109,
+    "pain": "Slow clinical systems at peak times + Storage end of support",
+    "persona": "sceptical",
+    "numBehav": "wrong-unit",
+    "flow": "budget-first",
+    "aeBehavior": "good",
+    "ending": "vague",
+    "objections": [
+      {
+        "key": "compliance",
+        "timing": "at-close"
+      },
+      {
+        "key": "proof",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 400000,
+    "quote": 720000,
+    "canAbsorb": 0
+  },
+  "contains": {
+    "situation.hosts": "16",
+    "situation.vms": "578",
+    "situation.storageTB": "102",
+    "situation.teamSize": "4",
+    "deadline": "march",
+    "renewalDate": "april"
+  },
+  "painTypeIn": [
+    "Storage end of support"
+  ],
+  "objections": [
+    {
+      "matchedKey": "compliance",
+      "match": "compliance"
+    },
+    {
+      "matchedKey": "proof",
+      "match": "prove"
+    }
+  ],
+  "mustNotInvent": []
+}

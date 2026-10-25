@@ -10,6 +10,7 @@ const fs   = require('fs');
 const path = require('path');
 const { runCall, parseTranscript, fv } = require('../lib/extractor');
 const CoachLogic = require('../public/coach-logic.js');
+const { confirmCost } = require('../lib/confirm');
 
 const PORT = 3095;
 const BASE = `http://localhost:${PORT}`;
@@ -200,6 +201,7 @@ function acc(r) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 (async () => {
+  await confirmCost('This makes about 44 API calls (~$0.25).');
   console.log('Starting server…');
   const server = await startServer();
   await waitReady();

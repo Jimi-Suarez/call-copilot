@@ -1,0 +1,64 @@
+# Generated: seed 109 | pain: Slow clinical systems at peak times + Storage end of support | persona: sceptical | objections: compliance@at-close, proof@right-after-pitch
+[00:10] Me: Morning Sarah, thanks for making the time. Can you hear me alright?
+[00:16] Her: Yes, loud and clear.
+[00:19] Me: Brilliant. So I know Dave at Insight set this up — I've got about 25 minutes blocked. My plan was to spend a few minutes understanding your environment and what's actually going on, then share a bit about where Nutanix might fit, and we figure out together if a next step makes sense. Does that work?
+[00:38] Her: That's fine, but I'll be honest with you upfront — I don't have budget for a rip and replace. Whatever Dave told you, we're not sitting on a pot of money here. The CFO is squeezing everything.
+[00:52] Me: Completely fair, and I appreciate you flagging it early. Can I ask — when you say no budget, is that no budget full stop, or no budget beyond what you're already spending to keep the lights on?
+[01:06] Her: The second one. We've got what we've got. I'm spending about thirty-three thousand three hundred on the VMware and support stack as it is, and the renewal quote came back at sixty thousand. That's the conversation I'm already having with finance.
+[01:22] Me: Understood. And just so I've got it straight — is that thirty-three thousand three hundred annual, or…?
+[01:29] Her: Sorry, monthly. Four hundred thousand a year currently, the quote is seven hundred and twenty thousand a year.
+[01:37] Me: Got it, thank you. That's a serious jump. Is there a date you need a decision by?
+[01:44] Her: The board wants sign-off in March. Renewal itself is April.
+[01:50] Me: Okay, so March is the real deadline. And look — I've been doing this long enough to know I'm not going to convince you of anything in one call. You've been on VMware a long time?
+[02:02] Her: Ten years. And it's been fine. That's part of my scepticism here — I know how it behaves, my team knows how it behaves, and change in a hospital isn't trivial.
+[02:14] Me: That's a completely reasonable position. Can I ask — when you say it's been fine, is there anything that isn't fine? Anything that nags you?
+[02:24] Her: Honestly? A couple of things. The patient record crawls at shift change. Every morning around seven, and again at the evening handover, clinicians are complaining it's slow. That's not a VMware problem per se, but it's a problem.
+[02:40] Me: That's a real one. What's your read on the cause?
+[02:45] Her: Storage, mostly. Which is the other thing — the arrays go out of support at the end of next year. So I've got a storage refresh coming whether I like it or not, on top of the VMware renewal.
+[02:58] Me: Right, so you've actually got two bills landing on top of each other. Does the seven-twenty quote include anything on the storage side?
+[03:08] Her: No. That's just VMware. Storage is a separate conversation I haven't fully costed yet.
+[03:14] Me: Okay. That's useful context. Can I ask a few quick sizing questions so I'm not talking in the abstract?
+[03:22] Her: Go on.
+[03:23] Me: How many hosts are you running?
+[03:26] Her: Sixteen.
+[03:28] Me: And rough VM count?
+[03:30] Her: Five seventy-eight at last count.
+[03:33] Me: Storage footprint?
+[03:35] Her: About 102 terabytes usable.
+[03:38] Me: And the team looking after it?
+[03:40] Her: Four of us, including me. And before you ask, no, I can't hire more.
+[03:46] Me: Noted. Honestly, team size is one of the reasons customers your size look at us — not to pitch yet, just flagging. One more — the slow EPR at shift change, has anyone put a number on what that costs clinically? Delayed handovers, anything like that?
+[04:04] Her: Not formally. The clinical director has complained in writing twice. That's as formal as it gets right now.
+[04:12] Me: Okay. So let me play back what I'm hearing and you tell me where I'm wrong. You've got a VMware renewal in April with an eighty percent price hike, board sign-off needed by March, a storage refresh landing end of next year, performance issues at peak clinical times that are already visible to leadership, and a team of four who can't grow. Fair?
+[04:34] Her: That's a fair summary, yes.
+[04:37] Me: Alright. Let me tell you briefly where Nutanix fits and then you can poke holes. The short version — we collapse the compute and storage into one platform on standard servers, so your storage refresh and your virtualisation renewal become one conversation, not two. The platform includes our hypervisor, AHV, at no extra cost, so you're not paying the VMware tax if you don't want to. And the architecture tends to flatten out those peak-time performance issues because data sits local to the compute. That's the thirty-second version.
+[05:12] Her: Can you actually prove this works in a hospital environment? Because I've heard pitches before. Epic, Cerner, PACS — those workloads are not forgiving.
+[05:23] Me: Totally fair challenge. Short answer, yes — we've got a decent number of NHS trusts and private hospital groups running exactly those workloads. I'd rather not just name-drop on a call though. What I can do is get you two or three reference customers of similar size, ideally one running the same EPR as you. What EPR are you on?
+[05:44] Her: System C.
+[05:46] Me: Okay. I'll see what we've got on System C specifically. Would a reference call with a peer be useful, or would you rather just see written case studies first?
+[05:56] Her: Written first. I'm not getting on a call with a stranger until I've read something.
+[06:02] Me: Sensible. Couple of questions from your side probably — can I guess?
+[06:08] Her: Go on.
+[06:09] Me: You're probably wondering whether you can keep your existing VMware licences, and whether you have to bin your current storage.
+[06:17] Her: Both of those, yes. Can we use our existing VMware licences?
+[06:22] Me: Yes, you can run Nutanix underneath VMware if you want to — the platform supports ESXi as well as AHV. A lot of customers run a mix during transition, or stay on ESXi and just use us for the infrastructure layer. It gives you a path rather than a cliff edge.
+[06:40] Her: And the storage? Do we have to throw out our current storage?
+[06:45] Me: Not immediately. The arrays can stay in place until end of support — you'd typically migrate workloads over as you stand up Nutanix nodes. By the time your arrays go end of support next year, you've moved off them naturally. No forklift.
+[07:02] Her: Hm. Okay.
+[07:05] Me: What's the "hm" — scepticism or interest?
+[07:09] Her: Both. It sounds tidy, which makes me suspicious.
+[07:14] Me: Fair. I'd rather you be suspicious than oversold. What would make this concrete for you — numbers on a page comparing the renewal path versus a Nutanix path over three or five years?
+[07:27] Her: That would be a start. I need something I can show the CFO. Right now I've got a seven-twenty quote and no alternative.
+[07:36] Me: Understood. To build that properly I'd need a bit more — current host specs, licence editions you're on, and ideally a rough workload breakdown. Would you be open to a technical scoping session with one of our SEs? Thirty minutes, no commitment, just so the numbers I give you are real.
+[07:55] Her: Maybe. Send me something first and I'll decide.
+[08:00] Me: Will do. One other thing I should ask — anything else that would need to be true for this to even be a conversation? Security, compliance, anything structural?
+[08:11] Her: Well, yes — what about compliance? Everything touches patient data here. DSPT, Caldicott, the lot. If your platform can't tick those boxes, none of the rest matters.
+[08:24] Me: Agreed, and it should be a gating question. Short answer — the platform's used across the NHS and in regulated healthcare globally, encryption at rest and in flight is built in, and we can map specifically to DSPT controls. I'd rather send you our healthcare compliance pack than hand-wave it on a call. I'll include it with the case studies.
+[08:46] Her: Alright. Send me something — the case studies, the compliance pack, and some sort of indicative comparison. I'll have a look and come back to you.
+[08:57] Me: Will do. Just so I set expectations — given your March deadline, if there's any chance this becomes a real option, we'd want the scoping session in the next two or three weeks so you've got numbers in time. Can I pencil something provisionally and you confirm once you've read?
+[09:14] Her: No, let me read first. I'm not committing to a diary slot before I've seen anything.
+[09:21] Me: Understood. I'll get the pack over by end of week. Anyone else I should copy — your infrastructure lead, or just you?
+[09:30] Her: Just me for now.
+[09:32] Me: Perfect. Thanks for being straight with me today, Sarah — it's genuinely more useful than a polite call.
+[09:40] Her: We'll see. Send me something and we'll go from there.
+[09:44] Me: Will do. Speak soon.

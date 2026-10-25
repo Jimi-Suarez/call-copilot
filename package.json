@@ -5,14 +5,16 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/run-tests.js",
+    "test": "node test/unit-tests.js",
+    "test:llm": "node test/run-tests.js",
     "check": "node check.js",
     "replay": "node scripts/replay.js",
     "test:e2e": "node test/e2e.test.js",
     "test:layout": "node test/layout.test.js",
     "test:stable": "node scripts/stability-check.js",
     "test:coach": "node scripts/coach-check.js",
-    "test:deepgram": "node test/test-deepgram.js"
+    "test:deepgram": "node test/test-deepgram.js",
+    "gen-call": "node scripts/gen-call.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",

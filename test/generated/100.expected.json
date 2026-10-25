@@ -1,0 +1,45 @@
+{
+  "scenario": {
+    "seed": 100,
+    "pain": "Audit finding or regulator pressure",
+    "persona": "defensive-team",
+    "numBehav": "wrong-unit",
+    "flow": "early-jump",
+    "aeBehavior": "good",
+    "ending": "no-next-step",
+    "objections": [
+      {
+        "key": "other",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 240000,
+    "quote": 460000,
+    "canAbsorb": 10000
+  },
+  "contains": {
+    "situation.hosts": "13",
+    "situation.vms": "585",
+    "situation.storageTB": "70",
+    "situation.teamSize": "6",
+    "deadline": "february"
+  },
+  "painTypeIn": [
+    "No tested fallback",
+    "Migration risk / downtime",
+    "CFO needs numbers",
+    "Renewal cost shock",
+    "Small team capacity",
+    "Storage end of support",
+    "Servers and storage as two worlds",
+    "Clinical uptime / patient safety",
+    "Board wants less single-vendor risk",
+    "Compliance / patient data",
+    "Paying for a suite we don't use"
+  ],
+  "mustNotInvent": [
+    "renewalDate (not mentioned in transcript)"
+  ]
+}

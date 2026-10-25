@@ -1,0 +1,56 @@
+{
+  "scenario": {
+    "seed": 101,
+    "pain": "Data must stay on-premises / in-country + Cloud-first mandate versus reality / cloud costs",
+    "persona": "rushed",
+    "numBehav": "corrects",
+    "flow": "budget-first",
+    "aeBehavior": "mistakes",
+    "ending": "specific",
+    "objections": [
+      {
+        "key": "downtime",
+        "timing": "at-close"
+      }
+    ]
+  },
+  "numbers": {
+    "paysNow": 180000,
+    "quote": 320000,
+    "canAbsorb": 10000
+  },
+  "contains": {
+    "situation.hosts": "9",
+    "situation.vms": "338",
+    "situation.storageTB": "65",
+    "situation.teamSize": "4",
+    "deadline": "november",
+    "renewalDate": "february"
+  },
+  "painTypeIn": [
+    "No tested fallback",
+    "Migration risk / downtime",
+    "CFO needs numbers",
+    "Renewal cost shock",
+    "Small team capacity",
+    "Storage end of support",
+    "Servers and storage as two worlds",
+    "Clinical uptime / patient safety",
+    "Board wants less single-vendor risk",
+    "Compliance / patient data",
+    "Paying for a suite we don't use"
+  ],
+  "objections": [
+    {
+      "matchedKey": "downtime",
+      "match": "downtime"
+    }
+  ],
+  "nextStep": {
+    "purposeContains": "presentation to the CFO",
+    "dateTimeContains": [
+      "19"
+    ]
+  },
+  "mustNotInvent": []
+}

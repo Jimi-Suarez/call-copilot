@@ -1,0 +1,55 @@
+# Generated: seed 107 | pain: Community clinics / remote sites | persona: friendly-vague | objections: downtime@mid-discovery
+[00:10] Me: Hi Diane, thanks for making the time today. Can you hear me okay?
+[00:16] Her: Yes, loud and clear, thanks for setting this up.
+[00:21] Me: Great. So just to set expectations, I was hoping we could spend about twenty-five minutes together. I'd love to understand your environment and what's driving you to look at options right now, then I can share a bit about what we do at Nutanix, and we'll agree a sensible next step if it makes sense. Does that work for you?
+[00:40] Her: Yeah, that sounds good. Mark at the reseller said you'd be a good person to talk to, so I'm happy to walk you through where we're at.
+[00:50] Me: Perfect. Before I dive in, is there anything specific you were hoping to get out of today?
+[00:58] Her: Well, honestly, we've been on VMware for about ten years and, you know, with everything that's happened with the licensing changes, our renewal number came back and it's just, it's a lot more than we budgeted for. So we're sort of forced to look around, which I wasn't really planning on doing this year.
+[01:20] Me: Yeah, I hear that a lot right now. Can you tell me a bit more about that renewal, like when does it land and sort of what the shape of it is?
+[01:30] Her: It's July. Same time our board has to sign off on the capital plan, so the timing is, you know, not great. The quote we got back is well above what we can absorb in the operating budget.
+[01:46] Me: Understood. And when you say well above, are we talking a bit of a stretch or is it the kind of thing where you'd have to cut somewhere else to make it work?
+[02:00] Her: Oh it's, I mean I don't want to throw numbers around, but it's not something we can just absorb. We'd have to go back to finance and have a hard conversation, and Rachel, our finance partner, is already asking what the alternatives look like.
+[02:18] Me: Got it, that's helpful. So July for both the renewal and the board sign-off, that's the real pressure point.
+[02:26] Her: Yes exactly.
+[02:29] Me: Okay. Let me ask about the environment itself so I can picture what we're talking about. Can you walk me through what you're running today?
+[02:40] Her: Sure, so we've got our main data center at the hospital, that's the bulk of it, and then we run kit at ten community sites, you know, the outpatient clinics and the smaller satellite locations.
+[02:56] Me: Okay, the community sites are interesting, I want to come back to those. On the main data center side, roughly how many hosts and VMs are we talking?
+[03:08] Her: We've got eight hosts in the main cluster, and I think we're at two hundred and eighty-three VMs, give or take. Storage is around sixty-two terabytes.
+[03:22] Me: Perfect, thank you. And is that a traditional three-tier setup, like separate SAN?
+[03:30] Her: Yeah, hosts and a SAN, pretty standard. It's been reliable, I'll give it that.
+[03:38] Me: And what does the team look like supporting all of that?
+[03:43] Her: There's seven of us total, but only a couple really touch the virtualization and storage side day to day. The rest are apps, help desk, that sort of thing.
+[03:55] Me: Okay. Coming back to the community sites, you said ten of them. What does the kit look like out there, is it the same kind of setup scaled down, or something different?
+[04:08] Her: It's sort of a mix, honestly. Some of them have a little server locally, some are pulling back to the main site. It's grown organically over the years and it's, you know, not consistent. That's actually one of the headaches.
+[04:26] Me: Yeah, I bet. What's the pain feel like on a Tuesday for your team with those sites?
+[04:33] Her: Oh it's just, every site's a little different. If something goes wrong at one of the clinics we're either driving out there or we're troubleshooting over the phone with someone who isn't technical. And patching, backups, it's all sort of bespoke per site. We know we need to standardize but we've never had the budget or the window to do it.
+[04:58] Me: That makes a lot of sense. And is the renewal conversation making you look at the community sites too, or is that a separate problem?
+[05:08] Her: Well that's the thing, if we're going to spend real money anyway, I'd rather spend it on something that actually solves more than one problem. Rachel said the same thing, basically, you know, if we're writing a big check let's make it count.
+[05:25] Me: That's a really sensible lens. Okay, let me ask, when you think about what good looks like twelve months from now, what's different?
+[05:36] Her: Honestly? I'd love for the clinics to just run themselves, you know, same stack everywhere, we can see them from one place, we're not driving out when a disk fails. And on the main side I just want the renewal number to make sense without us bleeding somewhere else.
+[05:56] Me: Got it. One more on the technical side, what applications are the most critical, the ones where you really feel it if they blink?
+[06:06] Her: The EHR obviously, that's the big one. Then imaging, the PACS system, and the clinical scheduling. Those three are the ones where if they're down, I'm getting phone calls.
+[06:20] Me: Understood. So let me ask the question that's probably on your mind, if you were to move those off VMware, can you guarantee there will be no downtime when we move patient systems?
+[06:34] Her: Yeah, that is the question. I can't go to the board and say we're saving money if the trade-off is the EHR goes dark for a weekend.
+[06:45] Me: Completely fair, and I'm not going to sit here and promise zero downtime without knowing your environment properly, that wouldn't be honest. What I can tell you is the migration pattern we use is designed around keeping production running. There's a tool called Nutanix Move that handles the VM conversion, and typically what customers do is migrate in waves, non-production first, then less critical workloads, then the EHR and PACS over a planned maintenance window that you already have. The cutover per VM is usually minutes, not hours. But the honest answer is we'd want to scope it with you and your reseller before anyone commits to a timeline.
+[07:30] Her: Okay, that's a reasonable answer. So how would we actually move our VMs, like what does that look like in practice?
+[07:40] Me: Sure, so Move is a free tool from us, it sits in your environment, connects to vCenter on one side and the Nutanix cluster on the other. It does an initial sync of the VM data in the background while the VM is still running on VMware, then when you're ready to cut over, it does a final delta sync and powers the VM up on Nutanix. For most VMs the actual downtime window is a few minutes. It also handles the driver changes under the hood so you're not doing that manually.
+[08:15] Her: Okay. And it works with the clinical systems, like the vendors are okay with it?
+[08:22] Me: Generally yes, because from the VM's perspective it's still the same OS and the same application, just running on different infrastructure. That said, with EHR vendors we always recommend looping them in early, some of them have specific support statements. Who's your EHR vendor, out of interest?
+[08:42] Her: Epic.
+[08:44] Me: Yeah, Epic runs on Nutanix at a lot of hospitals, they have a formal validation. So that's not a blocker, but we'd want your Epic team involved in the planning. Can I ask, on the renewal conversation, who else besides you and Rachel is involved in the decision?
+[09:05] Her: It's mostly me on the technical side, Rachel on the finance side, and then it goes to our CFO and the board for sign-off in July. The reseller, Mark, has been helping us think through options.
+[09:20] Me: Okay. And has Rachel seen any numbers from anyone yet, or are you still at the gathering-information stage?
+[09:28] Her: We're still gathering. She's seen the VMware renewal number obviously, and that's what kicked all this off, but we haven't gotten a real comparison from anyone yet.
+[09:40] Me: That's really useful to know. So here's what I'd suggest as a next step, and tell me if this feels right. What I'd like to do is put together a cost comparison for you, taking the eight hosts, the two hundred and eighty-three VMs, the sixty-two terabytes, plus a sensible design for the ten community sites, and show you what a Nutanix proposal looks like side by side with what you're being asked to pay. That way when you go to Rachel and eventually the board, you've got a real number to compare, not a hand-wave.
+[10:18] Her: Yeah, that would actually be really helpful. Rachel's been asking for exactly that.
+[10:25] Me: Great. Given July is the deadline, I'd want to get that in front of you and Rachel sooner rather than later. Could we book a session the week of the twelfth to walk through it together, you, me, and Rachel from finance?
+[10:40] Her: The week of the twelfth should work. I'll need to check with Rachel on her calendar, she's got some board prep going on, but I think that's doable.
+[10:52] Me: Perfect. I'll send a hold for a couple of options that week, you can confirm with Rachel which works. And I'll loop Mark in on the invite as well so he's across it, does that work?
+[11:04] Her: Yes please, keep Mark in the loop, he's been great.
+[11:08] Me: Will do. Before we wrap, is there anything else that's on your mind, anything I haven't asked about that I should know?
+[11:17] Her: No, I think you've covered it. The main thing for me is just, you know, I need to be confident the migration is safe. The money matters, obviously, but if I lose the EHR for a day I'm in a different kind of trouble.
+[11:33] Me: Totally understood, and I think that's the right instinct. Let's make the week of the twelfth session partly about the numbers and partly about walking Rachel and you through what a migration plan would actually look like, so you can judge the risk with your eyes open.
+[11:50] Her: That sounds great, thank you.
+[11:53] Me: Thanks Diane, really appreciate the time. I'll get that invite out today and confirm with you once Rachel's locked in.
+[12:02] Her: Perfect, talk soon.

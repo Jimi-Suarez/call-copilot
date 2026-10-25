@@ -1,103 +1,190 @@
 {
-  "steps": [
+  "sections": [
     {
-      "id": 1,
-      "name": "AGENDA",
-      "minutes": "0-2",
-      "questions": [
-        "Objective: understand your virtual estate (15-20 min). Last 10 min: decide a next step or part ways. Does that feel fair?"
+      "id": "SITUATION",
+      "label": "SITUATION",
+      "minutesStart": 2,
+      "minutesEnd": 4,
+      "steps": [
+        {
+          "id": "S1",
+          "q": "Walk me through your estate: what runs on it, how many hosts and VMs, how much storage, how big is the team?",
+          "label": "estate walkthrough",
+          "fields": ["situation.hosts", "situation.vms", "situation.storageTB", "situation.teamSize"],
+          "anyField": true
+        }
       ]
     },
     {
-      "id": "2b",
-      "name": "PAIN",
-      "minutes": "2-6",
-      "questions": [
-        "What did the reseller say that made you agree to the meeting?",
-        "You mentioned [her words]. What does that affect over the next 6 to 12 months?",
-        "What's driving [her word] to be a priority?",
-        "Is this the thing to focus on, or will something overpower it?"
-      ],
-      "feeds": "Her pain, What it affects, Why it's a problem"
+      "id": "PAIN",
+      "label": "PAIN",
+      "minutesStart": 4,
+      "minutesEnd": 8,
+      "steps": [
+        {
+          "id": "P1",
+          "q": "What did the reseller say that made you agree to the meeting?",
+          "label": "her pain",
+          "fields": ["pain"]
+        },
+        {
+          "id": "P2",
+          "q": "You mentioned [pain]. What does that affect over the next 6 to 12 months?",
+          "label": "what it affects",
+          "fields": ["whatItAffects"],
+          "requires": ["pain"]
+        },
+        {
+          "id": "P3",
+          "q": "What's driving [pain] to be a priority?",
+          "label": "why it's a problem",
+          "fields": ["whyProblem"],
+          "requires": ["pain"]
+        },
+        {
+          "id": "P4",
+          "q": "Is this the thing to focus on, or will something overpower it?",
+          "label": "focus check",
+          "fields": [],
+          "oneShot": true
+        }
+      ]
     },
     {
-      "id": 2,
-      "name": "SITUATION",
-      "minutes": "6-9",
-      "questions": [
-        "Walk me through your estate: what runs on it, how many hosts and VMs, how much storage, how big is the team?"
-      ],
-      "hint": "KEYWORDS: 12 hosts, 400 VMs, 150TB, team 5",
-      "feeds": "Costing"
+      "id": "NUMBER",
+      "label": "NUMBER",
+      "minutesStart": 8,
+      "minutesEnd": 12,
+      "steps": [
+        {
+          "id": "N1",
+          "q": "Roughly how much has it gone up by? 10%, 50%, or more? Can you put a monetary value on it?",
+          "label": "numbers",
+          "fields": ["numbers.paysNow", "numbers.quote"],
+          "anyField": true
+        },
+        {
+          "id": "N1b",
+          "q": "Is that a yearly cost or a one-off purchase?",
+          "label": "quote type",
+          "fields": ["quoteType"],
+          "requires": ["numbers.paysNow"]
+        },
+        {
+          "id": "N2",
+          "q": "When is the deadline for this?",
+          "label": "deadline",
+          "fields": ["deadline"]
+        },
+        {
+          "id": "N3",
+          "q": "And when is the renewal date?",
+          "label": "renewal date",
+          "fields": ["renewalDate"]
+        },
+        {
+          "id": "N4",
+          "q": "What happens if nothing changes by [her date]?",
+          "label": "doing nothing",
+          "fields": ["doingNothing"],
+          "requires": ["deadline"]
+        }
+      ]
     },
     {
-      "id": 3,
-      "name": "NUMBER",
-      "minutes": "9-13",
-      "questions": [
-        "You said [her words]. Roughly how much has it gone up by? 10%, 50%, or more?",
-        "Can you put a monetary value on it?",
-        "What does she pay now per year?",
-        "What is the quote she has seen (per year)?",
-        "What can she absorb without cutting anything (per year)?",
-        "When is the deadline for this?",
-        "What is the renewal date?",
-        "What happens if nothing changes by then?"
-      ],
-      "feeds": "Numbers, Timeframe, Doing nothing"
+      "id": "CAUSE",
+      "label": "CAUSE",
+      "minutesStart": 12,
+      "minutesEnd": 16,
+      "steps": [
+        {
+          "id": "C1",
+          "q": "Why do you think this is going to hit you so hard?",
+          "label": "cause",
+          "fields": ["cause"]
+        },
+        {
+          "id": "C2",
+          "q": null,
+          "label": "targeted cause",
+          "fields": ["cause"],
+          "targeted": "causeQuestion"
+        },
+        {
+          "id": "C3",
+          "q": "What else is driving this to matter right now?",
+          "label": "other drivers",
+          "fields": ["otherDrivers"]
+        }
+      ]
     },
     {
-      "id": 4,
-      "name": "CAUSE",
-      "minutes": "13-17",
-      "questions": [
-        "Why do you think this is going to hit you so hard?",
-        "To what extent is [her cause] an issue for YOU?",
-        "What else is driving this to matter right now?"
-      ],
-      "feeds": "Cause, Y's for the pitch"
+      "id": "IMPACT",
+      "label": "IMPACT",
+      "minutesStart": 16,
+      "minutesEnd": 21,
+      "steps": [
+        {
+          "id": "I1",
+          "q": "What ripple effect is this having on other people? Who else feels this, and why is it a concern to them?",
+          "label": "ripple effect",
+          "fields": ["impactOnOthers"]
+        },
+        {
+          "id": "I2",
+          "q": null,
+          "label": "targeted impact",
+          "fields": ["impactOnOthers"],
+          "targeted": "impactQuestion"
+        },
+        {
+          "id": "I3",
+          "q": "How does this affect you personally?",
+          "label": "personal stake",
+          "fields": ["personalStake"]
+        },
+        {
+          "id": "I4",
+          "q": "Who else needs to sign off on this? What would they need to see?",
+          "label": "sign-off",
+          "fields": ["signOff"]
+        },
+        {
+          "id": "I5",
+          "q": "Where would the money for this come from? Is it set aside, or does it need requesting?",
+          "label": "budget",
+          "fields": ["budget"]
+        }
+      ]
     },
     {
-      "id": 5,
-      "name": "IMPACT",
-      "minutes": "17-22",
-      "questions": [
-        "What ripple effect is this having on other people? Who else feels this, and why is it a concern to them?",
-        "How does this affect you personally?",
-        "Who else needs to sign off on this?",
-        "What would they need to see?",
-        "Where would the money for this come from? Is it set aside, or does it need requesting?"
-      ],
-      "feeds": "Buying box, Y's for the pitch"
-    },
-    {
-      "id": 6,
-      "name": "OUTCOME",
-      "minutes": "22-24",
-      "questions": [
-        "What do you need to happen before [her date]?",
-        "Which of those matters most to you?",
-        "Why does that matter to you personally?"
-      ],
-      "feeds": "Pitch"
-    },
-    {
-      "id": 9,
-      "name": "CLOSE",
-      "minutes": "27-30",
-      "questions": [
-        "We said we'd decide if a next step makes sense. Does it?",
-        "What do you need from us beforehand?",
-        "Who else should be in the room?",
-        "Let's book a working session, worked back from your deadline."
-      ],
-      "feeds": "Next step"
+      "id": "OUTCOME",
+      "label": "OUTCOME",
+      "minutesStart": 21,
+      "minutesEnd": 23,
+      "steps": [
+        {
+          "id": "O1",
+          "q": "What do you think you need to solve [pain]?",
+          "followup": "What do you need to happen before [her date]?",
+          "label": "needs",
+          "fields": ["needs"]
+        },
+        {
+          "id": "O2",
+          "q": "Which of those matters most to you?",
+          "label": "top need",
+          "fields": ["topNeed"],
+          "requires": ["needs"]
+        },
+        {
+          "id": "O3",
+          "q": "Why does that matter to you personally?",
+          "label": "need reason",
+          "fields": ["needReason"],
+          "requires": ["topNeed"]
+        }
+      ]
     }
-  ],
-  "timeTargets": {
-    "agendaBy": 2,
-    "pitchBy": 24,
-    "closeBy": 27,
-    "endBy": 30
-  }
+  ]
 }

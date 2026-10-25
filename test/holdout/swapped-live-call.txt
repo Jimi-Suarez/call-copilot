@@ -1,0 +1,23 @@
+# SWAPPED LIVE CALL — Deepgram speaker 0 is Helen (prospect), labelled Me by mistake.
+# Ground truth: Her lines are Jimi (AE); Me lines are Helen (prospect).
+# After correction all Her lines become Me and vice versa.
+[00:08] Her: Thanks for making time, Helen. My name is Jimi, inside sales at Nutanix. What I'd love to do today is spend the first fifteen minutes understanding your situation, then in the last ten we decide if a next step makes sense or we part ways. Does that feel fair?
+[00:25] Me: Yes, that's fine.
+[00:45] Her: What made you agree to this meeting today?
+[01:00] Me: Our VMware renewal is coming up and the quote came back much higher than we expected.
+[01:35] Her: Walk me through your estate — hosts, VMs, storage?
+[01:50] Me: We have about sixteen hosts, two hundred and fifty VMs, around ninety terabytes.
+[02:20] Her: Can you put a number on the increase?
+[02:35] Me: We pay two hundred and eighty thousand a year now. The renewal quote is three hundred and ninety thousand.
+[03:00] Her: What does that affect in your budget this year?
+[03:15] Me: It hits the IT budget hard. My manager has asked me to look at alternatives before we sign anything.
+[03:45] Her: What's the ripple effect if this doesn't get resolved?
+[04:00] Me: Other projects get deferred. The board is watching the IT budget very closely this year.
+[04:30] Her: What would you need to see before making a decision?
+[04:45] Me: A like-for-like cost comparison, and something that shows we wouldn't need a full migration project.
+[05:10] Her: Right. So Nutanix runs compute, storage and networking on commodity servers — managed from one place.
+[05:40] Me: How does the licensing compare to VMware?
+[05:55] Her: It's a single AOS licence instead of separate vSphere, vSAN and vCenter. Typically more predictable.
+[06:10] Me: Hi Jimi, that sounds interesting. Can you tell me more about migration risk?
+[06:30] Her: Most customers do it in phased waves with minimal disruption. The tooling is mature.
+[06:50] Me: Our team would need some reassurance on that. Our concern is downtime on clinical systems.

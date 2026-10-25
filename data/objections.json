@@ -1,0 +1,158 @@
+{
+  "objections": [
+    {
+      "id": "downtime",
+      "triggers": ["guarantee no downtime", "guarantee downtime", "can you guarantee", "zero downtime", "no downtime", "promise downtime"],
+      "answer": "I can't promise zero downtime, and nobody honest can.",
+      "ask": "What would you need to see in a plan to feel safe?",
+      "bridge": "We design the migration windows around your clinical systems.",
+      "check": "Does that cover it?",
+      "never": "zero downtime, or any specific downtime figure",
+      "ifRepeated": "I hear you — let's write down exactly what you'd need in a cutover plan. That becomes the brief.",
+      "bridgeTo": "I2"
+    },
+    {
+      "id": "retraining",
+      "triggers": ["retraining", "need to retrain", "team would need", "team training", "learn vmware", "only knows vmware", "relearn"],
+      "answer": "That's a real cost — so it goes in the comparison.",
+      "ask": "What would help most: training time, or someone supporting you during the move?",
+      "bridge": "We can price both options before you make a decision.",
+      "check": "Does that cover it?",
+      "never": "any specific learning-curve length",
+      "ifRepeated": "Understood. Let's put a number on it — training time and support during the move both go in the comparison.",
+      "bridgeTo": "I3"
+    },
+    {
+      "id": "cost",
+      "triggers": ["is it cheaper", "cheaper than vmware", "reseller said", "will it be cheaper", "going to be cheaper", "how much cheaper", "save money", "cost less"],
+      "answer": "I can't promise that, because I haven't seen your setup yet.",
+      "ask": "What would you need to see to know if it's worth it?",
+      "bridge": "That's exactly what the comparison is for.",
+      "check": "Does that cover it?",
+      "never": "cheaper (without seeing her actual numbers)",
+      "ifRepeated": "I still can't promise that before I've seen your estate. The comparison will show the real numbers — that's the only honest answer.",
+      "bridgeTo": "N1"
+    },
+    {
+      "id": "compliance",
+      "triggers": ["compliance", "patient data", "gdpr", "patient records", "data protection", "regulatory", "information governance", "data privacy", "hipaa"],
+      "answer": "I'd want an expert to answer that properly, not me.",
+      "ask": "Who looks after compliance on your side?",
+      "bridge": "We bring the right person in before anything moves.",
+      "check": "Does that cover it?",
+      "never": "claim compliance yourself — that requires an expert",
+      "ifRepeated": "Same answer — I won't claim compliance. Let's get your compliance lead in the conversation.",
+      "bridgeTo": "I5"
+    },
+    {
+      "id": "proof",
+      "triggers": ["prove it will work", "can you prove", "show me proof", "evidence it works", "case study for us", "how do i know"],
+      "answer": "I can't prove that today.",
+      "ask": "What would make you confident enough to take the next step?",
+      "bridge": "That's exactly what the comparison is for.",
+      "check": "Does that cover it?",
+      "never": "I can prove it will work for you",
+      "ifRepeated": "I hear you — let's define what evidence would look like. What would you want to see?",
+      "bridgeTo": "O2"
+    },
+    {
+      "id": "warranty-gap",
+      "triggers": ["warranty", "warranty gap", "lose our warranty", "warranty runs out", "warranty ends", "vendor support gap", "warranty coverage", "out of warranty"],
+      "answer": "I don't know your warranty terms, so I won't guess.",
+      "ask": "What's the date and what does it cover?",
+      "bridge": "We can plan the move to land before it, and cost an extension as the fallback.",
+      "check": "Which would you want to see?",
+      "never": "Nutanix covers the warranty or you won't have a gap",
+      "ifRepeated": "I still can't guess your terms. Let's map the date and what coverage you need — then plan the options.",
+      "bridgeTo": "S1"
+    },
+    {
+      "id": "reference",
+      "triggers": ["reference", "hospital reference", "case study", "other customers", "who else uses", "customer reference", "talk to a customer", "speak to a customer", "can you name"],
+      "answer": "I can't name one on this call, and I won't guess.",
+      "ask": "What would you want to ask them?",
+      "bridge": "I'll find out which customers we can introduce before the next session.",
+      "check": "Does that cover it?",
+      "never": "name a specific customer without checking first",
+      "ifRepeated": "I understand you want to hear from a peer. What's the one question you'd ask them?",
+      "bridgeTo": "O1"
+    },
+    {
+      "id": "timing",
+      "triggers": ["too busy", "not now", "bad timing", "not the right time", "come back later", "not a priority right now", "have too much on", "calendar is full", "booked up", "not great timing"],
+      "answer": "Fair, and that's why your [her date] matters.",
+      "ask": "What would have to be true by then for this to be worth an hour?",
+      "bridge": "We don't need the full picture now — just enough to see if the next step makes sense.",
+      "check": "Does that cover it?",
+      "never": "push or guilt-trip her over timing",
+      "ifRepeated": "I hear you. If [her date] changes, come back to me — I'll keep the comparison ready.",
+      "bridgeTo": "O2"
+    },
+    {
+      "id": "send-info",
+      "triggers": ["send me some information", "send me info", "send something over", "just send", "send a brochure", "email me some", "send me details", "send over some", "can you send"],
+      "answer": "Happy to.",
+      "ask": "So I send the right thing, what do you want it to answer?",
+      "bridge": "Then twenty minutes after you've read it: does [day] work?",
+      "check": "Does that cover it?",
+      "never": "send generic material without asking what she needs it to answer",
+      "ifRepeated": "Totally fine. One question first: what do you want it to answer? That shapes what I send.",
+      "bridgeTo": "O3"
+    },
+    {
+      "id": "happy-vmware",
+      "triggers": ["worked for ten years", "works for us", "happy with vmware", "vmware works", "no reason to change", "why change", "been working fine", "never had issues", "it works"],
+      "answer": "It has, and I'm not here to run it down.",
+      "ask": "If the quote stands, what's your plan B?",
+      "bridge": "Would a costed comparison next to the renewal help?",
+      "check": "Does that cover it?",
+      "never": "run down VMware — she chose it and it's worked",
+      "ifRepeated": "I'm not asking you to leave VMware. I'm asking what your plan is if the quote stands.",
+      "bridgeTo": "N1"
+    },
+    {
+      "id": "not-my-decision",
+      "triggers": ["not my decision", "finance director decides", "cfo decides", "board decides", "need to ask my manager", "have to check with", "decision maker", "not my call", "my manager decides", "someone else decides"],
+      "answer": "Makes sense.",
+      "ask": "What would they need to see?",
+      "bridge": "Can they join the working session?",
+      "check": "Does that cover it?",
+      "never": "try to go around the decision maker",
+      "ifRepeated": "I hear you — what would you need to bring to them to make it easy?",
+      "bridgeTo": "O1"
+    },
+    {
+      "id": "contract",
+      "triggers": ["locked in", "under contract", "contract runs", "still in contract", "18 months", "24 months", "contract period", "can't leave", "tied in", "tied to vmware"],
+      "answer": "Understood. I don't know your terms.",
+      "ask": "Is that a firm end date?",
+      "bridge": "What would you need to see to plan for it?",
+      "check": "Does that cover it?",
+      "never": "assume the contract is breakable or promise an early exit",
+      "ifRepeated": "Understood — when it ends, I want to be the first call. What date does the contract run to?",
+      "bridgeTo": "O1"
+    },
+    {
+      "id": "competitors",
+      "triggers": ["hyper-v", "proxmox", "openstack", "why not cloud", "azure vmware", "google cloud", "aws for this", "other vendors", "other options", "alternatives to nutanix", "instead of nutanix"],
+      "answer": "Fair, you should look at them too, and I can't speak for them.",
+      "ask": "What would you want from any alternative?",
+      "bridge": "Let's measure us against that list.",
+      "check": "Does that cover it?",
+      "never": "claim Nutanix is better than alternatives you can't speak for",
+      "ifRepeated": "I still can't speak for the others. What matters most to you — let's measure each one against that.",
+      "bridgeTo": "C1"
+    },
+    {
+      "id": "hidden-costs",
+      "triggers": ["migration cost", "cost of migration", "how much will migration", "cost of moving", "migration fee", "professional services cost", "what will the migration", "implementation cost", "cost to migrate", "hidden costs", "additional costs"],
+      "answer": "That's a real cost, so it goes in the comparison next to the licence.",
+      "ask": "Which worries you most: team time, downtime, or new hardware?",
+      "bridge": "We map that before the comparison goes to your manager.",
+      "check": "Does that cover it?",
+      "never": "give a migration cost figure without seeing the estate",
+      "ifRepeated": "I hear you — that's why we map it as part of the comparison. Which concerns you most: team time, downtime, or new hardware?",
+      "bridgeTo": "N2"
+    }
+  ]
+}

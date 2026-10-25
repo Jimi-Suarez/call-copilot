@@ -1,0 +1,33 @@
+# Diane call — VMware renewal pain, 12-min call. No doing-nothing, no personal stake, no numbers, technical Nutanix intro, 1 self-raised objection.
+[00:10] Me: Thanks for making time, Diane. What I'd like to do is spend the first 20 minutes understanding your situation, then the last 10 we decide if a next step makes sense or part ways. Does that feel fair?
+[00:25] Her: Yes, that's fine.
+[00:45] Me: What made you agree to this meeting?
+[01:00] Her: Our VMware renewal is coming up and my manager suggested we get at least one alternative view before signing.
+[01:35] Me: Walk me through your estate — hosts, VMs, storage?
+[01:50] Her: About twelve hosts, two hundred VMs, and roughly eighty terabytes.
+[02:20] Me: How big is the team?
+[02:30] Her: Five people including me.
+[03:00] Me: What's the main thing driving you to look at alternatives now?
+[03:15] Her: The renewal pricing came in higher than we expected. The reseller told us it was a Broadcom price restructure.
+[04:00] Me: What does the renewal increase affect for you?
+[04:15] Her: It hits the IT budget hard. We'd have to cut something else or go back to finance for a supplementary.
+[04:45] Me: What ripple effects does that have on the rest of the business?
+[05:00] Her: Other teams are waiting on projects we'd have to defer if we can't find a way through this.
+[05:30] Me: When does the decision need to happen?
+[05:40] Her: We need a position by early March. The renewal itself is end of April.
+[05:55] Me: What do you need to happen before you make a decision?
+[06:05] Her: A like-for-like cost comparison, and ideally something that doesn't require a full migration project just to get started.
+[06:20] Me: Okay — so Nutanix runs your compute, storage and networking together on commodity servers using a distributed architecture. The software stack sits across all nodes and presents everything as a single resource pool.
+[07:00] Her: Okay. And how does the licensing compare to VMware?
+[07:15] Me: Instead of separate vSphere, vSAN and vCenter licences, it's a single AOS licence. The overall TCO depends on your workload profile, but typically it's more predictable.
+[07:50] Me: I know you might be concerned about migration complexity given you've been on VMware for several years, but Nutanix has tooling specifically for this.
+[08:10] Her: Well actually, yes — disruption during a migration is a real concern. We can't afford downtime in key systems.
+[08:40] Me: The migration tooling is mature. Most customers do it in phased waves over a few months with minimal disruption.
+[09:00] Her: That's useful to know.
+[09:20] Me: I think a sensible next step would be to bring in our technical team for a proper assessment.
+[09:40] Her: Maybe. I'd need to check the timing with my manager before committing.
+[10:10] Me: Of course. Who else would need to be involved in that conversation?
+[10:20] Her: Probably my manager and the finance lead.
+[10:50] Me: Should I send over some proposed dates for a session?
+[11:00] Her: Yes, go ahead and send them over.
+[11:30] Me: Great. I'll send a note today with dates and a brief outline of what we'd cover.

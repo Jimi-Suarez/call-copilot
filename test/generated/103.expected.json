@@ -1,0 +1,45 @@
+{
+  "scenario": {
+    "seed": 103,
+    "pain": "Storage end of support + Trust merger / consolidation",
+    "persona": "sceptical",
+    "numBehav": "refuses",
+    "flow": "budget-first",
+    "aeBehavior": "good",
+    "ending": "no-next-step",
+    "objections": [
+      {
+        "key": "compliance",
+        "timing": "right-after-pitch"
+      },
+      {
+        "key": "downtime",
+        "timing": "right-after-pitch"
+      }
+    ]
+  },
+  "contains": {
+    "situation.hosts": "8",
+    "situation.vms": "335",
+    "situation.storageTB": "183",
+    "situation.teamSize": "8",
+    "deadline": "march",
+    "renewalDate": "may"
+  },
+  "painTypeIn": [
+    "Storage end of support"
+  ],
+  "objections": [
+    {
+      "matchedKey": "compliance",
+      "match": "compliance"
+    },
+    {
+      "matchedKey": "downtime",
+      "match": "downtime"
+    }
+  ],
+  "mustNotInvent": [
+    "exact numbers (not given)"
+  ]
+}
