@@ -541,7 +541,7 @@ function findLockedFields(notes, prefix = '', result = []) {
   return result;
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 // Create HTTP server and attach WebSocket
 const httpServer = http.createServer(app);

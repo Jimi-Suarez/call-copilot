@@ -2010,6 +2010,38 @@ console.log('\n━━ Objection engine ━━━━━━━━━━━━━�
   }
 }
 
+// ── Module load checks ────────────────────────────────────────────────────────
+// Any crash in lib/*.js on require() shows up as a FAIL here, matching a server startup crash.
+console.log('\n━━ Module load checks ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+{
+  let genCard = null, confirm = null, extractor = null;
+
+  try { genCard = require('../lib/gen-card'); }
+  catch (e) { console.log(`    error: ${e.message}`); }
+  assert(genCard !== null, 'MOD-gen-card: lib/gen-card.js loads without error');
+
+  try { confirm = require('../lib/confirm'); }
+  catch (e) { console.log(`    error: ${e.message}`); }
+  assert(confirm !== null, 'MOD-confirm: lib/confirm.js loads without error');
+
+  try { extractor = require('../lib/extractor'); }
+  catch (e) { console.log(`    error: ${e.message}`); }
+  assert(extractor !== null, 'MOD-extractor: lib/extractor.js loads without error');
+
+  // Every pain row in knowledge.json must have the three fields gen-card.js uses.
+  const knowledge = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../data/knowledge.json'), 'utf8')
+  );
+  const REQUIRED = ['sheSays', 'weDo', 'caution'];
+  for (const p of knowledge.lookup) {
+    const missing = REQUIRED.filter(f => !p[f]);
+    const label = (p.painType || '(unnamed)').slice(0, 30);
+    assert(missing.length === 0,
+      `MOD-pain-fields [${label}]: has sheSays, weDo, caution`,
+      missing.length ? `missing: ${missing.join(', ')}` : '');
+  }
+}
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 const total = passed + failed;
 console.log(`\n${'━'.repeat(55)}`);

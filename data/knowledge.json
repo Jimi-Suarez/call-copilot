@@ -123,6 +123,7 @@
   },
   {
    "painType": "Hardware failing / warranty ending",
+   "sheSays": "\"Our servers are getting old and the warranty runs out at the end of the year. We've already had two failures this quarter.\"",
    "weDo": "cost a replacement side by side with extending the old hardware's warranty, using your real numbers, before the budget window closes",
    "caution": "Don't promise it is cheaper or that it prevents outages.",
    "causeQuestion": "To what extent is ageing hardware behind the outages you've had?",
